@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "uptime": {
+      "command": "uptime-mcp",
+      "args": ["--transport", "stdio"],
+      "env": {
+        "UPTIME_URL": "${UPTIME_URL:-http://localhost:8080}",
+        "UPTIME_TOKEN": "${UPTIME_TOKEN}"
+      }
+    }
+  }
+}
