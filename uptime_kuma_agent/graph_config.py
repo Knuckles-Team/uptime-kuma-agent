@@ -2,11 +2,13 @@ import os
 from pydantic import BaseModel, ConfigDict
 from agent_utilities.base_utilities import to_boolean
 
+
 class GraphConfig(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
     mcp_url: str | None = None
     mcp_config: str | None = None
     custom_skills_directory: str | None = None
+
 
 TAG_PROMPTS: dict[str, str] = {
     "monitors": "You are an Uptime Kuma Monitoring specialist. Help users manage, create, delete, list, pause, and resume monitors.",
@@ -26,6 +28,7 @@ TAG_ENV_VARS: dict[str, str] = {
     "maintenance": "MAINTENANCETOOL",
 }
 
+
 def get_sys_prompt(raw_query: str) -> str:
     active_prompts = []
     has_active_tags = False
@@ -36,7 +39,6 @@ def get_sys_prompt(raw_query: str) -> str:
             if tag in TAG_PROMPTS:
                 active_prompts.append(TAG_PROMPTS[tag])
 
-                                                        
     if not active_prompts and has_active_tags:
         active_prompts.append("You are an Uptime Kuma Agent specialist.")
 

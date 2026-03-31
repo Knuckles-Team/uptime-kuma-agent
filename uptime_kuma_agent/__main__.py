@@ -1,5 +1,5 @@
 #!/usr/bin/python
-               
+
 from uptime_kuma_agent.agent_server import agent_server
 
 if __name__ == "__main__":
