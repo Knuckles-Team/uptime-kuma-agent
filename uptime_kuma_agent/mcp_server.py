@@ -1,3 +1,18 @@
+import warnings
+
+# Filter RequestsDependencyWarning early to prevent log spam
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore")
+    try:
+        from requests.exceptions import RequestsDependencyWarning
+        warnings.filterwarnings("ignore", category=RequestsDependencyWarning)
+    except ImportError:
+        pass
+
+# General urllib3/chardet mismatch warnings
+warnings.filterwarnings("ignore", message=".*urllib3.*or chardet.*")
+warnings.filterwarnings("ignore", message=".*urllib3.*or charset_normalizer.*")
+
 import os
 import sys
 import logging
@@ -28,16 +43,16 @@ def register_monitors_tools(mcp: FastMCP):
 
     @mcp.tool(name="uptime-kuma-add-monitor", description="Add a new monitor")
     def uptime_kuma_add_monitor(
-        name: str, type: str, url: Optional[str] = None, interval: int = 60, **kwargs
+        name: str, type: str, url: Optional[str] = None, interval: int = 60
     ) -> Dict[str, Any]:
         result = get_client().add_monitor(
-            name=name, type=type, url=url, interval=interval, **kwargs
+            name=name, type=type, url=url, interval=interval
         )
         return {"msg": result}
 
     @mcp.tool(name="uptime-kuma-edit-monitor", description="Edit an existing monitor")
-    def uptime_kuma_edit_monitor(monitor_id: int, **kwargs) -> Dict[str, Any]:
-        result = get_client().edit_monitor(monitor_id, **kwargs)
+    def uptime_kuma_edit_monitor(monitor_id: int) -> Dict[str, Any]:
+        result = get_client().edit_monitor(monitor_id)
         return {"msg": result}
 
     @mcp.tool(name="uptime-kuma-delete-monitor", description="Delete a monitor")
