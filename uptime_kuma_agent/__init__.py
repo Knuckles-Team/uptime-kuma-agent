@@ -4,11 +4,10 @@
 import importlib
 import inspect
 import warnings
-from typing import List
 
 warnings.filterwarnings("ignore", message=".*urllib3.*or chardet.*")
 
-__all__: List[str] = []
+__all__: list[str] = []
 
 CORE_MODULES = [
     "uptime_kuma_agent.uptime_api",

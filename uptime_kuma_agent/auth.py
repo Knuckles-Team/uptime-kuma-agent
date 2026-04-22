@@ -1,4 +1,5 @@
 import os
+
 from uptime_kuma_api import UptimeKumaApi
 
 _client = None
@@ -18,13 +19,11 @@ def get_client() -> UptimeKumaApi:
             _client = UptimeKumaApi(base_url)
 
             if token and not username and not password:
-
                 if ":" in token:
                     parts = token.split(":", 1)
                     username = parts[0]
                     password = parts[1]
                 else:
-
                     username = "admin"
                     password = token
 

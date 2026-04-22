@@ -14,17 +14,19 @@ with warnings.catch_warnings():
 warnings.filterwarnings("ignore", message=".*urllib3.*or chardet.*")
 warnings.filterwarnings("ignore", message=".*urllib3.*or charset_normalizer.*")
 
+import logging
 import os
 import sys
-import logging
-from typing import Any, Dict, List, Optional
-from dotenv import load_dotenv, find_dotenv
+from typing import Any
+
+from dotenv import find_dotenv, load_dotenv
 from fastmcp import FastMCP
 
 __version__ = "0.1.7"
 
 from agent_utilities.base_utilities import to_boolean
 from agent_utilities.mcp_utilities import create_mcp_server
+
 from .auth import get_client
 
 logger = logging.getLogger(__name__)
@@ -33,41 +35,41 @@ logger.setLevel(logging.INFO)
 
 def register_monitors_tools(mcp: FastMCP):
     @mcp.tool(name="uptime-kuma-get-monitors", description="Get all monitors")
-    def uptime_kuma_get_monitors() -> List[Dict[str, Any]]:
+    def uptime_kuma_get_monitors() -> list[dict[str, Any]]:
         return get_client().get_monitors()
 
     @mcp.tool(
         name="uptime-kuma-get-monitor", description="Get a specific monitor by ID"
     )
-    def uptime_kuma_get_monitor(monitor_id: int) -> Dict[str, Any]:
+    def uptime_kuma_get_monitor(monitor_id: int) -> dict[str, Any]:
         return get_client().get_monitor(monitor_id)
 
     @mcp.tool(name="uptime-kuma-add-monitor", description="Add a new monitor")
     def uptime_kuma_add_monitor(
-        name: str, type: str, url: Optional[str] = None, interval: int = 60
-    ) -> Dict[str, Any]:
+        name: str, type: str, url: str | None = None, interval: int = 60
+    ) -> dict[str, Any]:
         result = get_client().add_monitor(
             name=name, type=type, url=url, interval=interval
         )
         return {"msg": result}
 
     @mcp.tool(name="uptime-kuma-edit-monitor", description="Edit an existing monitor")
-    def uptime_kuma_edit_monitor(monitor_id: int) -> Dict[str, Any]:
+    def uptime_kuma_edit_monitor(monitor_id: int) -> dict[str, Any]:
         result = get_client().edit_monitor(monitor_id)
         return {"msg": result}
 
     @mcp.tool(name="uptime-kuma-delete-monitor", description="Delete a monitor")
-    def uptime_kuma_delete_monitor(monitor_id: int) -> Dict[str, Any]:
+    def uptime_kuma_delete_monitor(monitor_id: int) -> dict[str, Any]:
         result = get_client().delete_monitor(monitor_id)
         return {"msg": result}
 
     @mcp.tool(name="uptime-kuma-pause-monitor", description="Pause a monitor")
-    def uptime_kuma_pause_monitor(monitor_id: int) -> Dict[str, Any]:
+    def uptime_kuma_pause_monitor(monitor_id: int) -> dict[str, Any]:
         result = get_client().pause_monitor(monitor_id)
         return {"msg": result}
 
     @mcp.tool(name="uptime-kuma-resume-monitor", description="Resume a monitor")
-    def uptime_kuma_resume_monitor(monitor_id: int) -> Dict[str, Any]:
+    def uptime_kuma_resume_monitor(monitor_id: int) -> dict[str, Any]:
         result = get_client().resume_monitor(monitor_id)
         return {"msg": result}
 
@@ -76,7 +78,7 @@ def register_status_tools(mcp: FastMCP):
     @mcp.tool(
         name="uptime-kuma-get-status", description="Get status for a specific monitor"
     )
-    def uptime_kuma_get_status(monitor_id: int) -> Dict[str, Any]:
+    def uptime_kuma_get_status(monitor_id: int) -> dict[str, Any]:
         beats = get_client().get_heartbeats(monitor_id)
         if isinstance(beats, list) and len(beats) > 0:
             return beats[-1]
@@ -85,7 +87,7 @@ def register_status_tools(mcp: FastMCP):
     @mcp.tool(
         name="uptime-kuma-get-uptime", description="Get uptime percentages for monitors"
     )
-    def uptime_kuma_get_uptime() -> Dict[str, Any]:
+    def uptime_kuma_get_uptime() -> dict[str, Any]:
         return get_client().info()
 
 
