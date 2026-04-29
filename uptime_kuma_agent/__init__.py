@@ -65,3 +65,4 @@ uptime-kuma-agent
 
 Agent for interacting with Uptime Kuma API
 """
+__version__ = "0.1.0"
