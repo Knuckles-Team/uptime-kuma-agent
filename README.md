@@ -21,7 +21,7 @@
 ![PyPI - Wheel](https://img.shields.io/pypi/wheel/uptime-kuma-agent)
 ![PyPI - Implementation](https://img.shields.io/pypi/implementation/uptime-kuma-agent)
 
-*Version: 0.5.0*
+*Version: 0.6.0*
 
 ## Overview
 
@@ -138,3 +138,66 @@ uv pip install uptime-kuma-agent
 
 ![GitHub followers](https://img.shields.io/github/followers/Knucklessg1)
 ![GitHub User's stars](https://img.shields.io/github/stars/Knucklessg1)
+
+
+## MCP Configuration Examples
+
+### 1. Standard IO (stdio) Deployment
+
+```json
+{
+  "mcpServers": {
+    "uptime-kuma-agent": {
+      "command": "uv",
+      "args": [
+        "run",
+        "uptime-mcp"
+      ],
+      "env": {
+        "AGENT_DESCRIPTION": "<YOUR_AGENT_DESCRIPTION>",
+        "AGENT_SYSTEM_PROMPT": "<YOUR_AGENT_SYSTEM_PROMPT>",
+        "DEFAULT_AGENT_NAME": "<YOUR_DEFAULT_AGENT_NAME>",
+        "MONITORSTOOL": "True",
+        "STATUSTOOL": "True",
+        "UPTIME_KUMA_PASSWORD": "<YOUR_UPTIME_KUMA_PASSWORD>",
+        "UPTIME_KUMA_TOKEN": "<YOUR_UPTIME_KUMA_TOKEN>",
+        "UPTIME_KUMA_URL": "<YOUR_UPTIME_KUMA_URL>",
+        "UPTIME_KUMA_USERNAME": "<YOUR_UPTIME_KUMA_USERNAME>"
+      }
+    }
+  }
+}
+```
+
+### 2. Streamable HTTP (SSE) Deployment
+
+```json
+{
+  "mcpServers": {
+    "uptime-kuma-agent": {
+      "command": "uv",
+      "args": [
+        "run",
+        "uptime-mcp",
+        "--transport",
+        "http",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8000"
+      ],
+      "env": {
+        "AGENT_DESCRIPTION": "<YOUR_AGENT_DESCRIPTION>",
+        "AGENT_SYSTEM_PROMPT": "<YOUR_AGENT_SYSTEM_PROMPT>",
+        "DEFAULT_AGENT_NAME": "<YOUR_DEFAULT_AGENT_NAME>",
+        "MONITORSTOOL": "True",
+        "STATUSTOOL": "True",
+        "UPTIME_KUMA_PASSWORD": "<YOUR_UPTIME_KUMA_PASSWORD>",
+        "UPTIME_KUMA_TOKEN": "<YOUR_UPTIME_KUMA_TOKEN>",
+        "UPTIME_KUMA_URL": "<YOUR_UPTIME_KUMA_URL>",
+        "UPTIME_KUMA_USERNAME": "<YOUR_UPTIME_KUMA_USERNAME>"
+      }
+    }
+  }
+}
+```
