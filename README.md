@@ -201,3 +201,12 @@ uv pip install uptime-kuma-agent
   }
 }
 ```
+
+## Available MCP Tools
+
+This server utilizes dynamic Action-Routed tools to optimize token overhead and maximize IDE compatibility.
+
+| Tool Name | Description |
+|-----------|-------------|
+| `uptime_kuma_monitors` | Consolidated Action-Routed tool for monitors. Methods: get_monitors, get_monitor, add_monitor, edit_monitor, delete_monitor, pause_monitor, resume_monitor |
+| `uptime_kuma_status` | Consolidated Action-Routed tool for status. Methods: get_heartbeats, info |

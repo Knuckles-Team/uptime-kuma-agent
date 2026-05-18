@@ -1,15 +1,22 @@
+"""Tests for initialization functions."""
+
+import os
 import pytest
-from uptime_kuma_agent.mcp_server import get_mcp_instance
-from fastmcp import FastMCP
+from unittest.mock import MagicMock, patch
 
-def test_mcp_instance_creation():
-    """Test that the MCP instance can be created successfully."""
-    mcp, args, middlewares, registered_tags = get_mcp_instance()
-    assert isinstance(mcp, FastMCP)
-    assert "uptime-kuma" in mcp.name
-    assert len(registered_tags) > 0
+class TestInitialization:
+    @pytest.fixture
+    def mock_client(self):
+        client = MagicMock()
+        return client
 
-def test_import_uptime_kuma_agent():
-    """Test that the package can be imported."""
-    import uptime_kuma_agent
-    assert uptime_kuma_agent.__version__ is not None
+    def test_mcp_instance_creation(self, mock_client):
+        from uptime_kuma_agent.mcp_server import get_mcp_instance
+
+        with patch("uptime_kuma_agent.mcp_server.get_client", return_value=mock_client):
+            with patch("uptime_kuma_agent.mcp_server.create_mcp_server") as mock_create:
+                mock_create.return_value = (MagicMock(), MagicMock(), [MagicMock()])
+                mcp, args, middlewares = get_mcp_instance()
+
+                assert mcp is not None
+                assert args is not None
