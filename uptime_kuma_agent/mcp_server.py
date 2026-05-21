@@ -1,6 +1,11 @@
 #!/usr/bin/python
 import warnings
 
+from fastmcp import Context, FastMCP
+from fastmcp.dependencies import Depends
+from fastmcp.utilities.logging import get_logger
+from pydantic import Field
+
 # Filter RequestsDependencyWarning early to prevent log spam
 with warnings.catch_warnings():
     warnings.simplefilter("ignore")
@@ -22,16 +27,12 @@ from typing import Any
 from agent_utilities.base_utilities import to_boolean
 from agent_utilities.mcp_utilities import create_mcp_server
 from dotenv import find_dotenv, load_dotenv
-from fastmcp import FastMCP
-from fastmcp.dependencies import Depends
-from fastmcp.utilities.logging import get_logger
-from pydantic import Field
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 
 from uptime_kuma_agent.auth import get_client
 
-__version__ = "0.11.0"
+__version__ = "0.11.1"
 
 logger = get_logger(name="uptime-kuma-agent")
 logger.setLevel(logging.INFO)
@@ -43,51 +44,41 @@ def register_monitors_tools(mcp: FastMCP):
         action: str = Field(
             description="Action to perform. Must be one of: 'get_monitors', 'get_monitor', 'add_monitor', 'edit_monitor', 'delete_monitor', 'pause_monitor', 'resume_monitor'"
         ),
+        params_json: str = Field(
+            default="{}", description="JSON string of parameters to pass to the action."
+        ),
         client=Depends(get_client),
+        ctx: Context | None = Field(
+            default=None, description="MCP context for progress reporting"
+        ),
     ) -> dict:
-        """Manage monitors operations.
+        """Manage uptime kuma monitors operations."""
+        if ctx:
+            ctx.info("Executing tool...")
+        import json
 
-        Actions:
-          - 'get_monitors': Call get_monitors
-          - 'get_monitor': Call get_monitor
-          - 'add_monitor': Call add_monitor
-          - 'edit_monitor': Call edit_monitor
-          - 'delete_monitor': Call delete_monitor
-          - 'pause_monitor': Call pause_monitor
-          - 'resume_monitor': Call resume_monitor
-        """
-        kwargs: dict[str, Any]
+        try:
+            kwargs = json.loads(params_json)
+        except Exception as e:
+            return {"error": f"Invalid params_json: {e}"}
+
+        kwargs = {k: v for k, v in kwargs.items() if v is not None}
+
         if action == "get_monitors":
-            kwargs = {}
-            kwargs = {k: v for k, v in kwargs.items() if v is not None}
             return client.get_monitors(**kwargs)
         if action == "get_monitor":
-            kwargs = {}
-            kwargs = {k: v for k, v in kwargs.items() if v is not None}
             return client.get_monitor(**kwargs)
         if action == "add_monitor":
-            kwargs = {}
-            kwargs = {k: v for k, v in kwargs.items() if v is not None}
             return client.add_monitor(**kwargs)
         if action == "edit_monitor":
-            kwargs = {}
-            kwargs = {k: v for k, v in kwargs.items() if v is not None}
             return client.edit_monitor(**kwargs)
         if action == "delete_monitor":
-            kwargs = {}
-            kwargs = {k: v for k, v in kwargs.items() if v is not None}
             return client.delete_monitor(**kwargs)
         if action == "pause_monitor":
-            kwargs = {}
-            kwargs = {k: v for k, v in kwargs.items() if v is not None}
             return client.pause_monitor(**kwargs)
         if action == "resume_monitor":
-            kwargs = {}
-            kwargs = {k: v for k, v in kwargs.items() if v is not None}
             return client.resume_monitor(**kwargs)
-        raise ValueError(
-            f"Unknown action: {action}. Must be one of: get_monitors', 'get_monitor', 'add_monitor', 'edit_monitor', 'delete_monitor', 'pause_monitor', 'resume_monitor"
-        )
+        raise ValueError(f"Unknown action: {action}")
 
 
 def register_status_tools(mcp: FastMCP):
@@ -96,26 +87,31 @@ def register_status_tools(mcp: FastMCP):
         action: str = Field(
             description="Action to perform. Must be one of: 'get_heartbeats', 'info'"
         ),
+        params_json: str = Field(
+            default="{}", description="JSON string of parameters to pass to the action."
+        ),
         client=Depends(get_client),
+        ctx: Context | None = Field(
+            default=None, description="MCP context for progress reporting"
+        ),
     ) -> dict:
-        """Manage status operations.
+        """Manage uptime kuma status operations."""
+        if ctx:
+            ctx.info("Executing tool...")
+        import json
 
-        Actions:
-          - 'get_heartbeats': Call get_heartbeats
-          - 'info': Call info
-        """
-        kwargs: dict[str, Any]
+        try:
+            kwargs = json.loads(params_json)
+        except Exception as e:
+            return {"error": f"Invalid params_json: {e}"}
+
+        kwargs = {k: v for k, v in kwargs.items() if v is not None}
+
         if action == "get_heartbeats":
-            kwargs = {}
-            kwargs = {k: v for k, v in kwargs.items() if v is not None}
             return client.get_heartbeats(**kwargs)
         if action == "info":
-            kwargs = {}
-            kwargs = {k: v for k, v in kwargs.items() if v is not None}
             return client.info(**kwargs)
-        raise ValueError(
-            f"Unknown action: {action}. Must be one of: get_heartbeats', 'info"
-        )
+        raise ValueError(f"Unknown action: {action}")
 
 
 def get_mcp_instance() -> tuple[Any, ...]:

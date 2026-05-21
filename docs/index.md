@@ -154,9 +154,6 @@ uv pip install uptime-kuma-agent
         "uptime-mcp"
       ],
       "env": {
-        "AGENT_DESCRIPTION": "<YOUR_AGENT_DESCRIPTION>",
-        "AGENT_SYSTEM_PROMPT": "<YOUR_AGENT_SYSTEM_PROMPT>",
-        "DEFAULT_AGENT_NAME": "<YOUR_DEFAULT_AGENT_NAME>",
         "MONITORSTOOL": "True",
         "STATUSTOOL": "True",
         "UPTIME_KUMA_PASSWORD": "<YOUR_UPTIME_KUMA_PASSWORD>",
@@ -187,9 +184,6 @@ uv pip install uptime-kuma-agent
         "8000"
       ],
       "env": {
-        "AGENT_DESCRIPTION": "<YOUR_AGENT_DESCRIPTION>",
-        "AGENT_SYSTEM_PROMPT": "<YOUR_AGENT_SYSTEM_PROMPT>",
-        "DEFAULT_AGENT_NAME": "<YOUR_DEFAULT_AGENT_NAME>",
         "MONITORSTOOL": "True",
         "STATUSTOOL": "True",
         "UPTIME_KUMA_PASSWORD": "<YOUR_UPTIME_KUMA_PASSWORD>",

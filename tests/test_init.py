@@ -1,8 +1,9 @@
 """Tests for initialization functions."""
 
-import os
-import pytest
 from unittest.mock import MagicMock, patch
+
+import pytest
+
 
 class TestInitialization:
     @pytest.fixture
