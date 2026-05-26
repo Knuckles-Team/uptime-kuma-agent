@@ -11,6 +11,7 @@ class TestInitialization:
         client = MagicMock()
         return client
 
+    @pytest.mark.concept("CONCEPT:UKA-003")
     def test_mcp_instance_creation(self, mock_client):
         from uptime_kuma_agent.mcp_server import get_mcp_instance
 

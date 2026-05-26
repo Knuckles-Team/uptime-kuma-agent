@@ -10,6 +10,18 @@
     - `skills/`: Directory containing modular agent skills (if applicable).
     - `agent/`: Internal agent logic and prompt templates.
 
+### Concept Registry
+To maintain strict traceability across design documents, execution flows, and tests, we track the following key architectural concepts:
+
+| Concept ID | Component | Title | Description |
+|------------|-----------|-------|-------------|
+| `CONCEPT:UKA-001` | Core Module | Dynamic Eager Loading | Lazy-loading optional modules dynamically via Python's `__getattr__` wrapper to optimize start time. |
+| `CONCEPT:UKA-002` | Authentication | Authentication Splitting | Splitting credentials (username:password or token), establishing connection pools, and caching client instances. |
+| `CONCEPT:UKA-003` | MCP Server | Action-Routed Monitors | Bundling multiple Kuma monitors operations into a single action-routed FastMCP tool (`uptime_kuma_monitors`). |
+| `CONCEPT:UKA-004` | MCP Server | Action-Routed Status | Bundling Uptime Kuma heartbeats and info endpoints into a single action-routed FastMCP tool (`uptime_kuma_status`). |
+| `CONCEPT:UKA-005` | MCP Server | Custom Health Endpoint | Lightweight Starlette `/health` route integration within the MCP server. |
+| `CONCEPT:UKA-006` | Agent Server | Dynamic Identity Discovery | CLI bootstrapping, profile verification, and dynamic identity loading. |
+
 ### Architecture Diagram
 ```mermaid
 graph TD

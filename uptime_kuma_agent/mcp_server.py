@@ -37,7 +37,6 @@ __version__ = "0.14.0"
 logger = get_logger(name="uptime-kuma-agent")
 logger.setLevel(logging.INFO)
 
-
 def register_monitors_tools(mcp: FastMCP):
     @mcp.tool(tags={"monitors"})
     async def uptime_kuma_monitors(
@@ -80,7 +79,6 @@ def register_monitors_tools(mcp: FastMCP):
             return client.resume_monitor(**kwargs)
         raise ValueError(f"Unknown action: {action}")
 
-
 def register_status_tools(mcp: FastMCP):
     @mcp.tool(tags={"status"})
     async def uptime_kuma_status(
@@ -113,7 +111,6 @@ def register_status_tools(mcp: FastMCP):
             return client.info(**kwargs)
         raise ValueError(f"Unknown action: {action}")
 
-
 def get_mcp_instance() -> tuple[Any, ...]:
     """Initialize and return the MCP instance."""
     load_dotenv(find_dotenv())
@@ -138,7 +135,6 @@ def get_mcp_instance() -> tuple[Any, ...]:
         mcp.add_middleware(mw)
     return mcp, args, middlewares
 
-
 def mcp_server() -> None:
     mcp, args, middlewares = get_mcp_instance()
     print(f"uptime-kuma-agent MCP v{__version__}", file=sys.stderr)
@@ -155,7 +151,6 @@ def mcp_server() -> None:
     else:
         logger.error("Invalid transport", extra={"transport": args.transport})
         sys.exit(1)
-
 
 if __name__ == "__main__":
     mcp_server()

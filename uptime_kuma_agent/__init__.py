@@ -26,7 +26,7 @@ def _expose_members(module):
 
 
 # Eagerly import core modules (keeps API wrappers fast & light)
-for module_name in CORE_MODULES:
+for module_name in CORE_MODULES:  # pragma: no cover
     if module_name:
         module = importlib.import_module(module_name)
         _expose_members(module)

@@ -24,6 +24,19 @@
 
 ---
 
+## Table of Contents
+- [Overview](#overview)
+- [Key Features](#key-features)
+- [Environment Variables](#environment-variables)
+- [Usage & Quick Start](#usage--quick-start)
+- [MCP Architecture](#mcp)
+- [Agentic Graph Architecture](#agent)
+- [Security & Access Governance](#security--governance)
+- [Installation](#installation)
+- [Contribution Guidelines](#contribute)
+
+---
+
 ## Overview
 
 **Uptime Kuma Agent** is a production-grade Agent and Model Context Protocol (MCP) server designed to interface directly with Agent for interacting with Uptime Kuma API.
@@ -39,11 +52,49 @@
 
 ---
 
-## CLI or API
+## Environment Variables
 
-This agent wraps the Agent for interacting with Uptime Kuma API API. You can interact with it programmatically or via its integrated execution entrypoints.
+The agent's behavior and connections can be fully configured via environment variables.
 
-Detailed instructions on how to use the underlying API wrappers, extended schema bindings, and developer SDK references are maintained in [docs/index.md](file:///home/apps/workspace/agent-packages/agents/uptime-kuma-agent/docs/index.md).
+| Environment Variable | Source Type | Default Value | Description |
+|----------------------|-------------|---------------|-------------|
+| `HOST` | System / Docker | `0.0.0.0` | IP interface address for the MCP and Agent servers to bind to. |
+| `PORT` | System / Docker | `8000` | Port number for HTTP/SSE transports. |
+| `TRANSPORT` | System / Docker | `stdio` | MCP transport channel. Supported values: `stdio`, `streamable-http`, `sse`. |
+| `SUPERTOKEN` | Auth / Security | None | Optional master bearer token for client request validation. |
+| `UPTIME_KUMA_URL` | App Credential | `http://localhost:3001` | The base URL of your target Uptime Kuma instance. |
+| `AUTH_TYPE` | App Credential | None | Type of authentication used. Supported values: `password`, `token`. |
+| `UPTIME_KUMA_TOKEN` | App Credential | None | Authentication token (if `AUTH_TYPE` is `token`). |
+| `UPTIME_KUMA_USERNAME`| App Credential | None | Login username (if `AUTH_TYPE` is `password`). |
+| `UPTIME_KUMA_PASSWORD`| App Credential | None | Login password (if `AUTH_TYPE` is `password`). |
+| `MONITORSTOOL` | Toggle switch | `True` | Set to `False` to completely disable the `uptime_kuma_monitors` MCP tool. |
+| `STATUSTOOL` | Toggle switch | `True` | Set to `False` to completely disable the `uptime_kuma_status` MCP tool. |
+| `ENABLE_OTEL` | Tracing Switch| `True` | Enable telemetry exports via OpenTelemetry standards. |
+| `OTEL_EXPORTER_OTLP_ENDPOINT` | Tracing | `http://langfuse.arpa/api/public/otel` | Core endpoint URL for exporting tracing and span data. |
+| `EUNOMIA_TYPE` | Governance | `none` | Policy enforcement style. Options: `none`, `embedded`, `remote`. |
+| `EUNOMIA_POLICY_FILE` | Governance | `mcp_policies.json` | Path to your local Eunomia JSON policy parameters. |
+
+---
+
+## Usage & Quick Start
+
+To bootstrap and run the agent:
+
+1. **Configure Environment:** Create a `.env` file from the provided template:
+   ```bash
+   cp .env.example .env
+   # Add your target Uptime Kuma credentials
+   ```
+
+2. **Run MCP Server locally via CLI:**
+   ```bash
+   uv run uptime-mcp
+   ```
+
+3. **Interact with the Pydantic AI Graph Agent CLI:**
+   ```bash
+   uv run uptime-agent --provider openai --model-id gpt-4o
+   ```
 
 ---
 
@@ -54,10 +105,49 @@ This server utilizes dynamic Action-Routed tools to optimize token overhead and 
 ### Available MCP Tools
 | Tool Module | Toggle Env Var | Enabled by Default | Description & Nested Methods |
 |-------------|----------------|--------------------|------------------------------|
-| **Monitors** | `MONITORSTOOL` | `True` | Manage uptime kuma monitors operations. Action-routed methods: `get_monitors`, `get_monitor`, `add_monitor`, `edit_monitor`, `delete_monitor`, `pause_monitor`, `resume_monitor`. |
+| **Monitors** | `MONITORSTOOL` | `True` | Manage uptime kuma monitors operations. Action-routed methods: `add_monitor`, `delete_monitor`, `edit_monitor`, `get_monitor`, `get_monitors`, `pause_monitor`, `resume_monitor`. |
 | **Status** | `STATUSTOOL` | `True` | Manage uptime kuma status operations. Action-routed methods: `get_heartbeats`, `info`. |
 
-Detailed tool schemas, parameter shapes, and validation constraints are preserved in [docs/mcp.md](file:///home/apps/workspace/agent-packages/agents/uptime-kuma-agent/docs/mcp.md).
+Detailed tool schemas, parameter shapes, and validation constraints are preserved in [docs/index.md](docs/index.md#mcp).
+
+### Detailed Tool Actions Mapping
+The action-routed tools wrap complex calls behind a simple, unified parameters scheme:
+
+#### 1. `uptime_kuma_monitors`
+Manage uptime kuma monitors operations. Action parameter must be one of:
+- `get_monitors`: List all monitors.
+- `get_monitor`: Fetch a single monitor details by ID (in `params_json`).
+- `add_monitor`: Create a new monitor.
+- `edit_monitor`: Modify an existing monitor.
+- `delete_monitor`: Delete a monitor by ID.
+- `pause_monitor`: Pause monitoring for a specific ID.
+- `resume_monitor`: Resume monitoring for a specific ID.
+
+#### 2. `uptime_kuma_status`
+Retrieve status and analytics. Action parameter must be one of:
+- `get_heartbeats`: Fetch monitor heartbeat records.
+- `info`: Retrieve system stats and general status info.
+
+### Dynamic Tool Selection & Visibility
+
+This MCP server supports dynamic toolset selection and visibility filtering at runtime. This allows you to restrict the set of exposed tools in order to prevent blowing up the LLM's context window.
+
+You can configure tool filtering via multiple input channels:
+
+- **CLI Arguments:** Pass `--tools` or `--toolsets` (or their disabled counterparts `--disabled-tools` and `--disabled-toolsets`) during startup.
+- **Environment Variables:** Define standard environment variables:
+  - `MCP_ENABLED_TOOLS` / `MCP_DISABLED_TOOLS`
+  - `MCP_ENABLED_TAGS` / `MCP_DISABLED_TAGS`
+- **HTTP SSE Request Headers:** Pass custom headers during transport initialization:
+  - `x-mcp-enabled-tools` / `x-mcp-disabled-tools`
+  - `x-mcp-enabled-tags` / `x-mcp-disabled-tags`
+- **HTTP SSE Request Query Parameters:** Append query parameters directly to your transport connection URL:
+  - `?tools=tool1,tool2`
+  - `?tags=tag1`
+
+When query strings or parameters are supplied, an LLM-free **Knowledge Graph resolution layer** (using `DynamicToolOrchestrator`) matches query intents against known tool tags, names, or descriptions, with safe fallback and automated 24-hour background cache refreshing.
+
+---
 
 ### MCP Configuration Examples
 
@@ -75,7 +165,10 @@ Configure your IDE's `mcp.json` to launch the MCP server via `uvx`:
         "uptime-mcp"
       ],
       "env": {
-        "SUPERTOKEN": "your_supertoken_here"
+        "UPTIME_KUMA_URL": "http://localhost:3001",
+        "AUTH_TYPE": "password",
+        "UPTIME_KUMA_USERNAME": "admin",
+        "UPTIME_KUMA_PASSWORD": "your_password_here"
       }
     }
   }
@@ -99,7 +192,10 @@ Configure your client's `mcp.json` to launch the Streamable-HTTP server via `uvx
         "TRANSPORT": "streamable-http",
         "HOST": "0.0.0.0",
         "PORT": "8000",
-        "SUPERTOKEN": "your_supertoken_here"
+        "UPTIME_KUMA_URL": "http://localhost:3001",
+        "AUTH_TYPE": "password",
+        "UPTIME_KUMA_USERNAME": "admin",
+        "UPTIME_KUMA_PASSWORD": "your_password_here"
       }
     }
   }
@@ -126,7 +222,10 @@ docker run -d \
   -p 8000:8000 \
   -e TRANSPORT=streamable-http \
   -e PORT=8000 \
-  -e SUPERTOKEN="your_value" \
+  -e UPTIME_KUMA_URL="http://your-kuma:3001" \
+  -e AUTH_TYPE="password" \
+  -e UPTIME_KUMA_USERNAME="admin" \
+  -e UPTIME_KUMA_PASSWORD="your-password" \
   knucklessg1/uptime-kuma-agent:latest
 ```
 
@@ -141,7 +240,10 @@ To start the interactive command-line agent:
 
 ```bash
 # Set credentials
-export SUPERTOKEN="your_value"
+export UPTIME_KUMA_URL="http://localhost:3001"
+export AUTH_TYPE="password"
+export UPTIME_KUMA_USERNAME="admin"
+export UPTIME_KUMA_PASSWORD="your-password"
 
 # Run the agent server
 uptime-agent --provider openai --model-id gpt-4o
@@ -215,7 +317,7 @@ services:
 
 ```
 
-Detailed graph node architecture explanations, custom skill configurations, and agentic trace guides are available in [docs/agent.md](file:///home/apps/workspace/agent-packages/agents/uptime-kuma-agent/docs/agent.md).
+Detailed graph node architecture explanations, custom skill configurations, and agentic trace guides are available in [docs/index.md#agent](docs/index.md#agent).
 
 ---
 
