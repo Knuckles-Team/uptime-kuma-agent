@@ -32,7 +32,7 @@ from starlette.responses import JSONResponse
 
 from uptime_kuma_agent.auth import get_client
 
-__version__ = "0.23.0"
+__version__ = "0.23.1"
 
 logger = get_logger(name="uptime-kuma-agent")
 logger.setLevel(logging.INFO)
