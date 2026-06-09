@@ -22,6 +22,10 @@
 
 *Version: 0.28.0*
 
+> **Documentation** — Installation, deployment, usage across the API, CLI, and MCP
+> interfaces, the integrated A2A agent, and guidance for provisioning the Uptime Kuma
+> platform are maintained in the [official documentation](https://knuckles-team.github.io/uptime-kuma-agent/).
+
 ---
 
 ## Table of Contents
@@ -33,6 +37,7 @@
 - [Agentic Graph Architecture](#agent)
 - [Security & Access Governance](#security--governance)
 - [Installation](#installation)
+- [Documentation](#documentation)
 - [Contribution Guidelines](#contribute)
 
 ---
@@ -350,6 +355,25 @@ uv pip install uptime-kuma-agent[all]
 # Using standard pip
 python -m pip install uptime-kuma-agent[all]
 ```
+
+---
+
+## Documentation
+
+The complete documentation is published as the
+[official documentation site](https://knuckles-team.github.io/uptime-kuma-agent/) and
+is the recommended reference for installation, deployment, and day-to-day operation.
+
+| Page | Contents |
+|---|---|
+| [Installation](https://knuckles-team.github.io/uptime-kuma-agent/installation/) | pip, source, extras, prebuilt Docker image |
+| [Deployment](https://knuckles-team.github.io/uptime-kuma-agent/deployment/) | run the MCP server and agent, Compose, Caddy + Technitium, env config |
+| [Usage](https://knuckles-team.github.io/uptime-kuma-agent/usage/) | the MCP tools, the `UptimeKumaApi` client, the agent CLI |
+| [Backing Platform](https://knuckles-team.github.io/uptime-kuma-agent/platform/) | deploy Uptime Kuma with Docker |
+| [Overview](https://knuckles-team.github.io/uptime-kuma-agent/overview/) | ecosystem role and enterprise readiness |
+| [Concepts](https://knuckles-team.github.io/uptime-kuma-agent/concepts/) | concept registry (`CONCEPT:UKA-*`) |
+
+`AGENTS.md` is the canonical contributor/agent guidance.
 
 ---
 
