@@ -3,6 +3,7 @@
 Auto-generated from mcp_server.py during ecosystem standardization.
 """
 
+from agent_utilities.mcp_utilities import resolve_action
 from fastmcp import Context, FastMCP
 from fastmcp.dependencies import Depends
 from pydantic import Field
@@ -35,6 +36,20 @@ def register_monitors_tools(mcp: FastMCP):
             return {"error": f"Invalid params_json: {e}"}
 
         kwargs = {k: v for k, v in kwargs.items() if v is not None}
+
+        valid_actions = [
+            "get_monitors",
+            "get_monitor",
+            "add_monitor",
+            "edit_monitor",
+            "delete_monitor",
+            "pause_monitor",
+            "resume_monitor",
+        ]
+        resolved = resolve_action(action, valid_actions, service="uptime-kuma-agent")
+        if isinstance(resolved, dict):
+            return resolved
+        action = resolved
 
         if action == "get_monitors":
             return client.get_monitors(**kwargs)

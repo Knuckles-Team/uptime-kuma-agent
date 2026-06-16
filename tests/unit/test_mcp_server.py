@@ -1,15 +1,16 @@
 import json
-import sys
 import runpy
-from unittest.mock import AsyncMock, MagicMock, patch
+import sys
+from unittest.mock import MagicMock, patch
+
 import pytest
 from starlette.responses import JSONResponse
 
 from uptime_kuma_agent.mcp_server import (
-    register_monitors_tools,
-    register_status_tools,
     get_mcp_instance,
     mcp_server,
+    register_monitors_tools,
+    register_status_tools,
 )
 
 
@@ -130,7 +131,13 @@ async def test_uptime_kuma_monitors_tool():
         await uptime_kuma_monitors(
             action="invalid_action", params_json="{}", client=mock_client, ctx=None
         )
-    assert "Unknown action: invalid_action" in str(exc_info.value)
+    assert "list_actions" in str(exc_info.value)
+
+    # 10. Test discovery (list_actions)
+    res = await uptime_kuma_monitors(
+        action="list_actions", params_json="{}", client=mock_client, ctx=None
+    )
+    assert "get_monitors" in res["actions"]
 
 
 @pytest.mark.concept("CONCEPT:UKA-004")
@@ -185,7 +192,13 @@ async def test_uptime_kuma_status_tool():
         await uptime_kuma_status(
             action="bad_action", params_json="{}", client=mock_client, ctx=None
         )
-    assert "Unknown action: bad_action" in str(exc_info.value)
+    assert "list_actions" in str(exc_info.value)
+
+    # 5. Test discovery (list_actions)
+    res = await uptime_kuma_status(
+        action="list_actions", params_json="{}", client=mock_client, ctx=None
+    )
+    assert "info" in res["actions"]
 
 
 @pytest.mark.concept("CONCEPT:UKA-005")

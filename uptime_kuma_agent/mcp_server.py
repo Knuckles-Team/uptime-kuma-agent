@@ -25,7 +25,7 @@ import sys
 from typing import Any
 
 from agent_utilities.base_utilities import to_boolean
-from agent_utilities.mcp_utilities import create_mcp_server
+from agent_utilities.mcp_utilities import create_mcp_server, resolve_action
 from dotenv import find_dotenv, load_dotenv
 from starlette.requests import Request
 from starlette.responses import JSONResponse
@@ -63,6 +63,20 @@ def register_monitors_tools(mcp: FastMCP):
             return {"error": f"Invalid params_json: {e}"}
 
         kwargs = {k: v for k, v in kwargs.items() if v is not None}
+
+        valid_actions = [
+            "get_monitors",
+            "get_monitor",
+            "add_monitor",
+            "edit_monitor",
+            "delete_monitor",
+            "pause_monitor",
+            "resume_monitor",
+        ]
+        resolved = resolve_action(action, valid_actions, service="uptime-kuma-agent")
+        if isinstance(resolved, dict):
+            return resolved
+        action = resolved
 
         if action == "get_monitors":
             return client.get_monitors(**kwargs)
@@ -106,6 +120,12 @@ def register_status_tools(mcp: FastMCP):
             return {"error": f"Invalid params_json: {e}"}
 
         kwargs = {k: v for k, v in kwargs.items() if v is not None}
+
+        valid_actions = ["get_heartbeats", "info"]
+        resolved = resolve_action(action, valid_actions, service="uptime-kuma-agent")
+        if isinstance(resolved, dict):
+            return resolved
+        action = resolved
 
         if action == "get_heartbeats":
             return client.get_heartbeats(**kwargs)
