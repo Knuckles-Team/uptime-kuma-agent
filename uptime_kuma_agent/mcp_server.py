@@ -25,7 +25,11 @@ import sys
 from typing import Any
 
 from agent_utilities.base_utilities import to_boolean
-from agent_utilities.mcp_utilities import create_mcp_server, resolve_action
+from agent_utilities.mcp_utilities import (
+    create_mcp_server,
+    resolve_action,
+    run_blocking,
+)
 from dotenv import find_dotenv, load_dotenv
 from starlette.requests import Request
 from starlette.responses import JSONResponse
@@ -79,19 +83,19 @@ def register_monitors_tools(mcp: FastMCP):
         action = resolved
 
         if action == "get_monitors":
-            return client.get_monitors(**kwargs)
+            return await run_blocking(client.get_monitors, **kwargs)
         if action == "get_monitor":
-            return client.get_monitor(**kwargs)
+            return await run_blocking(client.get_monitor, **kwargs)
         if action == "add_monitor":
-            return client.add_monitor(**kwargs)
+            return await run_blocking(client.add_monitor, **kwargs)
         if action == "edit_monitor":
-            return client.edit_monitor(**kwargs)
+            return await run_blocking(client.edit_monitor, **kwargs)
         if action == "delete_monitor":
-            return client.delete_monitor(**kwargs)
+            return await run_blocking(client.delete_monitor, **kwargs)
         if action == "pause_monitor":
-            return client.pause_monitor(**kwargs)
+            return await run_blocking(client.pause_monitor, **kwargs)
         if action == "resume_monitor":
-            return client.resume_monitor(**kwargs)
+            return await run_blocking(client.resume_monitor, **kwargs)
         raise ValueError(f"Unknown action: {action}")
 
 
@@ -128,9 +132,9 @@ def register_status_tools(mcp: FastMCP):
         action = resolved
 
         if action == "get_heartbeats":
-            return client.get_heartbeats(**kwargs)
+            return await run_blocking(client.get_heartbeats, **kwargs)
         if action == "info":
-            return client.info(**kwargs)
+            return await run_blocking(client.info, **kwargs)
         raise ValueError(f"Unknown action: {action}")
 
 
