@@ -20,14 +20,18 @@ warnings.filterwarnings("ignore", message=".*urllib3.*or chardet.*")
 warnings.filterwarnings("ignore", message=".*urllib3.*or charset_normalizer.*")
 
 import logging
-import os
 import sys
 from typing import Any
 
-from agent_utilities.base_utilities import to_boolean
-from agent_utilities.mcp_utilities import create_mcp_server, load_config, resolve_action
+from agent_utilities.mcp_utilities import (
+    create_mcp_server,
+    load_config,
+    register_tool_surface,
+    resolve_action,
+)
 from starlette.requests import Request
 from starlette.responses import JSONResponse
+from uptime_kuma_api import UptimeKumaApi
 
 from uptime_kuma_agent.auth import get_client
 
@@ -146,12 +150,13 @@ def get_mcp_instance() -> tuple[Any, ...]:
     async def health_check(request: Request) -> JSONResponse:
         return JSONResponse({"status": "OK"})
 
-    DEFAULT_MONITORSTOOL = to_boolean(os.getenv("MONITORSTOOL", "True"))
-    if DEFAULT_MONITORSTOOL:
-        register_monitors_tools(mcp)
-    DEFAULT_STATUSTOOL = to_boolean(os.getenv("STATUSTOOL", "True"))
-    if DEFAULT_STATUSTOOL:
-        register_status_tools(mcp)
+    register_tool_surface(
+        mcp,
+        client_cls=UptimeKumaApi,
+        get_client=get_client,
+        service="uptime-kuma-agent",
+        tools_module=sys.modules[__name__],
+    )
 
     for mw in middlewares:
         mcp.add_middleware(mw)

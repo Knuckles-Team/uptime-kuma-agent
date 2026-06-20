@@ -1,5 +1,4 @@
-import os
-
+from agent_utilities.core.config import setting
 from uptime_kuma_api import UptimeKumaApi
 
 _client = None
@@ -8,12 +7,12 @@ _client = None
 def get_client() -> UptimeKumaApi:
     global _client
     if _client is None:
-        base_url = os.getenv("UPTIME_KUMA_URL", "http://localhost:3001")
+        base_url = setting("UPTIME_KUMA_URL", "http://localhost:3001")
 
-        token = os.getenv("UPTIME_KUMA_TOKEN", "")
+        token = setting("UPTIME_KUMA_TOKEN", "")
 
-        username = os.getenv("UPTIME_KUMA_USERNAME", "")
-        password = os.getenv("UPTIME_KUMA_PASSWORD", "")
+        username = setting("UPTIME_KUMA_USERNAME", "")
+        password = setting("UPTIME_KUMA_PASSWORD", "")
 
         try:
             _client = UptimeKumaApi(base_url)
