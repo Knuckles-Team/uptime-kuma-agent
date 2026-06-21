@@ -27,6 +27,12 @@ test = [
 uptime-mcp = "uptime_kuma_agent.mcp_server:mcp_server"
 uptime-agent = "uptime_kuma_agent.agent_server:agent_server"
 
+[project.entry-points."agent_utilities.skill_providers"]
+uptime-kuma-agent = "uptime_kuma_agent.skills"
+
+[project.entry-points."agent_utilities.prompt_providers"]
+uptime-kuma-agent = "uptime_kuma_agent.prompts"
+
 [tool.setuptools]
 include-package-data = true
 
@@ -45,7 +51,7 @@ dev = [
 ]
 
 [tool.setuptools.package-data]
-uptime_kuma_agent = [ "mcp_config.json", "agent/**", "skills/**",]
+uptime_kuma_agent = [ "mcp_config.json", "agent/**", "skills/**", "prompts/**",]
 
 [tool.ruff.lint]
 select = [ "E", "F", "I", "UP", "B",]
