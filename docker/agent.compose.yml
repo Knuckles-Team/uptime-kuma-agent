@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   uptime-kuma-agent-mcp:
-    image: knucklessg1/uptime-kuma-agent:latest
+    image: knucklessg1/uptime-kuma-agent:mcp
     container_name: uptime-kuma-agent-mcp
     hostname: uptime-kuma-agent-mcp
     restart: always
