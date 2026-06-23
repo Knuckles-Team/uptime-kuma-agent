@@ -51,7 +51,7 @@ dev = [
 ]
 
 [tool.setuptools.package-data]
-uptime_kuma_agent = [ "mcp_config.json", "agent/**", "skills/**", "prompts/**",]
+uptime_kuma_agent = [ "mcp_config.json", "skills/**", "prompts/**",]
 
 [tool.ruff.lint]
 select = [ "E", "F", "I", "UP", "B",]
