@@ -166,7 +166,6 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
-**/agent_data/chats/
 
 # Graph Database
 knowledge_graph.db*
