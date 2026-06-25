@@ -11,7 +11,6 @@
     - `mcp_server.py`: Main MCP server entry point and tool registration.
     - `agent.py`: Pydantic AI agent definition and logic.
     - `skills/`: Directory containing modular agent skills (if applicable).
-    - `agent/`: Internal agent logic and prompt templates.
 
 ### Concept Registry
 To maintain strict traceability across design documents, execution flows, and tests, we track the following key architectural concepts:
@@ -93,8 +92,7 @@ uptime-kuma-agent
 │   ├── __init__.py
 │   ├── agent.py
 │   ├── auth.py
-│   ├── mcp_server.py
-│   └── agent/
+│   └── mcp_server.py
 ├── pyproject.toml
 └── requirements.txt
 ```
