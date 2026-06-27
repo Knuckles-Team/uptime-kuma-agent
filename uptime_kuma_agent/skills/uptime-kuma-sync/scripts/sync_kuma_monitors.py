@@ -28,7 +28,7 @@ def parse_caddyfile(caddyfile_path: str) -> list[tuple[str, str]]:
     Returns:
         Deduplicated list of (name, url) tuples.
     """
-    with open(caddyfile_path, "r") as f:
+    with open(caddyfile_path) as f:
         lines = f.readlines()
 
     monitors: list[tuple[str, str]] = []

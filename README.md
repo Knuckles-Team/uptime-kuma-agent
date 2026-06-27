@@ -76,12 +76,13 @@
 | `EUNOMIA_TYPE` | `none` | options: none, embedded, remote |
 | `EUNOMIA_POLICY_FILE` | `mcp_policies.json` |  |
 | `EUNOMIA_REMOTE_URL` | `http://eunomia-server:8000` |  |
-| `SUPERTOKEN` | `your_supertoken_here` |  |
 | `UPTIME_KUMA_URL` | `http://localhost:3001` |  |
 | `UPTIME_KUMA_TOKEN` | `your_token_here (used if AUTH_TYPE is token)` |  |
 | `UPTIME_KUMA_USERNAME` | `admin (used if AUTH_TYPE is password)` |  |
 | `UPTIME_KUMA_PASSWORD` | `your_password_here` |  |
 | `AUTH_TYPE` | `password` | options: password, token |
+| `CADDYFILE_PATH` | `/home/apps/caddy/Caddyfile` | Caddyfile parsed by the kuma-sync skill |
+| `KUMA_DB_PATH` | `/home/apps/uptime-kuma/data/kuma.db` | Uptime-Kuma SQLite DB used by the kuma-sync skill |
 | `MONITORSTOOL` | `True` |  |
 | `STATUSTOOL` | `True` |  |
 
@@ -104,7 +105,7 @@
 | `MODEL_ID` | `gpt-4o` | Model id for the agent |
 | `ENABLE_WEB_UI` | `True` | Serve the AG-UI web interface |
 
-_19 package + 14 inherited variable(s). Auto-generated from `.env.example` + the shared agent-utilities set — do not edit._
+_20 package + 14 inherited variable(s). Auto-generated from `.env.example` + the shared agent-utilities set — do not edit._
 <!-- ENV-VARS-TABLE:END -->
 
 
@@ -120,7 +121,6 @@ The agent's behavior and connections can be fully configured via environment var
 | `MCP_ENABLED_TAGS` / `MCP_DISABLED_TAGS` | MCP / Tools | None | Comma-separated tag allow/deny list. |
 | `PYTHONUNBUFFERED` | System / Docker | `1` | Unbuffered stdout (recommended in containers). |
 | `DEBUG` | System / Docker | `False` | Verbose logging. |
-| `SUPERTOKEN` | Auth / Security | None | Optional master bearer token for client request validation. |
 | `UPTIME_KUMA_URL` | App Credential | `http://localhost:3001` | The base URL of your target Uptime Kuma instance. |
 | `AUTH_TYPE` | App Credential | None | Type of authentication used. Supported values: `password`, `token`. |
 | `UPTIME_KUMA_TOKEN` | App Credential | None | Authentication token (if `AUTH_TYPE` is `token`). |
@@ -128,6 +128,8 @@ The agent's behavior and connections can be fully configured via environment var
 | `UPTIME_KUMA_PASSWORD`| App Credential | None | Login password (if `AUTH_TYPE` is `password`). |
 | `MONITORSTOOL` | Toggle switch | `True` | Set to `False` to completely disable the `uptime_kuma_monitors` MCP tool. |
 | `STATUSTOOL` | Toggle switch | `True` | Set to `False` to completely disable the `uptime_kuma_status` MCP tool. |
+| `CADDYFILE_PATH` | Kuma Sync Skill | `/home/apps/caddy/Caddyfile` | Caddyfile parsed by the `uptime-kuma-sync` skill. |
+| `KUMA_DB_PATH` | Kuma Sync Skill | `/home/apps/uptime-kuma/data/kuma.db` | Uptime-Kuma SQLite DB used by the `uptime-kuma-sync` skill. |
 | `ENABLE_OTEL` | Tracing Switch| `True` | Enable telemetry exports via OpenTelemetry standards. |
 | `OTEL_EXPORTER_OTLP_ENDPOINT` | Tracing | `http://langfuse.arpa/api/public/otel` | Core endpoint URL for exporting tracing and span data. |
 | `OTEL_EXPORTER_OTLP_PUBLIC_KEY` / `OTEL_EXPORTER_OTLP_SECRET_KEY` | Tracing | None | OTLP exporter auth keys. |
@@ -174,12 +176,112 @@ _Auto-generated from the live MCP server — do not edit by hand._
 
 <!-- MCP-TOOLS-TABLE:START -->
 
+#### Condensed action-routed tools (default — `MCP_TOOL_MODE=condensed`)
+
 | MCP Tool | Toggle Env Var | Description |
 |----------|----------------|-------------|
 | `uptime_kuma_monitors` | `MONITORSTOOL` | Manage uptime kuma monitors operations. |
 | `uptime_kuma_status` | `STATUSTOOL` | Manage uptime kuma status operations. |
 
-_2 action-routed tools (default `MCP_TOOL_MODE=condensed`). Each is enabled unless its toggle is set false; set `MCP_TOOL_MODE=verbose` (or `both`) for the 1:1 per-operation surface. Auto-generated — do not edit._
+#### Verbose 1:1 API-mapped tools (`MCP_TOOL_MODE=verbose` or `both`)
+
+<details>
+<summary>88 per-operation tools — one per public API method (click to expand)</summary>
+
+| MCP Tool | Toggle Env Var | Description |
+|----------|----------------|-------------|
+| `uptime_kuma_add_api_key` | `UPTIME_KUMA_APITOOL` | Adds a new api key. |
+| `uptime_kuma_add_docker_host` | `UPTIME_KUMA_APITOOL` | Add a docker host. |
+| `uptime_kuma_add_maintenance` | `UPTIME_KUMA_APITOOL` | Adds a maintenance. |
+| `uptime_kuma_add_monitor` | `UPTIME_KUMA_APITOOL` | Adds a new monitor. |
+| `uptime_kuma_add_monitor_maintenance` | `UPTIME_KUMA_APITOOL` | Adds monitors to a maintenance. |
+| `uptime_kuma_add_monitor_tag` | `UPTIME_KUMA_APITOOL` | Add a tag to a monitor. |
+| `uptime_kuma_add_notification` | `UPTIME_KUMA_APITOOL` | Add a notification. |
+| `uptime_kuma_add_proxy` | `UPTIME_KUMA_APITOOL` | Add a proxy. |
+| `uptime_kuma_add_status_page` | `UPTIME_KUMA_APITOOL` | Add a status page. |
+| `uptime_kuma_add_status_page_maintenance` | `UPTIME_KUMA_APITOOL` | Adds status pages to a maintenance. |
+| `uptime_kuma_add_tag` | `UPTIME_KUMA_APITOOL` | Add a tag. |
+| `uptime_kuma_avg_ping` | `UPTIME_KUMA_APITOOL` | Get average ping. |
+| `uptime_kuma_cert_info` | `UPTIME_KUMA_APITOOL` | Get certificate info. |
+| `uptime_kuma_change_password` | `UPTIME_KUMA_APITOOL` | Change password. |
+| `uptime_kuma_check_apprise` | `UPTIME_KUMA_APITOOL` | Check if apprise exists. |
+| `uptime_kuma_clear_events` | `UPTIME_KUMA_APITOOL` | Clear monitor events. |
+| `uptime_kuma_clear_heartbeats` | `UPTIME_KUMA_APITOOL` | Clear monitor heartbeats. |
+| `uptime_kuma_clear_statistics` | `UPTIME_KUMA_APITOOL` | Clear statistics. |
+| `uptime_kuma_connect` | `UPTIME_KUMA_APITOOL` | Connects to Uptime Kuma. |
+| `uptime_kuma_delete_api_key` | `UPTIME_KUMA_APITOOL` | Enable an api key. |
+| `uptime_kuma_delete_docker_host` | `UPTIME_KUMA_APITOOL` | Delete a docker host. |
+| `uptime_kuma_delete_maintenance` | `UPTIME_KUMA_APITOOL` | Deletes a maintenance. |
+| `uptime_kuma_delete_monitor` | `UPTIME_KUMA_APITOOL` | Deletes a monitor. |
+| `uptime_kuma_delete_monitor_tag` | `UPTIME_KUMA_APITOOL` | Delete a tag from a monitor. |
+| `uptime_kuma_delete_notification` | `UPTIME_KUMA_APITOOL` | Delete a notification. |
+| `uptime_kuma_delete_proxy` | `UPTIME_KUMA_APITOOL` | Delete a proxy. |
+| `uptime_kuma_delete_status_page` | `UPTIME_KUMA_APITOOL` | Delete a status page. |
+| `uptime_kuma_delete_tag` | `UPTIME_KUMA_APITOOL` | Delete a tag. |
+| `uptime_kuma_disable_2fa` | `UPTIME_KUMA_APITOOL` | Disable 2FA for this user. |
+| `uptime_kuma_disable_api_key` | `UPTIME_KUMA_APITOOL` | Disable an api key. |
+| `uptime_kuma_disconnect` | `UPTIME_KUMA_APITOOL` | Disconnects from Uptime Kuma. |
+| `uptime_kuma_edit_docker_host` | `UPTIME_KUMA_APITOOL` | Edit a docker host. |
+| `uptime_kuma_edit_maintenance` | `UPTIME_KUMA_APITOOL` | Edits a maintenance. |
+| `uptime_kuma_edit_monitor` | `UPTIME_KUMA_APITOOL` | Edits an existing monitor. |
+| `uptime_kuma_edit_notification` | `UPTIME_KUMA_APITOOL` | Edit a notification. |
+| `uptime_kuma_edit_proxy` | `UPTIME_KUMA_APITOOL` | Edit a proxy. |
+| `uptime_kuma_edit_tag` | `UPTIME_KUMA_APITOOL` | Edits an existing tag. |
+| `uptime_kuma_enable_api_key` | `UPTIME_KUMA_APITOOL` | Enable an api key. |
+| `uptime_kuma_get_api_key` | `UPTIME_KUMA_APITOOL` | Get an api key. |
+| `uptime_kuma_get_api_keys` | `UPTIME_KUMA_APITOOL` | Get all api keys. |
+| `uptime_kuma_get_database_size` | `UPTIME_KUMA_APITOOL` | Get database size. |
+| `uptime_kuma_get_docker_host` | `UPTIME_KUMA_APITOOL` | Get a docker host. |
+| `uptime_kuma_get_docker_hosts` | `UPTIME_KUMA_APITOOL` | Get all docker hosts. |
+| `uptime_kuma_get_game_list` | `UPTIME_KUMA_APITOOL` | Get a list of games that are supported by the GameDig monitor type. |
+| `uptime_kuma_get_heartbeats` | `UPTIME_KUMA_APITOOL` | Get heartbeats. |
+| `uptime_kuma_get_important_heartbeats` | `UPTIME_KUMA_APITOOL` | Get important heartbeats. |
+| `uptime_kuma_get_maintenance` | `UPTIME_KUMA_APITOOL` | Get a maintenance. |
+| `uptime_kuma_get_maintenances` | `UPTIME_KUMA_APITOOL` | Get all maintenances. |
+| `uptime_kuma_get_monitor` | `UPTIME_KUMA_APITOOL` | Get a monitor. |
+| `uptime_kuma_get_monitor_beats` | `UPTIME_KUMA_APITOOL` | Get monitor beats for a specific monitor in a time range. |
+| `uptime_kuma_get_monitor_maintenance` | `UPTIME_KUMA_APITOOL` | Gets all monitors of a maintenance. |
+| `uptime_kuma_get_monitor_status` | `UPTIME_KUMA_APITOOL` | Get the monitor status. |
+| `uptime_kuma_get_monitors` | `UPTIME_KUMA_APITOOL` | Get all monitors. |
+| `uptime_kuma_get_notification` | `UPTIME_KUMA_APITOOL` | Get a notification. |
+| `uptime_kuma_get_notifications` | `UPTIME_KUMA_APITOOL` | Get all notifications. |
+| `uptime_kuma_get_proxies` | `UPTIME_KUMA_APITOOL` | Get all proxies. |
+| `uptime_kuma_get_proxy` | `UPTIME_KUMA_APITOOL` | Get a proxy. |
+| `uptime_kuma_get_settings` | `UPTIME_KUMA_APITOOL` | Get settings. |
+| `uptime_kuma_get_status_page` | `UPTIME_KUMA_APITOOL` | Get a status page. |
+| `uptime_kuma_get_status_page_maintenance` | `UPTIME_KUMA_APITOOL` | Gets all status pages of a maintenance. |
+| `uptime_kuma_get_status_pages` | `UPTIME_KUMA_APITOOL` | Get all status pages. |
+| `uptime_kuma_get_tag` | `UPTIME_KUMA_APITOOL` | Get a tag. |
+| `uptime_kuma_get_tags` | `UPTIME_KUMA_APITOOL` | Get all tags. |
+| `uptime_kuma_info` | `UPTIME_KUMA_APITOOL` | Get server info. |
+| `uptime_kuma_login` | `UPTIME_KUMA_APITOOL` | Login. |
+| `uptime_kuma_login_by_token` | `UPTIME_KUMA_APITOOL` | Login by token. |
+| `uptime_kuma_logout` | `UPTIME_KUMA_APITOOL` | Logout. |
+| `uptime_kuma_need_setup` | `UPTIME_KUMA_APITOOL` | Check if the server has already been set up. |
+| `uptime_kuma_pause_maintenance` | `UPTIME_KUMA_APITOOL` | Pauses a maintenance. |
+| `uptime_kuma_pause_monitor` | `UPTIME_KUMA_APITOOL` | Pauses a monitor. |
+| `uptime_kuma_post_incident` | `UPTIME_KUMA_APITOOL` | Post an incident to status page. |
+| `uptime_kuma_prepare_2fa` | `UPTIME_KUMA_APITOOL` | Prepare 2FA configuration. |
+| `uptime_kuma_resume_maintenance` | `UPTIME_KUMA_APITOOL` | Resumes a maintenance. |
+| `uptime_kuma_resume_monitor` | `UPTIME_KUMA_APITOOL` | Resumes a monitor. |
+| `uptime_kuma_save_2fa` | `UPTIME_KUMA_APITOOL` | Save the current 2FA configuration. |
+| `uptime_kuma_save_status_page` | `UPTIME_KUMA_APITOOL` | Save a status page. |
+| `uptime_kuma_set_settings` | `UPTIME_KUMA_APITOOL` | Set settings. |
+| `uptime_kuma_setup` | `UPTIME_KUMA_APITOOL` | Set up the server. |
+| `uptime_kuma_shrink_database` | `UPTIME_KUMA_APITOOL` | Shrink database. |
+| `uptime_kuma_test_chrome` | `UPTIME_KUMA_APITOOL` | Test if the chrome executable is valid and return the version. |
+| `uptime_kuma_test_docker_host` | `UPTIME_KUMA_APITOOL` | Test a docker host. |
+| `uptime_kuma_test_notification` | `UPTIME_KUMA_APITOOL` | Test a notification. |
+| `uptime_kuma_twofa_status` | `UPTIME_KUMA_APITOOL` | Get current 2FA status. |
+| `uptime_kuma_unpin_incident` | `UPTIME_KUMA_APITOOL` | Unpin an incident from a status page. |
+| `uptime_kuma_upload_backup` | `UPTIME_KUMA_APITOOL` | Import Backup. |
+| `uptime_kuma_uptime` | `UPTIME_KUMA_APITOOL` | Get monitor uptime. |
+| `uptime_kuma_verify_token` | `UPTIME_KUMA_APITOOL` | Verify the provided 2FA token. |
+| `uptime_kuma_wait_for_event` | `UPTIME_KUMA_APITOOL` | Invoke the wait_for_event operation. |
+
+</details>
+
+_2 action-routed tool(s) (default) · 88 verbose 1:1 tool(s). Each is enabled unless its `<DOMAIN>TOOL` toggle is set false; `MCP_TOOL_MODE` selects the surface (`condensed` default · `verbose` 1:1 · `both`). Auto-generated — do not edit._
 <!-- MCP-TOOLS-TABLE:END -->
 
 Detailed tool schemas, parameter shapes, and validation constraints are preserved in [docs/index.md](docs/index.md#mcp).
