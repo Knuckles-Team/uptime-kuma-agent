@@ -35,7 +35,7 @@ from uptime_kuma_api import UptimeKumaApi
 
 from uptime_kuma_agent.auth import get_client
 
-__version__ = "0.33.0"
+__version__ = "1.0.0"
 
 logger = get_logger(name="uptime-kuma-agent")
 logger.setLevel(logging.INFO)
