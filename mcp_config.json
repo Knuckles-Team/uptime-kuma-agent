@@ -8,15 +8,14 @@
       ],
       "env": {
         "MCP_TOOL_MODE": "condensed",
-        "AGENT_DESCRIPTION": "<YOUR_AGENT_DESCRIPTION>",
-        "AGENT_SYSTEM_PROMPT": "<YOUR_AGENT_SYSTEM_PROMPT>",
-        "DEFAULT_AGENT_NAME": "<YOUR_DEFAULT_AGENT_NAME>",
+        "CADDYFILE_PATH": "/home/apps/caddy/Caddyfile",
+        "KUMA_DB_PATH": "/home/apps/uptime-kuma/data/kuma.db",
         "MONITORSTOOL": "True",
         "STATUSTOOL": "True",
-        "UPTIME_KUMA_PASSWORD": "<YOUR_UPTIME_KUMA_PASSWORD>",
-        "UPTIME_KUMA_TOKEN": "<YOUR_UPTIME_KUMA_TOKEN>",
-        "UPTIME_KUMA_URL": "<YOUR_UPTIME_KUMA_URL>",
-        "UPTIME_KUMA_USERNAME": "<YOUR_UPTIME_KUMA_USERNAME>"
+        "UPTIME_KUMA_PASSWORD": "your_password_here",
+        "UPTIME_KUMA_TOKEN": "your_token_here (used if AUTH_TYPE is token)",
+        "UPTIME_KUMA_URL": "http://localhost:3001",
+        "UPTIME_KUMA_USERNAME": "admin (used if AUTH_TYPE is password)"
       }
     }
   }
