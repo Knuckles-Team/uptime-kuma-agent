@@ -137,6 +137,58 @@ def register_status_tools(mcp: FastMCP):
         raise ValueError(f"Unknown action: {action}")
 
 
+def register_ingest_tools(mcp: FastMCP):
+    @mcp.tool(tags={"ingest"})
+    async def uptime_ingest_monitors(
+        params_json: str = Field(
+            default="{}",
+            description="JSON of options: {'include_heartbeats': bool} — also pull "
+            "and ingest recent heartbeat samples per monitor.",
+        ),
+        client=Depends(get_client),
+        ctx: Context | None = Field(
+            default=None, description="MCP context for progress reporting"
+        ),
+    ) -> dict:
+        """Natively ingest Uptime Kuma monitors into epistemic-graph as typed nodes.
+
+        Lists monitors via the Uptime Kuma client and pushes them (as
+        :UptimeMonitor nodes, plus optional :HeartbeatStat timeseries samples linked
+        via :heartbeatOf) into the knowledge graph via the fast engine client.
+        Best-effort: returns ``{"ingested": None}`` when no engine is reachable.
+        CONCEPT:AU-KG.ingest.enterprise-source-extractor.
+        """
+        if ctx:
+            ctx.info("Ingesting Uptime Kuma monitors into the knowledge graph...")
+        import json as _json
+
+        from uptime_kuma_agent.kg_ingest import ingest_monitors
+
+        try:
+            opts = _json.loads(params_json) if params_json else {}
+        except Exception as e:  # noqa: BLE001
+            return {"error": f"Invalid params_json: {e}"}
+
+        monitors = client.get_monitors()
+        records = monitors if isinstance(monitors, list) else [monitors]
+        records = [
+            r.model_dump() if hasattr(r, "model_dump") else r
+            for r in records
+            if r is not None
+        ]
+
+        heartbeats = None
+        if opts.get("include_heartbeats"):
+            try:
+                heartbeats = client.get_heartbeats()
+            except Exception as e:  # noqa: BLE001 — heartbeats optional/best-effort
+                logger.warning("get_heartbeats failed: %s", e)
+                heartbeats = None
+
+        result = ingest_monitors(records, heartbeats)
+        return {"listed": len(records), "ingested": result}
+
+
 def get_mcp_instance() -> tuple[Any, ...]:
     """Initialize and return the MCP instance."""
     load_config()

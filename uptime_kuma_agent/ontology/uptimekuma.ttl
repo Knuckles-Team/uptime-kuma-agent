@@ -1,0 +1,123 @@
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix dc: <http://purl.org/dc/terms/> .
+@prefix : <http://knuckles.team/kg#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Uptime Kuma monitoring ontology — monitors, heartbeat samples, status pages,
+# tags and notifications. All classes/properties live in the shared `:` (kg#)
+# namespace; only the owl:Ontology node gets the per-package IRI. Backs the
+# uptime-kuma-agent MCP tool surface (uptime_kuma_monitors / uptime_kuma_status /
+# uptime_ingest_monitors).
+
+# --- classes (owl:Class) ---
+
+:UptimeMonitor a owl:Class ;
+    rdfs:label "Uptime Monitor" ;
+    rdfs:comment "A configured health check against an endpoint (http/tcp/ping/dns/…), with an interval and active state (uptime_kuma_monitors)." .
+
+:HeartbeatStat a owl:Class ;
+    rdfs:label "Heartbeat Stat" ;
+    rdfs:comment "A single timeseries health sample of a monitor — status, response time (ping), message and timestamp (uptime_kuma_status get_heartbeats)." .
+
+:StatusPage a owl:Class ;
+    rdfs:label "Status Page" ;
+    rdfs:comment "A public status page aggregating one or more monitors." .
+
+:MonitorTag a owl:Class ;
+    rdfs:label "Monitor Tag" ;
+    rdfs:comment "A tag/group label applied to monitors for organization." .
+
+:Notification a owl:Class ;
+    rdfs:label "Notification" ;
+    rdfs:comment "A notification provider that alerts on monitor state changes." .
+
+# --- links (owl:ObjectProperty) ---
+
+:heartbeatOf a owl:ObjectProperty ;
+    rdfs:label "heartbeat of" ;
+    rdfs:comment "Links a HeartbeatStat sample to the UptimeMonitor it measures." ;
+    rdfs:domain :HeartbeatStat ;
+    rdfs:range :UptimeMonitor .
+
+:taggedWith a owl:ObjectProperty ;
+    rdfs:label "tagged with" ;
+    rdfs:comment "Links an UptimeMonitor to a MonitorTag applied to it." ;
+    rdfs:domain :UptimeMonitor ;
+    rdfs:range :MonitorTag .
+
+:notifiesVia a owl:ObjectProperty ;
+    rdfs:label "notifies via" ;
+    rdfs:comment "Links an UptimeMonitor to a Notification provider used for its alerts." ;
+    rdfs:domain :UptimeMonitor ;
+    rdfs:range :Notification .
+
+:onStatusPage a owl:ObjectProperty ;
+    rdfs:label "on status page" ;
+    rdfs:comment "Links an UptimeMonitor to a StatusPage that publishes it." ;
+    rdfs:domain :UptimeMonitor ;
+    rdfs:range :StatusPage .
+
+# --- fields (owl:DatatypeProperty) ---
+
+:monitorType a owl:DatatypeProperty ;
+    rdfs:label "monitor type" ;
+    rdfs:comment "Check type of a monitor (http, port/tcp, ping, dns, keyword, push, …)." ;
+    rdfs:domain :UptimeMonitor ;
+    rdfs:range xsd:string .
+
+:monitorUrl a owl:DatatypeProperty ;
+    rdfs:label "monitor url" ;
+    rdfs:comment "Target URL or host:port the monitor checks." ;
+    rdfs:domain :UptimeMonitor ;
+    rdfs:range xsd:string .
+
+:checkInterval a owl:DatatypeProperty ;
+    rdfs:label "check interval" ;
+    rdfs:comment "Seconds between checks for a monitor." ;
+    rdfs:domain :UptimeMonitor ;
+    rdfs:range xsd:integer .
+
+:monitorActive a owl:DatatypeProperty ;
+    rdfs:label "monitor active" ;
+    rdfs:comment "Whether the monitor is currently running (not paused)." ;
+    rdfs:domain :UptimeMonitor ;
+    rdfs:range xsd:boolean .
+
+:heartbeatStatus a owl:DatatypeProperty ;
+    rdfs:label "heartbeat status" ;
+    rdfs:comment "Sampled health status code (0 down, 1 up, 2 pending, 3 maintenance)." ;
+    rdfs:domain :HeartbeatStat ;
+    rdfs:range xsd:integer .
+
+:ping a owl:DatatypeProperty ;
+    rdfs:label "ping" ;
+    rdfs:comment "Measured response time of a heartbeat sample, in milliseconds." ;
+    rdfs:domain :HeartbeatStat ;
+    rdfs:range xsd:double .
+
+:heartbeatTime a owl:DatatypeProperty ;
+    rdfs:label "heartbeat time" ;
+    rdfs:comment "Timestamp of a heartbeat sample." ;
+    rdfs:domain :HeartbeatStat ;
+    rdfs:range xsd:string .
+
+:heartbeatMsg a owl:DatatypeProperty ;
+    rdfs:label "heartbeat message" ;
+    rdfs:comment "Status/error message attached to a heartbeat sample." ;
+    rdfs:domain :HeartbeatStat ;
+    rdfs:range xsd:string .
+
+:uptimeKumaId a owl:DatatypeProperty ;
+    rdfs:label "uptime kuma id" ;
+    rdfs:comment "External Uptime Kuma identifier of the object." ;
+    rdfs:range xsd:string .
+
+<http://knuckles.team/kg/uptimekuma> a owl:Ontology ;
+    rdfs:label "Uptime Kuma Monitoring Ontology" ;
+    rdfs:comment """Uptime Kuma availability-monitoring model — monitors, heartbeat
+    timeseries samples, status pages, tags and notification providers, with their
+    measurement relationships — federated into the agent-utilities knowledge-graph hub.""" ;
+    owl:imports <http://knuckles.team/kg> .

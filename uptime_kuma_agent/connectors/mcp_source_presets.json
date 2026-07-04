@@ -1,0 +1,14 @@
+{
+  "_comment": "Tier-1 mcp_tool source preset(s) for this package (AU-KG.ingest.mcp-tool-connector). Contributed presets win over the central MCP_TOOL_PRESETS.",
+  "uptimekuma-monitors": {
+    "server": "uptime-kuma-agent",
+    "tool": "uptime_kuma_monitors",
+    "action": "get_monitors",
+    "records_path": "",
+    "id_field": "id",
+    "title_field": "name",
+    "text_field": "url",
+    "updated_field": "",
+    "doc_type": "uptimekuma"
+  }
+}
