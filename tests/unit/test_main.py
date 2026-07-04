@@ -3,7 +3,7 @@ from unittest.mock import patch
 import pytest
 
 
-@pytest.mark.concept("CONCEPT:UKA-006")
+@pytest.mark.concept("CONCEPT:UK-OS.config.uka-4")
 @patch("uptime_kuma_agent.agent_server.agent_server")
 def test_main_execution(mock_agent_server):
     # Use runpy to execute the __main__.py file, mocking the actual server function

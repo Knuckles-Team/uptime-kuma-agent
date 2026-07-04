@@ -14,7 +14,7 @@ from uptime_kuma_agent.mcp_server import (
 )
 
 
-@pytest.mark.concept("CONCEPT:UKA-003")
+@pytest.mark.concept("CONCEPT:UK-OS.config.uka")
 @pytest.mark.asyncio
 async def test_uptime_kuma_monitors_tool():
     # Capture the tool function
@@ -140,7 +140,7 @@ async def test_uptime_kuma_monitors_tool():
     assert "get_monitors" in res["actions"]
 
 
-@pytest.mark.concept("CONCEPT:UKA-004")
+@pytest.mark.concept("CONCEPT:UK-OS.config.uka-2")
 @pytest.mark.asyncio
 async def test_uptime_kuma_status_tool():
     captured_tools = {}
@@ -201,7 +201,7 @@ async def test_uptime_kuma_status_tool():
     assert "info" in res["actions"]
 
 
-@pytest.mark.concept("CONCEPT:UKA-005")
+@pytest.mark.concept("CONCEPT:UK-OS.config.uka-3")
 @pytest.mark.asyncio
 async def test_health_check_route():
     # Capture custom route
@@ -233,7 +233,7 @@ async def test_health_check_route():
     assert json.loads(bytes(response.body).decode()) == {"status": "OK"}
 
 
-@pytest.mark.concept("CONCEPT:UKA-003")
+@pytest.mark.concept("CONCEPT:UK-OS.config.uka")
 def test_mcp_server_cli_runners():
     # Test mcp_server for various transport flags
     mock_mcp = MagicMock()
@@ -287,7 +287,7 @@ def test_mcp_server_cli_runners():
             mock_exit.assert_called_once_with(1)
 
 
-@pytest.mark.concept("CONCEPT:UKA-003")
+@pytest.mark.concept("CONCEPT:UK-OS.config.uka")
 def test_import_warning_handling():
     # Mock requests.exceptions to trigger ImportError when importing RequestsDependencyWarning
     with patch.dict(sys.modules, {"requests.exceptions": None}):
@@ -296,7 +296,7 @@ def test_import_warning_handling():
         importlib.reload(sys.modules["uptime_kuma_agent.mcp_server"])
 
 
-@pytest.mark.concept("CONCEPT:UKA-003")
+@pytest.mark.concept("CONCEPT:UK-OS.config.uka")
 def test_mcp_server_main_block():
     mock_mcp = MagicMock()
     mock_args = MagicMock()

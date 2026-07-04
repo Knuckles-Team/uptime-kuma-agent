@@ -14,7 +14,7 @@ def reset_global_client():
     auth._client = None
 
 
-@pytest.mark.concept("CONCEPT:UKA-002")
+@pytest.mark.concept("CONCEPT:UK-OS.identity.uka")
 @patch("uptime_kuma_agent.auth.UptimeKumaApi")
 def test_get_client_caching(mock_api_class):
     mock_api_instance = MagicMock()
@@ -29,7 +29,7 @@ def test_get_client_caching(mock_api_class):
     mock_api_class.assert_called_once_with("http://localhost:3001")
 
 
-@pytest.mark.concept("CONCEPT:UKA-002")
+@pytest.mark.concept("CONCEPT:UK-OS.identity.uka")
 @patch("uptime_kuma_agent.auth.UptimeKumaApi")
 @patch.dict(
     os.environ,
@@ -44,7 +44,7 @@ def test_get_client_user_pass(mock_api_class):
     mock_api_instance.login.assert_called_once_with("testuser", "testpassword")
 
 
-@pytest.mark.concept("CONCEPT:UKA-002")
+@pytest.mark.concept("CONCEPT:UK-OS.identity.uka")
 @patch("uptime_kuma_agent.auth.UptimeKumaApi")
 @patch.dict(os.environ, {"UPTIME_KUMA_TOKEN": "myuser:mytoken"})
 def test_get_client_token_split(mock_api_class):
@@ -56,7 +56,7 @@ def test_get_client_token_split(mock_api_class):
     mock_api_instance.login.assert_called_once_with("myuser", "mytoken")
 
 
-@pytest.mark.concept("CONCEPT:UKA-002")
+@pytest.mark.concept("CONCEPT:UK-OS.identity.uka")
 @patch("uptime_kuma_agent.auth.UptimeKumaApi")
 @patch.dict(os.environ, {"UPTIME_KUMA_TOKEN": "justatoken"})
 def test_get_client_token_no_split(mock_api_class):
@@ -68,7 +68,7 @@ def test_get_client_token_no_split(mock_api_class):
     mock_api_instance.login.assert_called_once_with("admin", "justatoken")
 
 
-@pytest.mark.concept("CONCEPT:UKA-002")
+@pytest.mark.concept("CONCEPT:UK-OS.identity.uka")
 @patch("uptime_kuma_agent.auth.UptimeKumaApi")
 def test_get_client_failure(mock_api_class):
     mock_api_class.side_effect = Exception("Connection Refused")

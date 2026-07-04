@@ -17,12 +17,12 @@ To maintain strict traceability across design documents, execution flows, and te
 
 | Concept ID | Component | Title | Description |
 |------------|-----------|-------|-------------|
-| `CONCEPT:UKA-001` | Core Module | Dynamic Eager Loading | Lazy-loading optional modules dynamically via Python's `__getattr__` wrapper to optimize start time. |
-| `CONCEPT:UKA-002` | Authentication | Authentication Splitting | Splitting credentials (username:password or token), establishing connection pools, and caching client instances. |
-| `CONCEPT:UKA-003` | MCP Server | Action-Routed Monitors | Bundling multiple Kuma monitors operations into a single action-routed FastMCP tool (`uptime_kuma_monitors`). |
-| `CONCEPT:UKA-004` | MCP Server | Action-Routed Status | Bundling Uptime Kuma heartbeats and info endpoints into a single action-routed FastMCP tool (`uptime_kuma_status`). |
-| `CONCEPT:UKA-005` | MCP Server | Custom Health Endpoint | Lightweight Starlette `/health` route integration within the MCP server. |
-| `CONCEPT:UKA-006` | Agent Server | Dynamic Identity Discovery | CLI bootstrapping, profile verification, and dynamic identity loading. |
+| `CONCEPT:UK-OS.governance.uka` | Core Module | Dynamic Eager Loading | Lazy-loading optional modules dynamically via Python's `__getattr__` wrapper to optimize start time. |
+| `CONCEPT:UK-OS.identity.uka` | Authentication | Authentication Splitting | Splitting credentials (username:password or token), establishing connection pools, and caching client instances. |
+| `CONCEPT:UK-OS.config.uka` | MCP Server | Action-Routed Monitors | Bundling multiple Kuma monitors operations into a single action-routed FastMCP tool (`uptime_kuma_monitors`). |
+| `CONCEPT:UK-OS.config.uka-2` | MCP Server | Action-Routed Status | Bundling Uptime Kuma heartbeats and info endpoints into a single action-routed FastMCP tool (`uptime_kuma_status`). |
+| `CONCEPT:UK-OS.config.uka-3` | MCP Server | Custom Health Endpoint | Lightweight Starlette `/health` route integration within the MCP server. |
+| `CONCEPT:UK-OS.config.uka-4` | Agent Server | Dynamic Identity Discovery | CLI bootstrapping, profile verification, and dynamic identity loading. |
 
 ### Architecture Diagram
 ```mermaid
@@ -276,7 +276,7 @@ alone).
 Working in parallel with other sessions/worktrees? **Reserve a concept id before you write its `CONCEPT:` marker** so two sessions never collide:
 
 ```bash
-agent-utilities --json concept reserve --ns KG-2   # or a package prefix, e.g. KEY
+agent-utilities --json concept reserve --ns EG-KG.compute.backend   # or a package prefix, e.g. KEY
 ```
 
 Full protocol (ledger, merge=union, reconcile, MCP/REST): <https://knuckles-team.github.io/agent-utilities/concept_coordination/>

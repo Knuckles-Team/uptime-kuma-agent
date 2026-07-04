@@ -5,7 +5,7 @@ from uptime_kuma_agent.uptime_kuma_models import (
 )
 
 
-@pytest.mark.concept("CONCEPT:UKA-003")
+@pytest.mark.concept("CONCEPT:UK-OS.config.uka")
 def test_uptime_kuma_monitor_defaults():
     monitor = UptimeKumaMonitor(name="test_mon", type="http")
     assert monitor.id is None
@@ -17,7 +17,7 @@ def test_uptime_kuma_monitor_defaults():
     assert monitor.accepted_statuscodes == ["200-299"]
 
 
-@pytest.mark.concept("CONCEPT:UKA-003")
+@pytest.mark.concept("CONCEPT:UK-OS.config.uka")
 def test_uptime_kuma_monitor_custom():
     monitor = UptimeKumaMonitor(
         id=123,
@@ -37,7 +37,7 @@ def test_uptime_kuma_monitor_custom():
     assert monitor.accepted_statuscodes == ["200", "301"]
 
 
-@pytest.mark.concept("CONCEPT:UKA-003")
+@pytest.mark.concept("CONCEPT:UK-OS.config.uka")
 def test_uptime_kuma_monitor_status():
     status = UptimeKumaMonitorStatus(
         id=456,

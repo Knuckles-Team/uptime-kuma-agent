@@ -7,7 +7,7 @@ import uptime_kuma_agent
 from uptime_kuma_agent import _expose_members, _import_module_safely
 
 
-@pytest.mark.concept("CONCEPT:UKA-001")
+@pytest.mark.concept("CONCEPT:UK-OS.governance.uka")
 def test_expose_members():
     # Test exposing classes/functions from a dummy module
     mock_module = MagicMock()
@@ -40,7 +40,7 @@ def test_expose_members():
         assert "MyClass" in uptime_kuma_agent.__all__
 
 
-@pytest.mark.concept("CONCEPT:UKA-001")
+@pytest.mark.concept("CONCEPT:UK-OS.governance.uka")
 def test_import_module_safely_success():
     with patch("importlib.import_module") as mock_import:
         mock_import.return_value = "success"
@@ -49,14 +49,14 @@ def test_import_module_safely_success():
         mock_import.assert_called_once_with("some_module")
 
 
-@pytest.mark.concept("CONCEPT:UKA-001")
+@pytest.mark.concept("CONCEPT:UK-OS.governance.uka")
 def test_import_module_safely_failure():
     with patch("importlib.import_module", side_effect=ImportError("Not found")):
         res = _import_module_safely("non_existent_module")
         assert res is None
 
 
-@pytest.mark.concept("CONCEPT:UKA-001")
+@pytest.mark.concept("CONCEPT:UK-OS.governance.uka")
 @pytest.mark.parametrize(
     "import_result, mcp_avail, agent_avail",
     [
@@ -71,7 +71,7 @@ def test_getattr_availability_flags_parametrized(import_result, mcp_avail, agent
         assert uptime_kuma_agent._AGENT_AVAILABLE is agent_avail
 
 
-@pytest.mark.concept("CONCEPT:UKA-001")
+@pytest.mark.concept("CONCEPT:UK-OS.governance.uka")
 def test_getattr_availability_flags_fallback():
     # Test the fallback lines (52 and 57) when keys are not found in OPTIONAL_MODULES
     with patch("uptime_kuma_agent.OPTIONAL_MODULES", {}):
@@ -79,7 +79,7 @@ def test_getattr_availability_flags_fallback():
         assert not uptime_kuma_agent._AGENT_AVAILABLE
 
 
-@pytest.mark.concept("CONCEPT:UKA-001")
+@pytest.mark.concept("CONCEPT:UK-OS.governance.uka")
 def test_getattr_optional_modules_success():
     # Mock dynamic import of an optional module
     mock_mod = MagicMock()
@@ -95,7 +95,7 @@ def test_getattr_optional_modules_success():
         assert val == "found_it"
 
 
-@pytest.mark.concept("CONCEPT:UKA-001")
+@pytest.mark.concept("CONCEPT:UK-OS.governance.uka")
 def test_getattr_attribute_error():
     # Attribute doesn't exist on any modules
     with patch("uptime_kuma_agent._import_module_safely", return_value=None):
@@ -103,7 +103,7 @@ def test_getattr_attribute_error():
             _ = uptime_kuma_agent.non_existent_attribute_name
 
 
-@pytest.mark.concept("CONCEPT:UKA-001")
+@pytest.mark.concept("CONCEPT:UK-OS.governance.uka")
 def test_dir():
     items = dir(uptime_kuma_agent)
     assert len(items) > 0

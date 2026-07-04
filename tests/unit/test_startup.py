@@ -1,7 +1,7 @@
 import pytest
 
 
-@pytest.mark.concept("CONCEPT:UKA-006")
+@pytest.mark.concept("CONCEPT:UK-OS.config.uka-4")
 def test_server_startup():
     """Validates that the server module can start successfully."""
     import os

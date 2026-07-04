@@ -7,7 +7,7 @@ import pytest
 from uptime_kuma_agent.agent_server import agent_server
 
 
-@pytest.mark.concept("CONCEPT:UKA-006")
+@pytest.mark.concept("CONCEPT:UK-OS.config.uka-4")
 @patch("agent_utilities.initialize_workspace")
 @patch("agent_utilities.load_identity")
 @patch("agent_utilities.build_system_prompt_from_workspace")
@@ -83,7 +83,7 @@ def test_agent_server_normal(
     )
 
 
-@pytest.mark.concept("CONCEPT:UKA-006")
+@pytest.mark.concept("CONCEPT:UK-OS.config.uka-4")
 @patch("agent_utilities.initialize_workspace")
 @patch("agent_utilities.load_identity")
 @patch("agent_utilities.build_system_prompt_from_workspace")
@@ -118,7 +118,7 @@ def test_agent_server_debug_mode(
     mock_build_prompt.assert_called_once()
 
 
-@pytest.mark.concept("CONCEPT:UKA-006")
+@pytest.mark.concept("CONCEPT:UK-OS.config.uka-4")
 @patch("agent_utilities.initialize_workspace")
 @patch("agent_utilities.load_identity")
 @patch("agent_utilities.build_system_prompt_from_workspace")
