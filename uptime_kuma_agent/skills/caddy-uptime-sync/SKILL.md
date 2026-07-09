@@ -1,5 +1,6 @@
 ---
 name: caddy-uptime-sync
+skill_type: skill
 description: >-
   Synchronizes DNS entries from Caddy to Uptime Kuma monitors. Use when the user asks to sync Caddy domains to Uptime Kuma, add missing caddy entries to uptime kuma, or compare Caddy config with Uptime Kuma.
 license: MIT

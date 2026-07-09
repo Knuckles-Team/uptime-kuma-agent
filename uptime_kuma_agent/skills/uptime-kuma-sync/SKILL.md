@@ -1,5 +1,6 @@
 ---
 name: uptime-kuma-sync
+skill_type: skill
 description: >-
   Synchronize Caddy reverse proxy routes into Uptime Kuma as HTTP monitors.
   Parses the Caddyfile for all .arpa hostnames, deduplicates them, appends
