@@ -1,6 +1,6 @@
 {
   "project": "uptime-kuma-agent",
-  "path": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent",
+  "path": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent",
   "domain_results": [
     {
       "domain": "Project Analysis",
@@ -26,7 +26,7 @@
         {
           "criterion": "externalized_prompts",
           "points": 0,
-          "evidence": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent",
+          "evidence": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent",
           "reasoning": "No prompts/ directory found. Prompts may be hardcoded in source."
         },
         {
@@ -44,25 +44,25 @@
         {
           "criterion": "agents_md",
           "points": 10,
-          "evidence": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/AGENTS.md (3913 bytes)",
+          "evidence": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/AGENTS.md (3913 bytes)",
           "reasoning": "AGENTS.md exists with comprehensive content"
         },
         {
           "criterion": "pre_commit_hooks",
           "points": 10,
-          "evidence": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/.pre-commit-config.yaml",
+          "evidence": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/.pre-commit-config.yaml",
           "reasoning": "Pre-commit configuration found for automated code quality checks"
         },
         {
           "criterion": "gitignore",
           "points": 10,
-          "evidence": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/.gitignore",
+          "evidence": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/.gitignore",
           "reasoning": ".gitignore exists to prevent committing build artifacts and secrets"
         },
         {
           "criterion": "env_template",
           "points": 10,
-          "evidence": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/.env.example",
+          "evidence": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/.env.example",
           "reasoning": "Environment template exists for onboarding and secret management"
         },
         {
@@ -95,7 +95,7 @@
         {
           "criterion": "dependency_freshness",
           "points": 91,
-          "evidence": "source=/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/pyproject.toml total=7 major=0 minor=3 patch=0 not_installed=3",
+          "evidence": "source=${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/pyproject.toml total=7 major=0 minor=3 patch=0 not_installed=3",
           "reasoning": "Audited 7 deps (4 installed, 3 constraint-only). 0 major, 3 minor, 0 patch updates."
         }
       ],
@@ -202,7 +202,7 @@
           "length": 26,
           "complexity": 12,
           "nesting_depth": 3,
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/uptime_kuma_agent/__init__.py"
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/uptime_kuma_agent/__init__.py"
         },
         {
           "name": "register_monitors_tools",
@@ -210,7 +210,7 @@
           "length": 41,
           "complexity": 11,
           "nesting_depth": 2,
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/uptime_kuma_agent/mcp_server.py"
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/uptime_kuma_agent/mcp_server.py"
         },
         {
           "name": "uptime_kuma_monitors",
@@ -218,7 +218,7 @@
           "length": 39,
           "complexity": 11,
           "nesting_depth": 2,
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/uptime_kuma_agent/mcp_server.py"
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/uptime_kuma_agent/mcp_server.py"
         },
         {
           "name": "test_uptime_kuma_monitors_tool",
@@ -226,7 +226,7 @@
           "length": 73,
           "complexity": 11,
           "nesting_depth": 1,
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_mcp_server.py"
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_mcp_server.py"
         },
         {
           "name": "get_client",
@@ -234,7 +234,7 @@
           "length": 32,
           "complexity": 9,
           "nesting_depth": 4,
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/uptime_kuma_agent/auth.py"
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/uptime_kuma_agent/auth.py"
         }
       ],
       "top_long": [
@@ -244,7 +244,7 @@
           "length": 73,
           "complexity": 11,
           "nesting_depth": 1,
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_mcp_server.py"
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_mcp_server.py"
         },
         {
           "name": "test_agent_server_normal",
@@ -252,7 +252,7 @@
           "length": 68,
           "complexity": 1,
           "nesting_depth": 0,
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_agent_server.py"
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_agent_server.py"
         },
         {
           "name": "agent_server",
@@ -260,7 +260,7 @@
           "length": 60,
           "complexity": 4,
           "nesting_depth": 1,
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/uptime_kuma_agent/agent_server.py"
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/uptime_kuma_agent/agent_server.py"
         },
         {
           "name": "register_monitors_tools",
@@ -268,7 +268,7 @@
           "length": 41,
           "complexity": 11,
           "nesting_depth": 2,
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/uptime_kuma_agent/mcp_server.py"
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/uptime_kuma_agent/mcp_server.py"
         },
         {
           "name": "uptime_kuma_monitors",
@@ -276,7 +276,7 @@
           "length": 39,
           "complexity": 11,
           "nesting_depth": 2,
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/uptime_kuma_agent/mcp_server.py"
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/uptime_kuma_agent/mcp_server.py"
         }
       ],
       "structural_issues": [],
@@ -335,7 +335,7 @@
       "tests": [
         {
           "name": "test_expose_members",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_package_init.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_package_init.py",
           "line": 21,
           "length": 30,
           "intent": "unit",
@@ -345,7 +345,7 @@
         },
         {
           "name": "test_import_module_safely_success",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_package_init.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_package_init.py",
           "line": 53,
           "length": 6,
           "intent": "unit",
@@ -355,7 +355,7 @@
         },
         {
           "name": "test_import_module_safely_failure",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_package_init.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_package_init.py",
           "line": 61,
           "length": 4,
           "intent": "unit",
@@ -365,7 +365,7 @@
         },
         {
           "name": "test_getattr_availability_flags",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_package_init.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_package_init.py",
           "line": 67,
           "length": 15,
           "intent": "unit",
@@ -375,7 +375,7 @@
         },
         {
           "name": "test_getattr_availability_flags_fallback",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_package_init.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_package_init.py",
           "line": 84,
           "length": 5,
           "intent": "unit",
@@ -385,7 +385,7 @@
         },
         {
           "name": "test_getattr_optional_modules_success",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_package_init.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_package_init.py",
           "line": 91,
           "length": 13,
           "intent": "unit",
@@ -395,7 +395,7 @@
         },
         {
           "name": "test_getattr_attribute_error",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_package_init.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_package_init.py",
           "line": 106,
           "length": 5,
           "intent": "unit",
@@ -405,7 +405,7 @@
         },
         {
           "name": "test_dir",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_package_init.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_package_init.py",
           "line": 113,
           "length": 3,
           "intent": "unit",
@@ -415,7 +415,7 @@
         },
         {
           "name": "test_agent_server_normal",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_agent_server.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_agent_server.py",
           "line": 15,
           "length": 68,
           "intent": "unit",
@@ -425,7 +425,7 @@
         },
         {
           "name": "test_agent_server_debug_mode",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_agent_server.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_agent_server.py",
           "line": 90,
           "length": 27,
           "intent": "unit",
@@ -435,7 +435,7 @@
         },
         {
           "name": "test_agent_server_main_block",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_agent_server.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_agent_server.py",
           "line": 124,
           "length": 21,
           "intent": "unit",
@@ -445,7 +445,7 @@
         },
         {
           "name": "test_uptime_kuma_monitors_tool",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_mcp_server.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_mcp_server.py",
           "line": 17,
           "length": 73,
           "intent": "unit",
@@ -457,7 +457,7 @@
         },
         {
           "name": "test_uptime_kuma_status_tool",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_mcp_server.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_mcp_server.py",
           "line": 93,
           "length": 39,
           "intent": "unit",
@@ -469,7 +469,7 @@
         },
         {
           "name": "test_health_check_route",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_mcp_server.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_mcp_server.py",
           "line": 135,
           "length": 25,
           "intent": "unit",
@@ -481,7 +481,7 @@
         },
         {
           "name": "test_mcp_server_cli_runners",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_mcp_server.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_mcp_server.py",
           "line": 162,
           "length": 35,
           "intent": "unit",
@@ -491,7 +491,7 @@
         },
         {
           "name": "test_import_warning_handling",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_mcp_server.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_mcp_server.py",
           "line": 199,
           "length": 5,
           "intent": "unit",
@@ -501,7 +501,7 @@
         },
         {
           "name": "test_mcp_server_main_block",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_mcp_server.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_mcp_server.py",
           "line": 206,
           "length": 10,
           "intent": "unit",
@@ -511,7 +511,7 @@
         },
         {
           "name": "test_concept_parity",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_concept_parity.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_concept_parity.py",
           "line": 58,
           "length": 30,
           "intent": "unit",
@@ -521,7 +521,7 @@
         },
         {
           "name": "test_mcp_instance_creation",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_init.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_init.py",
           "line": 14,
           "length": 10,
           "intent": "unit",
@@ -531,7 +531,7 @@
         },
         {
           "name": "test_uptime_kuma_monitor_defaults",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_models.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_models.py",
           "line": 4,
           "length": 9,
           "intent": "unit",
@@ -541,7 +541,7 @@
         },
         {
           "name": "test_uptime_kuma_monitor_custom",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_models.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_models.py",
           "line": 15,
           "length": 17,
           "intent": "unit",
@@ -551,7 +551,7 @@
         },
         {
           "name": "test_uptime_kuma_monitor_status",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_models.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_models.py",
           "line": 34,
           "length": 13,
           "intent": "unit",
@@ -561,7 +561,7 @@
         },
         {
           "name": "test_get_client_caching",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_auth.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_auth.py",
           "line": 18,
           "length": 11,
           "intent": "unit",
@@ -571,7 +571,7 @@
         },
         {
           "name": "test_get_client_user_pass",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_auth.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_auth.py",
           "line": 33,
           "length": 7,
           "intent": "unit",
@@ -581,7 +581,7 @@
         },
         {
           "name": "test_get_client_token_split",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_auth.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_auth.py",
           "line": 44,
           "length": 7,
           "intent": "unit",
@@ -591,7 +591,7 @@
         },
         {
           "name": "test_get_client_token_no_split",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_auth.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_auth.py",
           "line": 55,
           "length": 7,
           "intent": "unit",
@@ -601,7 +601,7 @@
         },
         {
           "name": "test_get_client_failure",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_auth.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_auth.py",
           "line": 65,
           "length": 8,
           "intent": "unit",
@@ -611,7 +611,7 @@
         },
         {
           "name": "test_server_startup",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_startup.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_startup.py",
           "line": 1,
           "length": 11,
           "intent": "unit",
@@ -621,7 +621,7 @@
         },
         {
           "name": "test_main_execution",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_main.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_main.py",
           "line": 6,
           "length": 4,
           "intent": "unit",
@@ -1032,157 +1032,157 @@
       "tests_missing_markers": [
         {
           "test_name": "test_expose_members",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_package_init.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_package_init.py",
           "line": 21
         },
         {
           "test_name": "test_import_module_safely_success",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_package_init.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_package_init.py",
           "line": 53
         },
         {
           "test_name": "test_import_module_safely_failure",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_package_init.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_package_init.py",
           "line": 61
         },
         {
           "test_name": "test_getattr_availability_flags",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_package_init.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_package_init.py",
           "line": 67
         },
         {
           "test_name": "test_getattr_availability_flags_fallback",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_package_init.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_package_init.py",
           "line": 84
         },
         {
           "test_name": "test_getattr_optional_modules_success",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_package_init.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_package_init.py",
           "line": 91
         },
         {
           "test_name": "test_getattr_attribute_error",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_package_init.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_package_init.py",
           "line": 106
         },
         {
           "test_name": "test_dir",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_package_init.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_package_init.py",
           "line": 113
         },
         {
           "test_name": "test_agent_server_normal",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_agent_server.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_agent_server.py",
           "line": 15
         },
         {
           "test_name": "test_agent_server_debug_mode",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_agent_server.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_agent_server.py",
           "line": 90
         },
         {
           "test_name": "test_agent_server_main_block",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_agent_server.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_agent_server.py",
           "line": 124
         },
         {
           "test_name": "test_uptime_kuma_monitors_tool",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_mcp_server.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_mcp_server.py",
           "line": 17
         },
         {
           "test_name": "test_uptime_kuma_status_tool",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_mcp_server.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_mcp_server.py",
           "line": 93
         },
         {
           "test_name": "test_health_check_route",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_mcp_server.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_mcp_server.py",
           "line": 135
         },
         {
           "test_name": "test_mcp_server_cli_runners",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_mcp_server.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_mcp_server.py",
           "line": 162
         },
         {
           "test_name": "test_import_warning_handling",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_mcp_server.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_mcp_server.py",
           "line": 199
         },
         {
           "test_name": "test_mcp_server_main_block",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_mcp_server.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_mcp_server.py",
           "line": 206
         },
         {
           "test_name": "test_concept_parity",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_concept_parity.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_concept_parity.py",
           "line": 58
         },
         {
           "test_name": "test_mcp_instance_creation",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_init.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_init.py",
           "line": 14
         },
         {
           "test_name": "test_uptime_kuma_monitor_defaults",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/tests/test_models.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/tests/test_models.py",
           "line": 4
         }
       ],
       "functions_missing_docstrings": [
         {
           "function": "register_monitors_tools",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/uptime_kuma_agent/mcp_server.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/uptime_kuma_agent/mcp_server.py",
           "line": 41,
           "length": 41
         },
         {
           "function": "register_status_tools",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/uptime_kuma_agent/mcp_server.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/uptime_kuma_agent/mcp_server.py",
           "line": 84,
           "length": 31
         },
         {
           "function": "get_mcp_instance",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/uptime_kuma_agent/mcp_server.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/uptime_kuma_agent/mcp_server.py",
           "line": 117,
           "length": 23
         },
         {
           "function": "mcp_server",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/uptime_kuma_agent/mcp_server.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/uptime_kuma_agent/mcp_server.py",
           "line": 142,
           "length": 16
         },
         {
           "function": "uptime_kuma_monitors",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/uptime_kuma_agent/mcp_server.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/uptime_kuma_agent/mcp_server.py",
           "line": 43,
           "length": 39
         },
         {
           "function": "uptime_kuma_status",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/uptime_kuma_agent/mcp_server.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/uptime_kuma_agent/mcp_server.py",
           "line": 86,
           "length": 29
         },
         {
           "function": "get_client",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/uptime_kuma_agent/auth.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/uptime_kuma_agent/auth.py",
           "line": 8,
           "length": 32
         },
         {
           "function": "agent_server",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/uptime_kuma_agent/agent_server.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/uptime_kuma_agent/agent_server.py",
           "line": 22,
           "length": 60
         },
         {
           "function": "__getattr__",
-          "file": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/uptime_kuma_agent/__init__.py",
+          "file": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/uptime_kuma_agent/__init__.py",
           "line": 46,
           "length": 26
         }
@@ -1462,7 +1462,7 @@
         {
           "criterion": "bumpversion_exists",
           "points": 20,
-          "evidence": "/home/apps/workspace/agent-packages/agents/uptime-kuma-agent/.bumpversion.cfg",
+          "evidence": "${WORKSPACE_ROOT}/agent-packages/agents/uptime-kuma-agent/.bumpversion.cfg",
           "reasoning": ".bumpversion.cfg found"
         },
         {
