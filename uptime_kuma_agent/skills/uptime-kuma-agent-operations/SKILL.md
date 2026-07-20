@@ -1,5 +1,6 @@
 ---
 name: uptime-kuma-agent-operations
+skill_type: skill
 description: >-
   Operate uptime-kuma-agent through its governed MCP and GraphOS capabilities, including caddy uptime sync, uptime kuma sync. Use when a request requires this provider's read, change, automation, ingestion, troubleshooting, or evidence workflows.
 ---
