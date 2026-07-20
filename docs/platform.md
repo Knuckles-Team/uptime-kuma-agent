@@ -75,7 +75,7 @@ services:
     volumes: ["uptime_data:/app/data"]
 
   uptime-kuma-agent-mcp:
-    image: knucklessg1/uptime-kuma-agent:latest
+    image: example/uptime-kuma-agent@sha256:<digest>
     depends_on: [uptime-kuma]
     environment:
       - UPTIME_KUMA_URL=http://uptime-kuma:3001

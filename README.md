@@ -81,8 +81,8 @@
 | `UPTIME_KUMA_USERNAME` | `admin (used if AUTH_TYPE is password)` |  |
 | `UPTIME_KUMA_PASSWORD` | `your_password_here` |  |
 | `AUTH_TYPE` | `password` | options: password, token |
-| `CADDYFILE_PATH` | `/home/apps/caddy/Caddyfile` | Caddyfile parsed by the kuma-sync skill |
-| `KUMA_DB_PATH` | `/home/apps/uptime-kuma/data/kuma.db` | Uptime-Kuma SQLite DB used by the kuma-sync skill |
+| `CADDYFILE_PATH` | deployment-provided | Caddyfile parsed by the kuma-sync skill |
+| `KUMA_DB_PATH` | deployment-provided | Uptime-Kuma SQLite DB used by the kuma-sync skill |
 | `MONITORSTOOL` | `True` |  |
 | `STATUSTOOL` | `True` |  |
 
@@ -128,10 +128,10 @@ The agent's behavior and connections can be fully configured via environment var
 | `UPTIME_KUMA_PASSWORD`| App Credential | None | Login password (if `AUTH_TYPE` is `password`). |
 | `MONITORSTOOL` | Toggle switch | `True` | Set to `False` to completely disable the `uptime_kuma_monitors` MCP tool. |
 | `STATUSTOOL` | Toggle switch | `True` | Set to `False` to completely disable the `uptime_kuma_status` MCP tool. |
-| `CADDYFILE_PATH` | Kuma Sync Skill | `/home/apps/caddy/Caddyfile` | Caddyfile parsed by the `uptime-kuma-sync` skill. |
-| `KUMA_DB_PATH` | Kuma Sync Skill | `/home/apps/uptime-kuma/data/kuma.db` | Uptime-Kuma SQLite DB used by the `uptime-kuma-sync` skill. |
+| `CADDYFILE_PATH` | Kuma Sync Skill | deployment-provided | Caddyfile parsed by the `uptime-kuma-sync` skill. |
+| `KUMA_DB_PATH` | Kuma Sync Skill | deployment-provided | Uptime-Kuma SQLite DB used by the `uptime-kuma-sync` skill. |
 | `ENABLE_OTEL` | Tracing Switch| `True` | Enable telemetry exports via OpenTelemetry standards. |
-| `OTEL_EXPORTER_OTLP_ENDPOINT` | Tracing | `http://langfuse.arpa/api/public/otel` | Core endpoint URL for exporting tracing and span data. |
+| `OTEL_EXPORTER_OTLP_ENDPOINT` | Tracing | `http://langfuse.example.invalid/api/public/otel` | Core endpoint URL for exporting tracing and span data. |
 | `OTEL_EXPORTER_OTLP_PUBLIC_KEY` / `OTEL_EXPORTER_OTLP_SECRET_KEY` | Tracing | None | OTLP exporter auth keys. |
 | `OTEL_EXPORTER_OTLP_PROTOCOL` | Tracing | None | OTLP protocol (e.g. `http/protobuf`). |
 | `EUNOMIA_TYPE` | Governance | `none` | Policy enforcement style. Options: `none`, `embedded`, `remote`. |
@@ -329,11 +329,10 @@ When query strings or parameters are supplied, an LLM-free **Knowledge Graph res
 
 <!-- MCP-CONFIG-EXAMPLES:START -->
 
-> **Install the slim `[mcp]` extra.** All examples install `uptime-kuma-agent[mcp]` — the
-> MCP-server extra that pulls only the FastMCP / FastAPI tooling (`agent-utilities[mcp]`).
-> It deliberately **excludes** the heavy agent runtime (`pydantic-ai`, the epistemic-graph
-> engine, `dspy`, `llama-index`), so `uvx` / container installs are far smaller. Use the
-> full `[agent]` extra only when you need the integrated Pydantic AI agent.
+> **Install the connector-focused `[mcp]` extra.** Examples use `uptime-kuma-agent[mcp]` to add
+> FastMCP / FastAPI through `agent-utilities[mcp]`; the required Agent Utilities core
+> still carries `epistemic-graph[full]`. The `[agent-runtime]` extra additionally
+> enables model orchestration.
 
 #### stdio Transport (local IDEs — Cursor, Claude Desktop, VS Code)
 
@@ -348,9 +347,7 @@ When query strings or parameters are supplied, an LLM-free **Knowledge Graph res
         "uptime-mcp"
       ],
       "env": {
-        "MCP_TOOL_MODE": "condensed",
-        "CADDYFILE_PATH": "/home/apps/caddy/Caddyfile",
-        "KUMA_DB_PATH": "/home/apps/uptime-kuma/data/kuma.db",
+        "MCP_TOOL_MODE": "intent",
         "MONITORSTOOL": "True",
         "STATUSTOOL": "True",
         "UPTIME_KUMA_PASSWORD": "your_password_here",
@@ -362,6 +359,10 @@ When query strings or parameters are supplied, an LLM-free **Knowledge Graph res
   }
 }
 ```
+
+Runtime references require an alias-aware launcher such as GraphOS. Other
+launchers must omit those entries and inject the resolved values through their
+own runtime secret boundary.
 
 #### Streamable-HTTP Transport (networked / production)
 
@@ -381,11 +382,9 @@ When query strings or parameters are supplied, an LLM-free **Knowledge Graph res
       ],
       "env": {
         "TRANSPORT": "streamable-http",
-        "HOST": "0.0.0.0",
+        "HOST": "127.0.0.1",
         "PORT": "8000",
-        "MCP_TOOL_MODE": "condensed",
-        "CADDYFILE_PATH": "/home/apps/caddy/Caddyfile",
-        "KUMA_DB_PATH": "/home/apps/uptime-kuma/data/kuma.db",
+        "MCP_TOOL_MODE": "intent",
         "MONITORSTOOL": "True",
         "STATUSTOOL": "True",
         "UPTIME_KUMA_PASSWORD": "your_password_here",
@@ -410,26 +409,31 @@ Alternatively, connect to a pre-deployed Streamable-HTTP instance by `url`:
 }
 ```
 
-Deploying the Streamable-HTTP server via Docker:
+Run a reviewed container image as a least-privilege stdio child (no
+listener or published port):
 
 ```bash
-docker run -d \
-  --name uptime-mcp-mcp \
-  -p 8000:8000 \
-  -e TRANSPORT=streamable-http \
-  -e HOST=0.0.0.0 \
-  -e PORT=8000 \
-  -e MCP_TOOL_MODE=condensed \
-  -e CADDYFILE_PATH=/home/apps/caddy/Caddyfile \
-  -e KUMA_DB_PATH=/home/apps/uptime-kuma/data/kuma.db \
+docker run -i --rm \
+  --read-only \
+  --cap-drop=ALL \
+  --security-opt=no-new-privileges \
+  --pids-limit=256 \
+  --tmpfs /tmp:rw,noexec,nosuid,nodev,size=64m \
+  -e TRANSPORT=stdio \
+  -e MCP_TOOL_MODE=intent \
   -e MONITORSTOOL=True \
   -e STATUSTOOL=True \
   -e UPTIME_KUMA_PASSWORD=your_password_here \
   -e UPTIME_KUMA_TOKEN="your_token_here (used if AUTH_TYPE is token)" \
   -e UPTIME_KUMA_URL=http://localhost:3001 \
   -e UPTIME_KUMA_USERNAME="admin (used if AUTH_TYPE is password)" \
-  knucklessg1/uptime-kuma-agent:mcp
+  registry.example.invalid/uptime-kuma-agent@sha256:<digest> uptime-mcp
 ```
+
+For containerized network HTTP, supply an authenticated TLS ingress (or
+direct server TLS), exact `MCP_ALLOWED_HOSTS`, and an exact trusted-proxy
+CIDR policy through the operator-owned deployment profile. The generator
+does not emit an unauthenticated non-loopback listener.
 
 _Auto-generated from the code-read env surface (`MCP_TOOL_MODE` + package vars) — do not edit._
 <!-- MCP-CONFIG-EXAMPLES:END -->
@@ -437,16 +441,16 @@ _Auto-generated from the code-read env surface (`MCP_TOOL_MODE` + package vars) 
 <!-- BEGIN GENERATED: additional-deployment-options -->
 ### Additional Deployment Options
 
-`uptime-kuma-agent` can also run as a **local container** (Docker / Podman / `uv`) or be
-consumed from a **remote deployment**. The
-[Deployment guide](https://knuckles-team.github.io/uptime-kuma-agent/deployment/) has full, copy-paste
-`mcp_config.json` for all four transports — **stdio**, **streamable-http**,
-**local container / uv**, and **remote URL**:
+`uptime-kuma-agent` can run as a local stdio process or container, or behind a remote
+network boundary. The
+[Deployment guide](https://knuckles-team.github.io/uptime-kuma-agent/deployment/) carries
+the detailed transport contract.
 
-- **Local container / uv** — launch the server from `mcp_config.json` via `uvx`,
-  `docker run`, or `podman run`, or point at a local streamable-http container by `url`.
-- **Remote URL** — connect to a server deployed behind Caddy at
-  `http://uptime-mcp.arpa/mcp` using the `"url"` key.
+- **Local container** — launch a reviewed immutable image as a least-privilege
+  stdio child with no listener or published port.
+- **Remote URL** — connect through an operator-supplied authenticated HTTPS
+  ingress. Keep its URL, outbound identity references, trust profile, and exact
+  `MCP_ALLOWED_HOSTS` in `AgentConfig`.
 <!-- END GENERATED: additional-deployment-options -->
 
 ## Agent
@@ -475,7 +479,7 @@ version: '3.8'
 
 services:
   uptime-kuma-agent-mcp:
-    image: knucklessg1/uptime-kuma-agent:mcp
+    image: example/uptime-kuma-agent:mcp
     container_name: uptime-kuma-agent-mcp
     hostname: uptime-kuma-agent-mcp
     restart: always
@@ -501,7 +505,7 @@ services:
         max-file: "3"
 
   uptime-kuma-agent-agent:
-    image: knucklessg1/uptime-kuma-agent:latest
+    image: example/uptime-kuma-agent@sha256:<digest>
     container_name: uptime-kuma-agent-agent
     hostname: uptime-kuma-agent-agent
     restart: always
@@ -563,15 +567,15 @@ Pick the extra that matches what you want to run:
 
 | Extra | Installs | Use when |
 |-------|----------|----------|
-| `uptime-kuma-agent[mcp]` | Slim MCP server only (`agent-utilities[mcp]` — FastMCP/FastAPI) | You only run the **MCP server** (smallest install / image) |
-| `uptime-kuma-agent[agent]` | Full agent runtime (`agent-utilities[agent,logfire]` — Pydantic AI + the epistemic-graph engine) | You run the **integrated agent** |
+| `uptime-kuma-agent[mcp]` | Connector-focused MCP server (`agent-utilities[mcp]` — FastMCP/FastAPI + `epistemic-graph[full]`) | You only run the **MCP server** (smallest install / image) |
+| `uptime-kuma-agent[agent]` | Agent runtime (`agent-utilities[agent-runtime,logfire]` — model orchestration + `epistemic-graph[full]`) | You run the **integrated agent** |
 | `uptime-kuma-agent[all]` | Everything (`mcp` + `agent` + `logfire`) | Development / both surfaces |
 
 ```bash
-# MCP server only (recommended for tool hosting — slim deps)
+# Connector-focused MCP server (includes the shared graph engine)
 uv pip install "uptime-kuma-agent[mcp]"
 
-# Full agent runtime (Pydantic AI + epistemic-graph engine)
+# Agent runtime (adds model orchestration to the shared graph engine)
 uv pip install "uptime-kuma-agent[agent]"
 
 # Everything (development)
@@ -584,26 +588,27 @@ One multi-stage `docker/Dockerfile` builds two right-sized images, selected by `
 
 | Image tag | Build target | Contents | Entrypoint |
 |-----------|--------------|----------|------------|
-| `knucklessg1/uptime-kuma-agent:mcp` | `--target mcp` | `uptime-kuma-agent[mcp]` — **slim**, no engine/`pydantic-ai`/`dspy`/`llama-index`/`tree-sitter` | `uptime-mcp` |
-| `knucklessg1/uptime-kuma-agent:latest` | `--target agent` (default) | `uptime-kuma-agent[agent]` — **full** agent runtime + epistemic-graph engine | `uptime-agent` |
+| `example/uptime-kuma-agent:mcp` | `--target mcp` | `uptime-kuma-agent[mcp]` — **connector-focused**, includes `epistemic-graph[full]`; no model-orchestration stack | `uptime-mcp` |
+| `example/uptime-kuma-agent@sha256:<digest>` | `--target agent` (default) | `uptime-kuma-agent[agent]` — **agent runtime**, model orchestration + `epistemic-graph[full]` | `uptime-agent` |
 
 ```bash
-docker build --target mcp   -t knucklessg1/uptime-kuma-agent:mcp    docker/   # slim MCP server
-docker build --target agent -t knucklessg1/uptime-kuma-agent:latest docker/   # full agent
+docker build --target mcp   -t example/uptime-kuma-agent:mcp    docker/   # connector-focused MCP server
+docker build --target agent -t example/uptime-kuma-agent:agent-local docker/   # agent runtime
 ```
 
-`docker/mcp.compose.yml` runs the slim `:mcp` server; `docker/agent.compose.yml` runs the
-agent (`:latest`) with a co-located `:mcp` sidecar.
+`docker/mcp.compose.yml` runs the connector-focused `:mcp` server; `docker/agent.compose.yml` runs the
+agent (`immutable agent digest`) with a co-located `:mcp` sidecar.
 
 ### Knowledge-graph database (`epistemic-graph`)
 
-The **full agent** (`[agent]` / `:latest`) embeds the **epistemic-graph** engine (pulled in
-transitively via `agent-utilities[agent]`). For production — or to share one knowledge graph
-across multiple agents — run **epistemic-graph as its own database container** and point the
-agent at it instead of embedding it. Deployment recipes (single-node + Raft HA), connection
-config, and the full database architecture (with diagrams) are documented in the
+Both `[mcp]` and `[agent]` carry the **epistemic-graph** engine through the required
+Agent Utilities core dependency (`epistemic-graph[full]`). The `[mcp]` extra keeps
+the server connector-focused; `[agent]` additionally enables model orchestration. Local
+deployments can use the bundled engine. For production or shared state, run
+**epistemic-graph as a dedicated database service** and configure the runtime to use it.
+Deployment recipes (single-node + Raft HA), connection configuration, and architecture
+diagrams are documented in the
 [epistemic-graph deployment guide](https://knuckles-team.github.io/epistemic-graph/deployment/).
-The slim `[mcp]` server does **not** require the database.
 
 ---
 
@@ -628,10 +633,10 @@ is the recommended reference for installation, deployment, and day-to-day operat
 
 ## Repository Owners
 
-<img width="100%" height="180em" src="https://github-readme-stats.vercel.app/api?username=Knucklessg1&show_icons=true&hide_border=true&&count_private=true&include_all_commits=true" />
+<img width="100%" height="180em" src="https://github-readme-stats.vercel.app/api?username=example&show_icons=true&hide_border=true&&count_private=true&include_all_commits=true" />
 
-![GitHub followers](https://img.shields.io/github/followers/Knucklessg1)
-![GitHub User's stars](https://img.shields.io/github/stars/Knucklessg1)
+![GitHub followers](https://img.shields.io/github/followers/example)
+![GitHub User's stars](https://img.shields.io/github/stars/example)
 
 ---
 
@@ -644,23 +649,40 @@ Contributions are welcome! Please ensure code quality by executing local checks 
 - Execute test suites using `pytest`
 
 
-<!-- BEGIN agent-os-genesis-deploy (generated; do not edit between markers) -->
+<!-- BEGIN agent-utilities-deployment (generated; do not edit between markers) -->
 
-## Deploy with `agent-os-genesis`
+## Deploy with `agent-utilities-deployment`
 
-This package can be provisioned for you — skill-guided — by the **`agent-os-genesis`**
-universal skill (its *single-package deploy mode*): it picks your install method, seeds
-secrets to OpenBao/Vault (or `.env`), trusts your enterprise CA, registers the MCP
-server, and verifies it — the same machinery that stands up the whole Agent OS, narrowed
-to just this package. Ask your agent to **"deploy `uptime-kuma-agent` with agent-os-genesis"**.
+Provision this package with the consolidated **`agent-utilities-deployment`**
+workflow. It selects an installed-package, editable-source, or immutable-container
+path; records only runtime secret and TLS-profile references in `AgentConfig`; and
+runs doctor, registration, policy, observability, and rollback gates. Ask your agent
+to **"deploy `uptime-kuma-agent` with agent-utilities-deployment"**.
 
 | Install mode | Command |
 |------|---------|
-| Bare-metal, prod (PyPI) | `uvx uptime-mcp` · or `uv tool install uptime-kuma-agent` |
-| Bare-metal, dev (editable) | `uv pip install -e ".[all]"` · or `pip install -e ".[all]"` |
-| Container, prod | deploy `knucklessg1/uptime-kuma-agent:latest` via docker-compose / swarm / podman / podman-compose / kubernetes |
-| Container, dev (editable) | deploy `docker/compose.dev.yml` (source-mounted at `/src`; edits live on restart) |
+| Installed package | `uv tool install "uptime-kuma-agent[mcp]"`, then run `uptime-mcp` |
+| Editable source | `uv pip install -e ".[agent]"`, then run `uptime-mcp` |
+| Immutable container | deploy `registry.example.invalid/uptime-kuma-agent@sha256:<digest>` through the operator-selected orchestrator |
 
-Secrets are read-existing + seeded via `vault_sync` — you are only prompted for what's missing.
+The repository embeds no deployment profile, credential value, certificate path, or
+environment-specific endpoint. Supply those at runtime through `AgentConfig` and the
+configured secret provider.
 
-<!-- END agent-os-genesis-deploy -->
+<!-- END agent-utilities-deployment -->
+
+<!-- GOVERNED-CAPABILITY:START -->
+## Governed capability contract
+
+This package ships a compact canonical skill surface with specialist procedures
+kept as referenced workflows. The current MCP tools, skill metadata,
+`connector_manifest.yml`, ontology, mappings, shapes, fixtures, migrations,
+tool-schema fingerprints, and certification metadata form one versioned
+capability contract. Validate them together; do not rely on stale tool names or
+historical per-task skill wrappers.
+
+Runtime endpoints, credentials, certificate trust, tenant identity, retention,
+and observability policy are deployment inputs and are never packaged values.
+See [Configuration, trust, and privacy](docs/configuration.md) before enabling a
+network transport, connector ingestion, GraphOS delegation, or trace export.
+<!-- GOVERNED-CAPABILITY:END -->

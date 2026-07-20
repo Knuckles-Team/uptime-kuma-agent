@@ -1,0 +1,20 @@
+schema_version: '1'
+connector: uptime-kuma-agent
+ontology_source: uptimekuma
+sync:
+- preset: uptimekuma-monitors
+  server: uptime-kuma-agent
+  tool: uptime_kuma_monitors
+  action: get_monitors
+  records_path: ''
+  id_field: id
+  title_field: name
+  text_field: url
+  updated_field: ''
+  doc_type: uptimekuma
+  tool_schema_sha256: 48a9ba14d62993c0544b0e97e4ce6ca638bc9338506d186c5b72fbfcc9e9c816
+governance:
+  default_acl: quarantine
+  identity: opaque-reference
+  tenant: required-at-materialization
+  provenance: required-at-materialization

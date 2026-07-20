@@ -1,0 +1,8 @@
+{
+  "algorithm": "agent-utilities:mcp-tool-schema-compat:v1",
+  "connector": "uptime-kuma-agent",
+  "schema_version": "1",
+  "tools": {
+    "uptime_kuma_monitors": "48a9ba14d62993c0544b0e97e4ce6ca638bc9338506d186c5b72fbfcc9e9c816"
+  }
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Uptime Kuma Agent Operations"
+  short_description: "Help with Uptime Kuma Agent Operations tasks"
+  default_prompt: "Use $uptime-kuma-agent-operations to complete a governed provider workflow."

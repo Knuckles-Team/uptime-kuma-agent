@@ -1,0 +1,37 @@
+{
+  "api_version": "graphos.io/v1",
+  "artifacts": {
+    "a2a.json": "391a9a930807b9db29c1129812c654154051c98d3d95403d5e87a9762b8c3120",
+    "connector_manifest.yml": "48e969ea9db9c9cced98c0eb5f824a3b7f24d93e742aa246d7c2b5a37c69d5c4",
+    "uptime_kuma_agent/connectors/mcp_source_presets.json": "9ec85c31d0c9bad57a166f6bdd91eb777aa8f7ed81102789e486bca866cd1ae4",
+    "uptime_kuma_agent/connectors/tool_schema_fingerprints.json": "7768ae50e0617c1b3e0bbebe463abf45a86e66e8a382d33eb9cdd469a5c6dc2d",
+    "uptime_kuma_agent/ontology/fixtures/records.json": "480b29e01ed9ef0bf09ce76db8d7a0e89a18645a3bca12d7cd53fc4fb3612ffc",
+    "uptime_kuma_agent/ontology/mappings/source.yaml": "f60893055ec4b6415b90b09281bf438f3bf4e7638e4628950c2d5921868ecd24",
+    "uptime_kuma_agent/ontology/migrations/manifest.json": "d514caa62423dc48d9557b3de0f6390f7393545031cc7cfb68d45aa2042be08c",
+    "uptime_kuma_agent/ontology/shapes/connector.shacl.ttl": "5f639a29b2a763b064a7fb6c8e2abcd276eeaa2af778cc3f1b1a5d81423e5f05",
+    "uptime_kuma_agent/ontology/uptimekuma.ttl": "bf536f311ac709a1629b5ece19de8865d3fab882df8e9fe7218dbeb99a69a182"
+  },
+  "checks": {
+    "declared_tool_schema": "passed",
+    "manifest_integrity": "passed",
+    "privacy_contract": "passed",
+    "shacl_parse": "passed",
+    "synthetic_fixture_contract": "passed"
+  },
+  "compatibility": {
+    "agent_utilities": ">=1.27.1,<2",
+    "bundle_schema": "2",
+    "epistemic_graph": ">=2.23.1,<3"
+  },
+  "connector": "uptime-kuma-agent",
+  "kind": "ConnectorSourceAttestation",
+  "live_certified": false,
+  "mode": "offline-source",
+  "schema_version": "2",
+  "signature": "zO6QZmrAVoG4YiMmWIfCrWoSTCLydJdpc2N3IpHBq9wIjAvTvXjuhfv0XWW3KEByJT0ZyMvgh9fncZ5550oGCw",
+  "signature_algorithm": "ed25519",
+  "signer": "ontology-manifest-generator",
+  "signing_public_key": "q0Cp7bmQMqJhbofGKKw8xXC6KbFzukBDDke0UYVi8y4",
+  "status": "source-validated",
+  "validated_at": "2026-07-18T00:00:00Z"
+}

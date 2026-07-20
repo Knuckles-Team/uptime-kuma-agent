@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Synchronize Caddy reverse proxy routes into Uptime Kuma as HTTP monitors.
 
-Parses the Caddyfile for .arpa hostnames, deduplicates them, appends /health
+Parses the Caddyfile for configured hostnames, deduplicates them, appends /health
 suffixes for MCP service endpoints, and inserts missing monitors directly
 into the Uptime Kuma SQLite database.
 
@@ -18,11 +18,14 @@ import sqlite3
 import sys
 
 
-def parse_caddyfile(caddyfile_path: str) -> list[tuple[str, str]]:
+def parse_caddyfile(
+    caddyfile_path: str, allowed_suffixes: tuple[str, ...] = ()
+) -> list[tuple[str, str]]:
     """Parse Caddyfile and extract (name, url) tuples for each server block.
 
-    Looks for lines containing `.arpa` (or other configured TLDs) followed
-    by `{`, indicating a Caddy server block declaration.  Uses any preceding
+    Looks for hostname lines followed by ``{``, indicating a Caddy server block
+    declaration. When ``allowed_suffixes`` is non-empty, only matching hosts are
+    included. Uses any preceding
     `# comment` line as the human-readable monitor name.
 
     Returns:
@@ -38,10 +41,18 @@ def parse_caddyfile(caddyfile_path: str) -> list[tuple[str, str]]:
         line = line.strip()
         if line.startswith("#"):
             current_comment = line.lstrip("#").strip()
-        elif (".arpa" in line or ".heavenhomestead.com" in line) and "{" in line:
+        elif "{" in line:
             match = re.match(r"(https?://)?([a-zA-Z0-9._-]+)", line)
             if match:
                 url = match.group(0)
+                hostname = match.group(2).lower()
+                if "." not in hostname:
+                    continue
+                if allowed_suffixes and not any(
+                    hostname == suffix or hostname.endswith(f".{suffix}")
+                    for suffix in allowed_suffixes
+                ):
+                    continue
                 if not url.startswith("http"):
                     url = "https://" + url if "registry" in url else "http://" + url
 
@@ -98,7 +109,7 @@ def sync_monitors(
         test_url = ensure_health_suffix(url)
 
         if test_url in existing_urls:
-            print(f"  [skip] {test_url} — already registered")
+            print("  [skip] monitor endpoint already registered")
             continue
 
         if dry_run:
@@ -124,18 +135,22 @@ def sync_monitors(
 
 
 def main() -> None:
+    configured_caddyfile = os.environ.get("CADDYFILE_PATH")
+    configured_db = os.environ.get("KUMA_DB_PATH")
     parser = argparse.ArgumentParser(
         description="Sync Caddy routes into Uptime Kuma monitors."
     )
     parser.add_argument(
         "--caddyfile",
-        default=os.environ.get("CADDYFILE_PATH", "/home/apps/caddy/Caddyfile"),
-        help="Path to the Caddyfile (default: /home/apps/caddy/Caddyfile)",
+        default=configured_caddyfile,
+        required=configured_caddyfile is None,
+        help="Path to the Caddyfile (or set CADDYFILE_PATH)",
     )
     parser.add_argument(
         "--db",
-        default=os.environ.get("KUMA_DB_PATH", "/home/apps/uptime-kuma/data/kuma.db"),
-        help="Path to the Uptime Kuma SQLite database (default: /home/apps/uptime-kuma/data/kuma.db)",
+        default=configured_db,
+        required=configured_db is None,
+        help="Path to the Uptime Kuma SQLite database (or set KUMA_DB_PATH)",
     )
     parser.add_argument(
         "--dry-run",
@@ -145,14 +160,19 @@ def main() -> None:
     args = parser.parse_args()
 
     if not os.path.isfile(args.caddyfile):
-        print(f"Error: Caddyfile not found at {args.caddyfile}", file=sys.stderr)
+        print("Error: the configured Caddyfile was not found", file=sys.stderr)
         sys.exit(1)
 
     if not os.path.isfile(args.db):
-        print(f"Error: Uptime Kuma database not found at {args.db}", file=sys.stderr)
+        print("Error: the configured Uptime Kuma database was not found", file=sys.stderr)
         sys.exit(1)
 
-    monitors = parse_caddyfile(args.caddyfile)
+    allowed_suffixes = tuple(
+        suffix.strip().lower().lstrip(".")
+        for suffix in os.environ.get("MONITOR_HOST_SUFFIXES", "").split(",")
+        if suffix.strip()
+    )
+    monitors = parse_caddyfile(args.caddyfile, allowed_suffixes)
     print(f"Parsed {len(monitors)} routes from Caddyfile.")
 
     mode = "DRY RUN" if args.dry_run else "LIVE"

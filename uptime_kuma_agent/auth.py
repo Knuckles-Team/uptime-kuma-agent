@@ -1,23 +1,31 @@
-from agent_utilities.core.config import setting
-from uptime_kuma_api import UptimeKumaApi
+from __future__ import annotations
 
-_client = None
+from typing import TYPE_CHECKING, Any
+
+from agent_utilities.core.config import setting
+
+if TYPE_CHECKING:
+    from uptime_kuma_api import UptimeKumaApi
+
+_client: Any = None
 
 
 def get_client() -> UptimeKumaApi:
     """Connect + authenticate to Uptime Kuma, caching the client.
 
-    Fails VERBOSELY: the socket.io client otherwise surfaces opaque
+    Fails with actionable, privacy-safe diagnostics: the socket.io client otherwise surfaces opaque
     ``Timed out while waiting for event Event.INFO`` on a bad URL and a bare
     ``Incorrect username or password`` on bad creds — neither says which step
     failed or how to fix it. We distinguish CONNECT vs LOGIN vs UNCONFIGURED and
-    include the target URL + a remediation hint. A generous connect ``timeout``
+    include a remediation hint without echoing endpoint or identity values. A generous connect ``timeout``
     (default 30s, overridable via ``UPTIME_KUMA_TIMEOUT``) absorbs
     cluster/ingress latency that makes the library's short default time out.
     """
     global _client
     if _client is not None:
         return _client
+
+    from uptime_kuma_api import UptimeKumaApi
 
     base_url = setting("UPTIME_KUMA_URL", "http://localhost:3001")
     # Accept several credential env names. SUPERTOKEN is the name the deployed
@@ -38,10 +46,9 @@ def get_client() -> UptimeKumaApi:
         client = UptimeKumaApi(base_url, timeout=timeout)
     except Exception as e:
         raise RuntimeError(
-            f"Uptime Kuma CONNECT failed to {base_url!r} (timeout={timeout}s): "
-            f"{type(e).__name__}: {e}. Verify UPTIME_KUMA_URL points at the reachable "
-            f"Uptime Kuma socket.io endpoint (a Service DNS name, not a stale host)."
-        ) from e
+            f"Uptime Kuma CONNECT failed ({type(e).__name__}). Verify UPTIME_KUMA_URL "
+            "points at a reachable socket.io endpoint."
+        ) from None
 
     if not (username and password):
         try:
@@ -49,9 +56,8 @@ def get_client() -> UptimeKumaApi:
         except Exception:
             pass
         raise RuntimeError(
-            f"Uptime Kuma auth is NOT configured for {base_url!r}: set "
-            f"UPTIME_KUMA_USERNAME + UPTIME_KUMA_PASSWORD (or UPTIME_KUMA_TOKEN / "
-            f"SUPERTOKEN as 'user:pass' or a bare password) to valid admin credentials."
+            "Uptime Kuma auth is not configured: set UPTIME_KUMA_USERNAME and "
+            "UPTIME_KUMA_PASSWORD, or configure a supported token reference."
         )
 
     try:
@@ -62,10 +68,8 @@ def get_client() -> UptimeKumaApi:
         except Exception:
             pass
         raise RuntimeError(
-            f"Uptime Kuma LOGIN failed for user {username!r} at {base_url!r}: "
-            f"{type(e).__name__}: {e}. Check the credentials (UPTIME_KUMA_USERNAME/"
-            f"UPTIME_KUMA_PASSWORD); reset the admin password if unknown."
-        ) from e
+            f"Uptime Kuma LOGIN failed ({type(e).__name__}). Check the configured credentials."
+        ) from None
 
     _client = client
     return _client

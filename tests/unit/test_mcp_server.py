@@ -303,7 +303,7 @@ def test_mcp_server_main_block():
     mock_args.transport = "stdio"
 
     with patch(
-        "agent_utilities.mcp_utilities.create_mcp_server",
+        "agent_utilities.mcp.server_factory.create_mcp_server",
         return_value=(mock_args, mock_mcp, []),
     ):
         with patch("sys.argv", ["mcp_server.py"]):

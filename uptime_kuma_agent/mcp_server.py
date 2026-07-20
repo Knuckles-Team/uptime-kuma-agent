@@ -23,15 +23,12 @@ import logging
 import sys
 from typing import Any
 
-from agent_utilities.mcp_utilities import (
-    create_mcp_server,
-    load_config,
-    register_tool_surface,
-    resolve_action,
-)
+from agent_utilities.core.config import load_config
+from agent_utilities.mcp.action_dispatch import resolve_action
+from agent_utilities.mcp.server_factory import create_mcp_server
+from agent_utilities.mcp.verbose_tools import register_tool_surface
 from starlette.requests import Request
 from starlette.responses import JSONResponse
-from uptime_kuma_api import UptimeKumaApi
 
 from uptime_kuma_agent.auth import get_client
 
@@ -39,6 +36,21 @@ __version__ = "1.0.1"
 
 logger = get_logger(name="uptime-kuma-agent")
 logger.setLevel(logging.INFO)
+
+
+def _optional_client_type() -> type[Any] | None:
+    """Load the upstream client only when verbose reflection needs it.
+
+    Condensed tool-schema discovery is intentionally offline and must remain
+    available from a source checkout even when the runtime-only client package
+    has not been installed. Actual tool execution still imports it fail-closed
+    through :func:`get_client`.
+    """
+    try:
+        from uptime_kuma_api import UptimeKumaApi
+    except ImportError:
+        return None
+    return UptimeKumaApi
 
 
 def register_monitors_tools(mcp: FastMCP):
@@ -62,8 +74,8 @@ def register_monitors_tools(mcp: FastMCP):
 
         try:
             kwargs = json.loads(params_json)
-        except Exception as e:
-            return {"error": f"Invalid params_json: {e}"}
+        except Exception:
+            return {"error": "Operation failed"}
 
         kwargs = {k: v for k, v in kwargs.items() if v is not None}
 
@@ -119,8 +131,8 @@ def register_status_tools(mcp: FastMCP):
 
         try:
             kwargs = json.loads(params_json)
-        except Exception as e:
-            return {"error": f"Invalid params_json: {e}"}
+        except Exception:
+            return {"error": "Operation failed"}
 
         kwargs = {k: v for k, v in kwargs.items() if v is not None}
 
@@ -154,8 +166,7 @@ def register_ingest_tools(mcp: FastMCP):
 
         Lists monitors via the Uptime Kuma client and pushes them (as
         :UptimeMonitor nodes, plus optional :HeartbeatStat timeseries samples linked
-        via :heartbeatOf) into the knowledge graph via the fast engine client.
-        Best-effort: returns ``{"ingested": None}`` when no engine is reachable.
+        via :heartbeatOf) through the authoritative native-ingest transaction.
         CONCEPT:AU-KG.ingest.enterprise-source-extractor.
         """
         if ctx:
@@ -166,8 +177,8 @@ def register_ingest_tools(mcp: FastMCP):
 
         try:
             opts = _json.loads(params_json) if params_json else {}
-        except Exception as e:  # noqa: BLE001
-            return {"error": f"Invalid params_json: {e}"}
+        except Exception:  # noqa: BLE001
+            return {"error": "Operation failed"}
 
         monitors = client.get_monitors()
         records = monitors if isinstance(monitors, list) else [monitors]
@@ -182,7 +193,9 @@ def register_ingest_tools(mcp: FastMCP):
             try:
                 heartbeats = client.get_heartbeats()
             except Exception as e:  # noqa: BLE001 — heartbeats optional/best-effort
-                logger.warning("get_heartbeats failed: %s", e)
+                logger.warning(
+                    "get_heartbeats failed: error_type=%s", type(e).__name__
+                )
                 heartbeats = None
 
         result = ingest_monitors(records, heartbeats)
@@ -204,7 +217,7 @@ def get_mcp_instance() -> tuple[Any, ...]:
 
     register_tool_surface(
         mcp,
-        client_cls=UptimeKumaApi,
+        client_cls=_optional_client_type(),
         get_client=get_client,
         service="uptime-kuma-agent",
         tools_module=sys.modules[__name__],

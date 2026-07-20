@@ -48,16 +48,16 @@ uv run uptime-mcp
 
 ## Prebuilt Docker image
 
-A multi-stage, slim image is published on every release (entrypoint `uptime-mcp`):
+A multi-stage runtime image is published on every release (entrypoint `uptime-mcp`):
 
 ```bash
-docker pull knucklessg1/uptime-kuma-agent:latest
+docker pull example/uptime-kuma-agent@sha256:<digest>
 
 docker run --rm -i \
   -e UPTIME_KUMA_URL=http://your-kuma:3001 \
   -e UPTIME_KUMA_USERNAME=admin \
   -e UPTIME_KUMA_PASSWORD=your_password_here \
-  knucklessg1/uptime-kuma-agent:latest        # stdio transport (default)
+  example/uptime-kuma-agent@sha256:<digest>        # stdio transport (default)
 ```
 
 For an HTTP server with a published port and the agent service, see

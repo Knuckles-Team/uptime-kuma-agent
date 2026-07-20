@@ -8,6 +8,9 @@ CONCEPT:AU-KG.ingest.enterprise-source-extractor.
 
 from __future__ import annotations
 
+import pytest
+from agent_utilities.knowledge_graph.memory.native_ingest import NativeIngestError
+
 from uptime_kuma_agent.kg_ingest import (
     ingest_documents,
     ingest_entities,
@@ -18,6 +21,7 @@ from uptime_kuma_agent.kg_ingest import (
 class _FakeTxn:
     def __init__(self):
         self.nodes = {}
+        self.edges = []
         self.committed = False
 
     def begin(self, graph=None):
@@ -27,33 +31,27 @@ class _FakeTxn:
     def add_node(self, txn, node_id, props):
         self.nodes[node_id] = props
 
+    def add_edge(self, txn, source, target, props):
+        self.edges.append((source, target, props))
+
     def commit(self, txn):
         self.committed = True
         return True
 
 
-class _FakeEdges:
-    def __init__(self):
-        self.edges = []
-
-    def add(self, src, dst, props):
-        self.edges.append((src, dst, props))
-
-
 class _FakeClient:
     def __init__(self):
         self.txn = _FakeTxn()
-        self.edges = _FakeEdges()
 
 
 def test_ingest_entities_writes_nodes_and_edges():
     c = _FakeClient()
     res = ingest_entities(
         [
-            {"id": "a", "type": "UptimeMonitor", "name": "web"},
-            {"id": "b", "type": "HeartbeatStat"},
+            {"id": "a", "node_type": "UptimeMonitor", "name": "web"},
+            {"id": "b", "node_type": "HeartbeatStat"},
         ],
-        [{"source": "b", "target": "a", "type": "heartbeatOf"}],
+        [{"source": "b", "target": "a", "relationship": "heartbeatOf"}],
         client=c,
         graph="__commons__",
     )
@@ -63,7 +61,7 @@ def test_ingest_entities_writes_nodes_and_edges():
     # provenance is stamped
     assert c.txn.nodes["a"]["source"] == "uptime-kuma-agent"
     assert c.txn.nodes["a"]["domain"] == "uptimekuma"
-    assert c.edges.edges == [("b", "a", {"type": "heartbeatOf"})]
+    assert c.txn.edges == [("b", "a", {"relationship": "heartbeatOf"})]
 
 
 def test_ingest_monitors_maps_monitor_and_heartbeats():
@@ -96,7 +94,7 @@ def test_ingest_monitors_maps_monitor_and_heartbeats():
     # 1 monitor + 2 heartbeats = 3 nodes; 2 heartbeatOf edges
     assert res == {"nodes": 3, "edges": 2}
     mon = c.txn.nodes["uptimekuma:monitor:3"]
-    assert mon["type"] == "UptimeMonitor"
+    assert mon["node_type"] == "UptimeMonitor"
     assert mon["monitorType"] == "http"
     assert mon["monitorUrl"] == "https://api.example/health"
     assert mon["checkInterval"] == 60
@@ -106,12 +104,12 @@ def test_ingest_monitors_maps_monitor_and_heartbeats():
     hb_ids = [k for k in c.txn.nodes if k.startswith("uptimekuma:heartbeat:3:")]
     assert len(hb_ids) == 2
     up = c.txn.nodes["uptimekuma:heartbeat:3:2026-07-04T10-00-00"]
-    assert up["type"] == "HeartbeatStat"
+    assert up["node_type"] == "HeartbeatStat"
     assert up["heartbeatStatus"] == 1
     assert up["ping"] == 12.5
     assert all(
-        rel[1] == "uptimekuma:monitor:3" and rel[2] == {"type": "heartbeatOf"}
-        for rel in c.edges.edges
+        rel[1] == "uptimekuma:monitor:3" and rel[2] == {"relationship": "heartbeatOf"}
+        for rel in c.txn.edges
     )
 
 
@@ -121,7 +119,7 @@ def test_ingest_monitors_without_heartbeats():
         [{"id": 1, "name": "web", "type": "http"}], client=c, graph="__commons__"
     )
     assert res == {"nodes": 1, "edges": 0}
-    assert c.txn.nodes["uptimekuma:monitor:1"]["type"] == "UptimeMonitor"
+    assert c.txn.nodes["uptimekuma:monitor:1"]["node_type"] == "UptimeMonitor"
 
 
 def test_ingest_documents_writes_document_nodes():
@@ -133,15 +131,18 @@ def test_ingest_documents_writes_document_nodes():
     )
     assert res == {"nodes": 1, "edges": 0}
     node = c.txn.nodes["uptimekuma:doc:1"]
-    assert node["type"] == "Document"
+    assert node["node_type"] == "Document"
     assert node["text"] == "monitor api is degraded"
 
 
-def test_ingest_noops_without_engine():
-    # No injected client + no reachable engine -> clean no-op.
-    assert ingest_entities([{"id": "a", "type": "UptimeMonitor"}]) is None
+def test_retired_node_type_alias_is_rejected():
+    with pytest.raises(NativeIngestError, match="canonical node_type"):
+        ingest_entities(
+            [{"id": "retired", "type": "RetiredAlias"}],
+            client=_FakeClient(),
+        )
 
 
-def test_ingest_empty_is_noop():
-    assert ingest_entities([], client=_FakeClient()) is None
-    assert ingest_monitors([], client=_FakeClient()) is None
+def test_empty_native_ingest_is_rejected():
+    with pytest.raises(NativeIngestError, match="at least one entity"):
+        ingest_entities([], client=_FakeClient())

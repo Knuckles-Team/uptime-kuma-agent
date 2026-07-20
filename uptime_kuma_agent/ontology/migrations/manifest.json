@@ -1,0 +1,6 @@
+{
+  "connector": "uptime-kuma-agent",
+  "current_ontology_source": "uptimekuma",
+  "migrations": [],
+  "schema_version": "1"
+}
