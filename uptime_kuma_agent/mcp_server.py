@@ -25,6 +25,7 @@ from typing import Any
 
 from agent_utilities.core.config import load_config
 from agent_utilities.mcp.action_dispatch import resolve_action
+from agent_utilities.mcp.concurrency import run_blocking
 from agent_utilities.mcp.server_factory import create_mcp_server
 from agent_utilities.mcp.verbose_tools import register_tool_surface
 from starlette.requests import Request
@@ -94,19 +95,19 @@ def register_monitors_tools(mcp: FastMCP):
         action = resolved
 
         if action == "get_monitors":
-            return client.get_monitors(**kwargs)
+            return await run_blocking(client.get_monitors, **kwargs)
         if action == "get_monitor":
-            return client.get_monitor(**kwargs)
+            return await run_blocking(client.get_monitor, **kwargs)
         if action == "add_monitor":
-            return client.add_monitor(**kwargs)
+            return await run_blocking(client.add_monitor, **kwargs)
         if action == "edit_monitor":
-            return client.edit_monitor(**kwargs)
+            return await run_blocking(client.edit_monitor, **kwargs)
         if action == "delete_monitor":
-            return client.delete_monitor(**kwargs)
+            return await run_blocking(client.delete_monitor, **kwargs)
         if action == "pause_monitor":
-            return client.pause_monitor(**kwargs)
+            return await run_blocking(client.pause_monitor, **kwargs)
         if action == "resume_monitor":
-            return client.resume_monitor(**kwargs)
+            return await run_blocking(client.resume_monitor, **kwargs)
         raise ValueError(f"Unknown action: {action}")
 
 
@@ -143,9 +144,9 @@ def register_status_tools(mcp: FastMCP):
         action = resolved
 
         if action == "get_heartbeats":
-            return client.get_heartbeats(**kwargs)
+            return await run_blocking(client.get_heartbeats, **kwargs)
         if action == "info":
-            return client.info(**kwargs)
+            return await run_blocking(client.info, **kwargs)
         raise ValueError(f"Unknown action: {action}")
 
 
@@ -193,9 +194,7 @@ def register_ingest_tools(mcp: FastMCP):
             try:
                 heartbeats = client.get_heartbeats()
             except Exception as e:  # noqa: BLE001 — heartbeats optional/best-effort
-                logger.warning(
-                    "get_heartbeats failed: error_type=%s", type(e).__name__
-                )
+                logger.warning("get_heartbeats failed: error_type=%s", type(e).__name__)
                 heartbeats = None
 
         result = ingest_monitors(records, heartbeats)
