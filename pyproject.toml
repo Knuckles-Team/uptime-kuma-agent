@@ -9,7 +9,7 @@ description = "Agent for interacting with Uptime Kuma API"
 readme = "README.md"
 classifiers = [ "Development Status :: 4 - Beta", "License :: OSI Approved :: MIT License", "Environment :: Console", "Operating System :: POSIX :: Linux", "Programming Language :: Python :: 3",]
 requires-python = ">=3.11, <3.15"
-dependencies = [ "agent-utilities[mcp]>=1.27.1,<2.0.0", "uptime-kuma-api>=1.2.1", "requests>=2.8.1",]
+dependencies = [ "agent-utilities[mcp]>=1.27.1,<2.0.0", "uptime-kuma-api>=1.2.1", "requests>=2.34.2",]
 [[project.authors]]
 name = "Project Maintainers"
 email = "maintainers@users.noreply.github.com"
@@ -22,7 +22,7 @@ mcp = [ "agent-utilities[mcp]>=1.27.1,<2.0.0",]
 agent = [ "agent-utilities[agent-runtime,logfire]>=1.27.1,<2.0.0",]
 all = [ "agent-utilities[mcp,agent-runtime,logfire]>=1.27.1,<2.0.0",]
 test = [
-    "pytest-xdist>=3.6.0", "pytest", "pytest-asyncio", "pytest-cov",]
+    "pytest-xdist>=3.8.0", "pytest>=9.1.1", "pytest-asyncio>=1.4.0", "pytest-cov>=7.1.0",]
 
 [project.scripts]
 uptime-mcp = "uptime_kuma_agent.mcp_server:mcp_server"
