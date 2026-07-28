@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from typing import TYPE_CHECKING, Any
 
 from agent_utilities.core.config import setting
@@ -8,6 +9,14 @@ if TYPE_CHECKING:
     from uptime_kuma_api import UptimeKumaApi
 
 _client: Any = None
+logger = logging.getLogger(__name__)
+
+
+def _new_client(base_url: str, *, timeout: int) -> UptimeKumaApi:
+    """Construct the optional runtime client behind a unit-testable seam."""
+    from uptime_kuma_api import UptimeKumaApi
+
+    return UptimeKumaApi(base_url, timeout=timeout)
 
 
 def get_client() -> UptimeKumaApi:
@@ -25,8 +34,6 @@ def get_client() -> UptimeKumaApi:
     if _client is not None:
         return _client
 
-    from uptime_kuma_api import UptimeKumaApi
-
     base_url = setting("UPTIME_KUMA_URL", "http://localhost:3001")
     # Accept several credential env names. SUPERTOKEN is the name the deployed
     # stack injects; UPTIME_KUMA_TOKEN is the documented one. Either may be
@@ -43,7 +50,7 @@ def get_client() -> UptimeKumaApi:
             username, password = (username or "admin"), token
 
     try:
-        client = UptimeKumaApi(base_url, timeout=timeout)
+        client = _new_client(base_url, timeout=timeout)
     except Exception as e:
         raise RuntimeError(
             f"Uptime Kuma CONNECT failed ({type(e).__name__}). Verify UPTIME_KUMA_URL "
@@ -53,8 +60,11 @@ def get_client() -> UptimeKumaApi:
     if not (username and password):
         try:
             client.disconnect()
-        except Exception:
-            pass
+        except Exception as exc:
+            logger.debug(
+                "Uptime Kuma disconnect after missing auth failed: error_type=%s",
+                type(exc).__name__,
+            )
         raise RuntimeError(
             "Uptime Kuma auth is not configured: set UPTIME_KUMA_USERNAME and "
             "UPTIME_KUMA_PASSWORD, or configure a supported token reference."
@@ -65,8 +75,11 @@ def get_client() -> UptimeKumaApi:
     except Exception as e:
         try:
             client.disconnect()
-        except Exception:
-            pass
+        except Exception as disconnect_error:
+            logger.debug(
+                "Uptime Kuma disconnect after login failure failed: error_type=%s",
+                type(disconnect_error).__name__,
+            )
         raise RuntimeError(
             f"Uptime Kuma LOGIN failed ({type(e).__name__}). Check the configured credentials."
         ) from None

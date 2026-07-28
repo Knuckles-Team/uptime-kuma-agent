@@ -164,7 +164,9 @@ def main() -> None:
         sys.exit(1)
 
     if not os.path.isfile(args.db):
-        print("Error: the configured Uptime Kuma database was not found", file=sys.stderr)
+        print(
+            "Error: the configured Uptime Kuma database was not found", file=sys.stderr
+        )
         sys.exit(1)
 
     allowed_suffixes = tuple(
