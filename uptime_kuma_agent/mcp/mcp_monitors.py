@@ -48,7 +48,7 @@ def register_monitors_tools(mcp: FastMCP):
     ) -> dict:
         """Manage uptime kuma monitors operations."""
         if ctx:
-            ctx.info("Executing tool...")
+            await ctx.info("Executing tool...")
         import json
 
         try:

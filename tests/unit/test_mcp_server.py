@@ -2,7 +2,7 @@ import json
 import runpy
 import sys
 from pathlib import Path
-from unittest.mock import MagicMock, patch
+from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 from starlette.responses import JSONResponse
@@ -39,6 +39,7 @@ async def test_uptime_kuma_monitors_tool():
     # Mock client and context
     mock_client = MagicMock()
     mock_ctx = MagicMock()
+    mock_ctx.info = AsyncMock()
 
     # 1. Test invalid params_json
     res = await uptime_kuma_monitors(
@@ -178,6 +179,7 @@ async def test_uptime_kuma_status_tool():
 
     mock_client = MagicMock()
     mock_ctx = MagicMock()
+    mock_ctx.info = AsyncMock()
 
     # 1. Test invalid params_json
     res = await uptime_kuma_status(
@@ -325,6 +327,6 @@ def test_mcp_server_main_block():
         return_value=(mock_args, mock_mcp, []),
     ):
         with patch("sys.argv", ["mcp_server.py"]):
-            runpy.run_path(Path(mcp_server_module.__file__), run_name="__main__")
+            runpy.run_path(str(Path(mcp_server_module.__file__)), run_name="__main__")
 
     mock_mcp.run.assert_called_once_with(transport="stdio")

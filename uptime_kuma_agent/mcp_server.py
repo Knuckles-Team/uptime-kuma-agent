@@ -90,7 +90,7 @@ def register_monitors_tools(mcp: FastMCP):
     ) -> dict:
         """Manage uptime kuma monitors operations."""
         if ctx:
-            ctx.info("Executing tool...")
+            await ctx.info("Executing tool...")
         import json
 
         try:
@@ -152,7 +152,7 @@ def register_status_tools(mcp: FastMCP):
     ) -> dict:
         """Manage uptime kuma status operations."""
         if ctx:
-            ctx.info("Executing tool...")
+            await ctx.info("Executing tool...")
         import json
 
         try:
@@ -196,7 +196,7 @@ def register_ingest_tools(mcp: FastMCP):
         CONCEPT:AU-KG.ingest.enterprise-source-extractor.
         """
         if ctx:
-            ctx.info("Ingesting Uptime Kuma monitors into the knowledge graph...")
+            await ctx.info("Ingesting Uptime Kuma monitors into the knowledge graph...")
         import json as _json
 
         from uptime_kuma_agent.kg_ingest import ingest_monitors
