@@ -28,13 +28,13 @@ def register_status_tools(mcp: FastMCP):
     ) -> dict:
         """Manage uptime kuma status operations."""
         if ctx:
-            ctx.info("Executing tool...")
+            await ctx.info("Executing tool...")
         import json
 
         try:
             kwargs = json.loads(params_json)
         except Exception:
-            return {"error": "Operation failed"}
+            return {"error": "Invalid params_json: expected a JSON object"}
 
         kwargs = {k: v for k, v in kwargs.items() if v is not None}
 

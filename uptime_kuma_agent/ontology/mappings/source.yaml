@@ -3,7 +3,7 @@ connector: uptime-kuma-agent
 ontology_source: uptimekuma
 sync:
 - preset: uptimekuma-monitors
-  server: uptime-kuma-agent
+  server: uptime-mcp
   tool: uptime_kuma_monitors
   action: get_monitors
   records_path: ''

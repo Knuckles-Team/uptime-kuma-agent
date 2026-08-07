@@ -1,11 +1,13 @@
 import json
 import runpy
 import sys
-from unittest.mock import MagicMock, patch
+from pathlib import Path
+from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 from starlette.responses import JSONResponse
 
+import uptime_kuma_agent.mcp_server as mcp_server_module
 from uptime_kuma_agent.mcp_server import (
     get_mcp_instance,
     mcp_server,
@@ -37,6 +39,7 @@ async def test_uptime_kuma_monitors_tool():
     # Mock client and context
     mock_client = MagicMock()
     mock_ctx = MagicMock()
+    mock_ctx.info = AsyncMock()
 
     # 1. Test invalid params_json
     res = await uptime_kuma_monitors(
@@ -64,12 +67,12 @@ async def test_uptime_kuma_monitors_tool():
     mock_client.get_monitor.return_value = {"id": 1}
     res = await uptime_kuma_monitors(
         action="get_monitor",
-        params_json=json.dumps({"id": 1}),
+        params_json=json.dumps({"monitor_id": 1}),
         client=mock_client,
         ctx=None,
     )
     assert res == {"id": 1}
-    mock_client.get_monitor.assert_called_once_with(id=1)
+    mock_client.get_monitor.assert_called_once_with(id_=1)
 
     # 4. Test add_monitor
     mock_client.add_monitor.return_value = {"status": "added"}
@@ -91,7 +94,7 @@ async def test_uptime_kuma_monitors_tool():
         ctx=None,
     )
     assert res == {"status": "edited"}
-    mock_client.edit_monitor.assert_called_once_with(id=1, name="edit")
+    mock_client.edit_monitor.assert_called_once_with(id_=1, name="edit")
 
     # 6. Test delete_monitor
     mock_client.delete_monitor.return_value = {"status": "deleted"}
@@ -102,7 +105,7 @@ async def test_uptime_kuma_monitors_tool():
         ctx=None,
     )
     assert res == {"status": "deleted"}
-    mock_client.delete_monitor.assert_called_once_with(id=1)
+    mock_client.delete_monitor.assert_called_once_with(id_=1)
 
     # 7. Test pause_monitor
     mock_client.pause_monitor.return_value = {"status": "paused"}
@@ -113,7 +116,7 @@ async def test_uptime_kuma_monitors_tool():
         ctx=None,
     )
     assert res == {"status": "paused"}
-    mock_client.pause_monitor.assert_called_once_with(id=1)
+    mock_client.pause_monitor.assert_called_once_with(id_=1)
 
     # 8. Test resume_monitor
     mock_client.resume_monitor.return_value = {"status": "resumed"}
@@ -124,7 +127,23 @@ async def test_uptime_kuma_monitors_tool():
         ctx=None,
     )
     assert res == {"status": "resumed"}
-    mock_client.resume_monitor.assert_called_once_with(id=1)
+    mock_client.resume_monitor.assert_called_once_with(id_=1)
+
+    # Public and legacy aliases are normalized, but ambiguous or absent IDs fail closed.
+    with pytest.raises(ValueError, match="only one"):
+        await uptime_kuma_monitors(
+            action="get_monitor",
+            params_json=json.dumps({"monitor_id": 1, "id": 1}),
+            client=mock_client,
+            ctx=None,
+        )
+    with pytest.raises(ValueError, match="must include 'monitor_id'"):
+        await uptime_kuma_monitors(
+            action="get_monitor",
+            params_json="{}",
+            client=mock_client,
+            ctx=None,
+        )
 
     # 9. Test unknown action
     with pytest.raises(ValueError) as exc_info:
@@ -160,6 +179,7 @@ async def test_uptime_kuma_status_tool():
 
     mock_client = MagicMock()
     mock_ctx = MagicMock()
+    mock_ctx.info = AsyncMock()
 
     # 1. Test invalid params_json
     res = await uptime_kuma_status(
@@ -307,6 +327,6 @@ def test_mcp_server_main_block():
         return_value=(mock_args, mock_mcp, []),
     ):
         with patch("sys.argv", ["mcp_server.py"]):
-            runpy.run_module("uptime_kuma_agent.mcp_server", run_name="__main__")
+            runpy.run_path(str(Path(mcp_server_module.__file__)), run_name="__main__")
 
     mock_mcp.run.assert_called_once_with(transport="stdio")

@@ -102,7 +102,9 @@ def _heartbeat_entities(
                 "uptimeKumaId": str(monitor_id),
             }
         )
-        relationships.append({"source": hid, "target": mon_node, "relationship": "heartbeatOf"})
+        relationships.append(
+            {"source": hid, "target": mon_node, "relationship": "heartbeatOf"}
+        )
     return entities, relationships
 
 

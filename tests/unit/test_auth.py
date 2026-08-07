@@ -1,5 +1,5 @@
-import os
 from unittest.mock import MagicMock, patch
+
 import pytest
 
 import uptime_kuma_agent.auth as auth
@@ -14,42 +14,54 @@ def reset_global_client():
     auth._client = None
 
 
-@pytest.mark.concept("CONCEPT:UK-OS.identity.uka")
-@patch("uptime_kuma_agent.auth.UptimeKumaApi")
-def test_get_client_caching(mock_api_class):
-    mock_api_instance = MagicMock()
-    mock_api_class.return_value = mock_api_instance
-
-    client1 = get_client()
-    client2 = get_client()
-
-    assert client1 is mock_api_instance
-    assert client2 is mock_api_instance
-    # UptimeKumaApi should only be instantiated once
-    mock_api_class.assert_called_once_with("http://localhost:3001")
+def _connected_client() -> MagicMock:
+    client = MagicMock()
+    client.sio.connected = True
+    client.sio.namespaces = {"/": "connected"}
+    return client
 
 
 @pytest.mark.concept("CONCEPT:UK-OS.identity.uka")
-@patch("uptime_kuma_agent.auth.UptimeKumaApi")
+@patch("uptime_kuma_agent.auth._new_client")
 @patch.dict(
-    os.environ,
+    "os.environ",
     {"UPTIME_KUMA_USERNAME": "testuser", "UPTIME_KUMA_PASSWORD": "testpassword"},
+    clear=True,
 )
-def test_get_client_user_pass(mock_api_class):
-    mock_api_instance = MagicMock()
-    mock_api_class.return_value = mock_api_instance
+def test_get_client_caching(mock_new_client):
+    mock_api_instance = _connected_client()
+    mock_new_client.return_value = mock_api_instance
+
+    assert get_client() is mock_api_instance
+    assert get_client() is mock_api_instance
+
+    mock_new_client.assert_called_once_with("http://localhost:3001", timeout=30)
+
+
+@pytest.mark.concept("CONCEPT:UK-OS.identity.uka")
+@patch("uptime_kuma_agent.auth._new_client")
+@patch.dict(
+    "os.environ",
+    {"UPTIME_KUMA_USERNAME": "testuser", "UPTIME_KUMA_PASSWORD": "testpassword"},
+    clear=True,
+)
+def test_get_client_user_pass(mock_new_client):
+    mock_api_instance = _connected_client()
+    mock_new_client.return_value = mock_api_instance
 
     client = get_client()
     assert client is mock_api_instance
     mock_api_instance.login.assert_called_once_with("testuser", "testpassword")
+    assert get_client() is mock_api_instance
+    mock_new_client.assert_called_once_with("http://localhost:3001", timeout=30)
 
 
 @pytest.mark.concept("CONCEPT:UK-OS.identity.uka")
-@patch("uptime_kuma_agent.auth.UptimeKumaApi")
-@patch.dict(os.environ, {"UPTIME_KUMA_TOKEN": "myuser:mytoken"})
-def test_get_client_token_split(mock_api_class):
-    mock_api_instance = MagicMock()
-    mock_api_class.return_value = mock_api_instance
+@patch("uptime_kuma_agent.auth._new_client")
+@patch.dict("os.environ", {"UPTIME_KUMA_TOKEN": "myuser:mytoken"}, clear=True)
+def test_get_client_token_split(mock_new_client):
+    mock_api_instance = _connected_client()
+    mock_new_client.return_value = mock_api_instance
 
     client = get_client()
     assert client is mock_api_instance
@@ -57,11 +69,11 @@ def test_get_client_token_split(mock_api_class):
 
 
 @pytest.mark.concept("CONCEPT:UK-OS.identity.uka")
-@patch("uptime_kuma_agent.auth.UptimeKumaApi")
-@patch.dict(os.environ, {"UPTIME_KUMA_TOKEN": "justatoken"})
-def test_get_client_token_no_split(mock_api_class):
-    mock_api_instance = MagicMock()
-    mock_api_class.return_value = mock_api_instance
+@patch("uptime_kuma_agent.auth._new_client")
+@patch.dict("os.environ", {"UPTIME_KUMA_TOKEN": "justatoken"}, clear=True)
+def test_get_client_token_no_split(mock_new_client):
+    mock_api_instance = _connected_client()
+    mock_new_client.return_value = mock_api_instance
 
     client = get_client()
     assert client is mock_api_instance
@@ -69,14 +81,35 @@ def test_get_client_token_no_split(mock_api_class):
 
 
 @pytest.mark.concept("CONCEPT:UK-OS.identity.uka")
-@patch("uptime_kuma_agent.auth.UptimeKumaApi")
-def test_get_client_failure(mock_api_class):
-    mock_api_class.side_effect = Exception("Connection Refused")
+@patch("uptime_kuma_agent.auth._new_client")
+@patch.dict("os.environ", {}, clear=True)
+def test_get_client_failure(mock_new_client):
+    mock_new_client.side_effect = Exception("Connection Refused")
 
     with pytest.raises(RuntimeError) as exc_info:
         get_client()
 
-    assert "Failed to authenticate with Uptime Kuma at http://localhost:3001" in str(
-        exc_info.value
-    )
+    assert "Uptime Kuma CONNECT failed (Exception)" in str(exc_info.value)
     assert auth._client is None
+
+
+@pytest.mark.concept("CONCEPT:UK-OS.identity.uka")
+@patch("uptime_kuma_agent.auth._new_client")
+@patch.dict(
+    "os.environ",
+    {"UPTIME_KUMA_USERNAME": "testuser", "UPTIME_KUMA_PASSWORD": "testpassword"},
+    clear=True,
+)
+def test_get_client_replaces_stale_socket(mock_new_client):
+    stale = MagicMock()
+    stale.sio.connected = True
+    stale.sio.namespaces = {}
+    fresh = _connected_client()
+    auth._client = stale
+    mock_new_client.return_value = fresh
+
+    assert get_client() is fresh
+
+    stale.disconnect.assert_called_once_with()
+    fresh.login.assert_called_once_with("testuser", "testpassword")
+    assert auth._client is fresh
