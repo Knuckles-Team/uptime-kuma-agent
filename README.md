@@ -20,7 +20,7 @@
 ![PyPI - Wheel](https://img.shields.io/pypi/wheel/uptime-kuma-agent)
 ![PyPI - Implementation](https://img.shields.io/pypi/implementation/uptime-kuma-agent)
 
-*Version: 2.0.0*
+*Version: 2.1.0*
 
 > **Documentation** — Installation, deployment, usage across the API, CLI, and MCP
 > interfaces, the integrated A2A agent, and guidance for provisioning the Uptime Kuma
@@ -70,19 +70,19 @@
 | `TRANSPORT` | `stdio` | options: stdio, streamable-http, sse |
 | `ENABLE_OTEL` | `True` |  |
 | `OTEL_EXPORTER_OTLP_ENDPOINT` | `http://localhost:8080/api/public/otel` |  |
-| `OTEL_EXPORTER_OTLP_PUBLIC_KEY` | `pk-...` |  |
-| `OTEL_EXPORTER_OTLP_SECRET_KEY` | `sk-...` |  |
+| `OTEL_EXPORTER_OTLP_PUBLIC_KEY` | secret-injected |  |
+| `OTEL_EXPORTER_OTLP_SECRET_KEY` | secret-injected |  |
 | `OTEL_EXPORTER_OTLP_PROTOCOL` | `http/protobuf` |  |
 | `EUNOMIA_TYPE` | `none` | options: none, embedded, remote |
 | `EUNOMIA_POLICY_FILE` | `mcp_policies.json` |  |
 | `EUNOMIA_REMOTE_URL` | `http://eunomia-server:8000` |  |
 | `UPTIME_KUMA_URL` | `http://localhost:3001` |  |
-| `UPTIME_KUMA_TOKEN` | `your_token_here (used if AUTH_TYPE is token)` |  |
+| `UPTIME_KUMA_TOKEN` | secret-injected |  |
 | `UPTIME_KUMA_USERNAME` | `admin (used if AUTH_TYPE is password)` |  |
-| `UPTIME_KUMA_PASSWORD` | `your_password_here` |  |
+| `UPTIME_KUMA_PASSWORD` | secret-injected |  |
 | `AUTH_TYPE` | `password` | options: password, token |
-| `CADDYFILE_PATH` | deployment-provided | Caddyfile parsed by the kuma-sync skill |
-| `KUMA_DB_PATH` | deployment-provided | Uptime-Kuma SQLite DB used by the kuma-sync skill |
+| `CADDYFILE_PATH` | `${CADDY_CONFIG_PATH}` | Caddyfile parsed by the kuma-sync skill |
+| `KUMA_DB_PATH` | `${UPTIME_KUMA_DATA_PATH}/kuma.db` | Uptime-Kuma SQLite DB used by the kuma-sync skill |
 | `MONITORSTOOL` | `True` |  |
 | `STATUSTOOL` | `True` |  |
 
@@ -90,14 +90,16 @@
 
 | Variable | Example | Description |
 |----------|---------|-------------|
-| `MCP_TOOL_MODE` | `condensed` | Tool surface: `condensed` | `verbose` | `both` |
+| `MCP_TOOL_MODE` | `intent` | Tool surface: `intent` \| `condensed` \| `verbose` \| `both` |
 | `MCP_ENABLED_TOOLS` | — | Comma-separated tool allow-list |
 | `MCP_DISABLED_TOOLS` | — | Comma-separated tool deny-list |
 | `MCP_ENABLED_TAGS` | — | Comma-separated tag allow-list |
 | `MCP_DISABLED_TAGS` | — | Comma-separated tag deny-list |
-| `MCP_CLIENT_AUTH` | — | Outbound MCP auth (`oidc-client-credentials` for fleet calls) |
+| `MCP_CLIENT_AUTH` | — | Outbound MCP child auth: `oidc-client-credentials` \| `basic` \| `none` |
 | `OIDC_CLIENT_ID` | — | OIDC client id (service-account auth) |
-| `OIDC_CLIENT_SECRET` | — | OIDC client secret (service-account auth) |
+| `OIDC_CLIENT_SECRET_REF` | `secret://identity/oidc-client-secret` | Runtime secret reference for the OIDC service account |
+| `MCP_BASIC_AUTH_USERNAME` | — | HTTP Basic username (`MCP_CLIENT_AUTH=basic`) |
+| `MCP_BASIC_AUTH_PASSWORD_REF` | `secret://identity/mcp-basic-password` | Runtime secret reference for HTTP Basic auth (`MCP_CLIENT_AUTH=basic`) |
 | `DEBUG` | `False` | Verbose logging |
 | `PYTHONUNBUFFERED` | `1` | Unbuffered stdout (recommended in containers) |
 | `MCP_URL` | `http://localhost:8000/mcp` | URL of the MCP server the agent connects to |
@@ -105,7 +107,7 @@
 | `MODEL_ID` | `gpt-4o` | Model id for the agent |
 | `ENABLE_WEB_UI` | `True` | Serve the AG-UI web interface |
 
-_20 package + 14 inherited variable(s). Auto-generated from `.env.example` + the shared agent-utilities set — do not edit._
+_20 package + 16 inherited variable(s). Auto-generated from `.env.example` + the shared agent-utilities set — do not edit._
 <!-- ENV-VARS-TABLE:END -->
 
 
@@ -176,10 +178,11 @@ _Auto-generated from the live MCP server — do not edit by hand._
 
 <!-- MCP-TOOLS-TABLE:START -->
 
-#### Condensed action-routed tools (default — `MCP_TOOL_MODE=condensed`)
+#### Condensed action-routed tools (`MCP_TOOL_MODE=condensed`)
 
 | MCP Tool | Toggle Env Var | Description |
 |----------|----------------|-------------|
+| `uptime_ingest_monitors` | `INGESTTOOL` | Natively ingest Uptime Kuma monitors into epistemic-graph as typed nodes. |
 | `uptime_kuma_monitors` | `MONITORSTOOL` | Manage uptime kuma monitors operations. |
 | `uptime_kuma_status` | `STATUSTOOL` | Manage uptime kuma status operations. |
 
@@ -281,7 +284,7 @@ _Auto-generated from the live MCP server — do not edit by hand._
 
 </details>
 
-_2 action-routed tool(s) (default) · 88 verbose 1:1 tool(s). Each is enabled unless its `<DOMAIN>TOOL` toggle is set false; `MCP_TOOL_MODE` selects the surface (`condensed` default · `verbose` 1:1 · `both`). Auto-generated — do not edit._
+_3 action-routed tool(s) · 88 verbose 1:1 tool(s). Each is enabled unless its `<DOMAIN>TOOL` toggle is set false; `MCP_TOOL_MODE` selects the surface (**`intent` default** — the six verb-tools, granular set loaded on demand · `condensed` action-routed · `verbose` 1:1 · `both`). Auto-generated — do not edit._
 <!-- MCP-TOOLS-TABLE:END -->
 
 Detailed tool schemas, parameter shapes, and validation constraints are preserved in [docs/index.md](docs/index.md#mcp).
