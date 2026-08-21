@@ -1,8 +1,7 @@
 {
   "api_version": "graphos.io/v1",
   "artifacts": {
-    "a2a.json": "fa336e2aba4ac52c2a4d681777ee879d153e1dfd89d7bfb9c69c2534972c44f7",
-    "connector_manifest.yml": "aa6a807bbeb62ce289abcfb6a0e2216fc5807320435166111a17762db09d5a87",
+    "connector_manifest.yml": "2f057f1f3079aa1209c1bf1eb97fa10d41db247ea7c956f044927b0f067e82e3",
     "uptime_kuma_agent/connectors/mcp_source_presets.json": "8e1ed279046cf280e8a6aa59e61d43628b54a4c5f621761d984bb21aad38dc7b",
     "uptime_kuma_agent/connectors/tool_schema_fingerprints.json": "7768ae50e0617c1b3e0bbebe463abf45a86e66e8a382d33eb9cdd469a5c6dc2d",
     "uptime_kuma_agent/ontology/fixtures/records.json": "480b29e01ed9ef0bf09ce76db8d7a0e89a18645a3bca12d7cd53fc4fb3612ffc",
@@ -19,19 +18,19 @@
     "synthetic_fixture_contract": "passed"
   },
   "compatibility": {
-    "agent_utilities": ">=2.1.0,<3",
+    "agent_utilities": ">=2.4.0,<3",
     "bundle_schema": "2",
-    "epistemic_graph": ">=2.23.0,<3"
+    "epistemic_graph": ">=2.26.0,<3"
   },
   "connector": "uptime-kuma-agent",
   "kind": "ConnectorSourceAttestation",
   "live_certified": false,
   "mode": "offline-source",
   "schema_version": "2",
-  "signature": "oxlSgpkal73ELy--gOfffGQxOMKA3D4uhAXwizI0uV_NpMfJ2KiGTZ5qfTSDkhymharugi8S2TlDw56qMWLuCQ",
-  "signature_algorithm": "ed25519",
-  "signer": "ontology-manifest-generator",
-  "signing_public_key": "QkigdPNpcUU7x7NcSkwCsUXIQpaFncMQbYSoiSgI2SY",
+  "signature": null,
+  "signature_algorithm": "none",
+  "signer": "UNSIGNED-PREVIEW",
+  "signing_public_key": "",
   "status": "source-validated",
-  "validated_at": "2026-07-31T04:00:00Z"
+  "validated_at": "2026-08-21T04:30:39Z"
 }
