@@ -1,7 +1,7 @@
 {
   "api_version": "graphos.io/v1",
   "artifacts": {
-    "connector_manifest.yml": "2f057f1f3079aa1209c1bf1eb97fa10d41db247ea7c956f044927b0f067e82e3",
+    "connector_manifest.yml": "ad9440569fb272d093dbc612674d4d88457d51d54826ea6fb708b713df663987",
     "uptime_kuma_agent/connectors/mcp_source_presets.json": "8e1ed279046cf280e8a6aa59e61d43628b54a4c5f621761d984bb21aad38dc7b",
     "uptime_kuma_agent/connectors/tool_schema_fingerprints.json": "7768ae50e0617c1b3e0bbebe463abf45a86e66e8a382d33eb9cdd469a5c6dc2d",
     "uptime_kuma_agent/ontology/fixtures/records.json": "480b29e01ed9ef0bf09ce76db8d7a0e89a18645a3bca12d7cd53fc4fb3612ffc",
@@ -18,9 +18,9 @@
     "synthetic_fixture_contract": "passed"
   },
   "compatibility": {
-    "agent_utilities": ">=2.4.0,<3",
+    "agent_utilities": ">=2.5.0,<3",
     "bundle_schema": "2",
-    "epistemic_graph": ">=2.26.0,<3"
+    "epistemic_graph": ">=2.27.0,<3"
   },
   "connector": "uptime-kuma-agent",
   "kind": "ConnectorSourceAttestation",
@@ -32,5 +32,5 @@
   "signer": "UNSIGNED-PREVIEW",
   "signing_public_key": "",
   "status": "source-validated",
-  "validated_at": "2026-08-21T04:30:39Z"
+  "validated_at": "2026-08-26T13:42:55Z"
 }
