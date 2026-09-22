@@ -21,7 +21,7 @@ warnings.filterwarnings("ignore", message=".*urllib3.*or charset_normalizer.*")
 
 import logging
 import sys
-from typing import Any
+from typing import Any, Literal
 
 from agent_utilities.core.config import load_config
 from agent_utilities.mcp.action_dispatch import resolve_action
@@ -73,7 +73,15 @@ def _optional_client_type() -> type[Any] | None:
 def register_monitors_tools(mcp: FastMCP):
     @mcp.tool(tags={"monitors"})
     async def uptime_kuma_monitors(
-        action: str = Field(
+        action: Literal[
+            "add_monitor",
+            "delete_monitor",
+            "edit_monitor",
+            "get_monitor",
+            "get_monitors",
+            "pause_monitor",
+            "resume_monitor",
+        ] = Field(
             description="Action to perform. Must be one of: 'get_monitors', 'get_monitor', 'add_monitor', 'edit_monitor', 'delete_monitor', 'pause_monitor', 'resume_monitor'"
         ),
         params_json: str = Field(

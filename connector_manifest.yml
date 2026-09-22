@@ -133,7 +133,7 @@ sync:
   updated_field: ''
   pagination: null
   doc_type: uptimekuma
-  tool_schema_sha256: 48a9ba14d62993c0544b0e97e4ce6ca638bc9338506d186c5b72fbfcc9e9c816
+  tool_schema_sha256: 623c7683fb518321b6fdc769e575dedc38f9855efc434d9b6589afb1d8a268b5
   raw:
     server: uptime-mcp
     tool: uptime_kuma_monitors
