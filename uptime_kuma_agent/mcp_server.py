@@ -71,7 +71,18 @@ def _optional_client_type() -> type[Any] | None:
 
 
 def register_monitors_tools(mcp: FastMCP):
-    @mcp.tool(tags={"monitors"})
+    @mcp.tool(
+        tags={"monitors"},
+        annotations={
+            "readOnlyHint": False,
+            "destructiveHint": True,
+            "idempotentHint": False,
+            "openWorldHint": True,
+        },
+        meta={
+            "eg.annotations": {"modalities_in": ["text"], "modalities_out": ["text"]}
+        },
+    )
     async def uptime_kuma_monitors(
         action: Literal[
             "add_monitor",
