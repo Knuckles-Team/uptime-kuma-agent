@@ -9,7 +9,11 @@ description = "Agent for interacting with Uptime Kuma API"
 readme = "README.md"
 classifiers = [ "Development Status :: 4 - Beta", "License :: OSI Approved :: MIT License", "Environment :: Console", "Operating System :: POSIX :: Linux", "Programming Language :: Python :: 3",]
 requires-python = ">=3.12, <3.15"
-dependencies = [ "agent-utilities[mcp]>=2.0.0,<3.0.0", "uptime-kuma-api>=1.2.1", "requests>=2.34.2",]
+# NOTE (EH-484 policy update, see /var/tmp/l9/finish/au-decon-G4e/SDK-GAPS.md gap #0):
+# agent-utilities is kept for kg_ingest.py's native_ingest import only -- the SDK's
+# EG-client ingest facade does not exist yet, and native_ingest must keep working
+# (no fail-closed stub). Drop agent-utilities once gap #0 lands.
+dependencies = [ "agent-connector-sdk>=0.1.0,<1.0.0", "agent-utilities>=2.0.0,<3.0.0", "uptime-kuma-api>=1.2.1", "requests>=2.34.2",]
 [[project.authors]]
 name = "Project Maintainers"
 email = "maintainers@users.noreply.github.com"
@@ -18,15 +22,11 @@ email = "maintainers@users.noreply.github.com"
 text = "MIT"
 
 [project.optional-dependencies]
-mcp = [ "agent-utilities[mcp]>=2.0.0,<3.0.0",]
-agent = [ "agent-utilities[agent-runtime,logfire]>=2.0.0,<3.0.0",]
-all = [ "agent-utilities[mcp,agent-runtime,logfire]>=2.0.0,<3.0.0",]
 test = [
     "pytest-xdist>=3.8.0", "pytest>=9.1.1", "pytest-asyncio>=1.4.0", "pytest-cov>=7.1.0",]
 
 [project.scripts]
 uptime-mcp = "uptime_kuma_agent.mcp_server:mcp_server"
-uptime-agent = "uptime_kuma_agent.agent_server:agent_server"
 
 [project.entry-points."agent_utilities.skill_providers"]
 uptime-kuma-agent = "uptime_kuma_agent.skills"
@@ -52,6 +52,7 @@ override-dependencies = [
 ]
 
 [tool.uv.sources]
+agent-connector-sdk = { path = ".uv-workspace-siblings/agent-connector-sdk", editable = true }
 agent-utilities = { path = ".uv-workspace-siblings/agent-utilities", editable = true }
 
 [tool.ruff]

@@ -23,13 +23,11 @@ import logging
 import sys
 from typing import Any, Literal
 
-from agent_utilities.core.config import load_config
-from agent_utilities.mcp.action_dispatch import resolve_action
-from agent_utilities.mcp.concurrency import run_blocking
-from agent_utilities.mcp.server_factory import create_mcp_server
-from agent_utilities.mcp.verbose_tools import register_tool_surface
-from starlette.requests import Request
-from starlette.responses import JSONResponse
+from agent_connector_sdk.config import load_config
+from agent_connector_sdk.mcp.action_dispatch import resolve_action
+from agent_connector_sdk.mcp.concurrency import run_blocking
+from agent_connector_sdk.mcp.server import create_mcp_server
+from agent_connector_sdk.mcp.tool_surface import register_tool_surface
 
 from uptime_kuma_agent.auth import get_client
 
@@ -254,10 +252,7 @@ def get_mcp_instance() -> tuple[Any, ...]:
         instructions="uptime-kuma-agent MCP Server — Condensed Action-Routed Tools.",
     )
 
-    @mcp.custom_route("/health", methods=["GET"])
-    async def health_check(request: Request) -> JSONResponse:
-        return JSONResponse({"status": "OK"})
-
+    # /health is now registered by agent_connector_sdk.mcp.server.create_mcp_server itself.
     register_tool_surface(
         mcp,
         client_cls=_optional_client_type(),

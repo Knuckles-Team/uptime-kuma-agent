@@ -5,11 +5,9 @@ from pathlib import Path
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
-from starlette.responses import JSONResponse
 
 import uptime_kuma_agent.mcp_server as mcp_server_module
 from uptime_kuma_agent.mcp_server import (
-    get_mcp_instance,
     mcp_server,
     register_monitors_tools,
     register_status_tools,
@@ -221,36 +219,9 @@ async def test_uptime_kuma_status_tool():
     assert "info" in res["actions"]
 
 
-@pytest.mark.concept("CONCEPT:UK-OS.config.uka-3")
-@pytest.mark.asyncio
-async def test_health_check_route():
-    # Capture custom route
-    captured_routes = {}
-    mock_mcp = MagicMock()
-
-    def custom_route_decorator(path, methods=None):
-        assert methods == ["GET"]
-
-        def decorator(func):
-            captured_routes[path] = func
-            return func
-
-        return decorator
-
-    mock_mcp.custom_route = custom_route_decorator
-
-    with patch("uptime_kuma_agent.mcp_server.create_mcp_server") as mock_create:
-        mock_create.return_value = (MagicMock(), mock_mcp, [])
-        get_mcp_instance()
-
-    assert "/health" in captured_routes
-    health_check_func = captured_routes["/health"]
-
-    # Call health check with mock Request
-    mock_request = MagicMock()
-    response = await health_check_func(mock_request)
-    assert isinstance(response, JSONResponse)
-    assert json.loads(bytes(response.body).decode()) == {"status": "OK"}
+# test_health_check_route removed: the connector no longer registers its own /health
+# route (agent_connector_sdk.mcp.server.create_mcp_server now registers one itself,
+# EH-484) — there is nothing left in this module for that behavior to assert.
 
 
 @pytest.mark.concept("CONCEPT:UK-OS.config.uka")
@@ -323,7 +294,7 @@ def test_mcp_server_main_block():
     mock_args.transport = "stdio"
 
     with patch(
-        "agent_utilities.mcp.server_factory.create_mcp_server",
+        "agent_connector_sdk.mcp.server.create_mcp_server",
         return_value=(mock_args, mock_mcp, []),
     ):
         with patch("sys.argv", ["mcp_server.py"]):
