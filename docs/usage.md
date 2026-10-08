@@ -1,7 +1,7 @@
 # Usage — API / CLI / MCP
 
 `uptime-kuma-agent` exposes the same capability three ways: as **MCP tools** an agent
-calls, as a **Python API** (`UptimeKumaApi`) you import, and as an **agent CLI**.
+calls, as a **Python API** (`UptimeKumaApi`) the operator import, and as an **agent CLI**.
 
 ## As an MCP server
 
@@ -41,7 +41,7 @@ heartbeats = client.get_heartbeats()          # recent heartbeat records
 info = client.info()                          # server stats / general info
 ```
 
-You can also construct the underlying client directly:
+The operator can also build the underlying client directly:
 
 ```python
 from uptime_kuma_api import UptimeKumaApi
@@ -54,7 +54,7 @@ client.disconnect()
 
 ### Writes
 
-The same client performs monitor mutations once you are authenticated:
+The same client performs monitor mutations once the operator are authenticated:
 
 ```python
 client.add_monitor(type="http", name="Example", url="https://example.com")

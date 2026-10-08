@@ -124,7 +124,7 @@ connection set:
 
 The complete set, including the OpenTelemetry and Eunomia options, is documented in
 [`.env.example`](https://github.com/Knuckles-Team/uptime-kuma-agent/blob/main/.env.example).
-Copy it to `.env` and populate only what you use.
+Copy it to `.env` and populate only what the operator use.
 
 ## Docker Compose
 
@@ -203,7 +203,7 @@ uptime-agent --provider openai --model-id gpt-4o
 
 ## Behind a Caddy reverse proxy
 
-Expose the HTTP server on a hostname with automatic TLS. Add to your `Caddyfile`:
+Expose the HTTP server on a hostname with automatic TLS. Add to the operator's `Caddyfile`:
 
 ```caddy
 # Internal (self-signed) — homelab .example.invalid zone
@@ -247,7 +247,7 @@ this as a tool.
 
 ## Register with an MCP client
 
-Add to your client's `mcp_config.json`:
+Add to the operator's client's `mcp_config.json`:
 
 ```json
 {

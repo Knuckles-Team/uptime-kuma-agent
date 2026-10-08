@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Standardized the test suite structure by migrating all tests to `tests/unit/`.
 - Introduced `tests/conftest.py` with dynamic modules cache cleaning to guarantee total isolation between test invocations.
 - Converted dynamic package initialization check blocks into clean data-driven parameterized tests.
-- Polished `README.md` with a comprehensive Table of Contents, detailed Usage & Quick Start guide, and a registered MCP Tools table.
+- Polished `README.md` with a complete Table of Contents, detailed Usage & Quick Start guide, and a registered MCP Tools table.
 
 ## [0.14.0] - 2026-05-22
 
