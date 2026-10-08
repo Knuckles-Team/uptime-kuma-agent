@@ -51,7 +51,7 @@
 ## Key Features
 
 - **Consolidated Action-Routed MCP Tools:** Minimizes token overhead and eliminates tool bloat in LLM contexts by grouping methods into optimized, togglable tool modules.
-- **Enterprise-Grade Security:** Comprehensive support for Eunomia policies, OIDC token delegation, and granular execution context tracking.
+- **Enterprise-Grade Security:** Complete support for Eunomia policies, OIDC token delegation, and granular execution context tracking.
 - **Integrated Graph Agent:** Built-in Pydantic AI agent supporting the Agent Control Protocol (ACP) and standard Web interfaces (AG-UI).
 - **Native Telemetry & Tracing:** Out-of-the-box OpenTelemetry exports and native Langfuse tracing.
 
@@ -123,7 +123,7 @@ The agent's behavior and connections can be fully configured via environment var
 | `MCP_ENABLED_TAGS` / `MCP_DISABLED_TAGS` | MCP / Tools | None | Comma-separated tag allow/deny list. |
 | `PYTHONUNBUFFERED` | System / Docker | `1` | Unbuffered stdout (recommended in containers). |
 | `DEBUG` | System / Docker | `False` | Verbose logging. |
-| `UPTIME_KUMA_URL` | App Credential | `http://localhost:3001` | The base URL of your target Uptime Kuma instance. |
+| `UPTIME_KUMA_URL` | App Credential | `http://localhost:3001` | The base URL of the operator's target Uptime Kuma instance. |
 | `AUTH_TYPE` | App Credential | None | Type of authentication used. Supported values: `password`, `token`. |
 | `UPTIME_KUMA_TOKEN` | App Credential | None | Authentication token (if `AUTH_TYPE` is `token`). |
 | `UPTIME_KUMA_USERNAME`| App Credential | None | Login username (if `AUTH_TYPE` is `password`). |
@@ -137,7 +137,7 @@ The agent's behavior and connections can be fully configured via environment var
 | `OTEL_EXPORTER_OTLP_PUBLIC_KEY` / `OTEL_EXPORTER_OTLP_SECRET_KEY` | Tracing | None | OTLP exporter auth keys. |
 | `OTEL_EXPORTER_OTLP_PROTOCOL` | Tracing | None | OTLP protocol (e.g. `http/protobuf`). |
 | `EUNOMIA_TYPE` | Governance | `none` | Policy enforcement style. Options: `none`, `embedded`, `remote`. |
-| `EUNOMIA_POLICY_FILE` | Governance | `mcp_policies.json` | Path to your local Eunomia JSON policy parameters. |
+| `EUNOMIA_POLICY_FILE` | Governance | `mcp_policies.json` | Path to the operator's local Eunomia JSON policy parameters. |
 | `EUNOMIA_REMOTE_URL` | Governance | None | Remote Eunomia server URL (when `EUNOMIA_TYPE=remote`). |
 | `MCP_URL` | Agent (`[agent]`) | `http://localhost:8000/mcp` | URL of the MCP server the agent connects to. |
 | `PROVIDER` | Agent (`[agent]`) | `openai` | LLM provider for the integrated agent. |
@@ -170,7 +170,7 @@ To bootstrap and run the agent:
 
 ## MCP
 
-This server utilizes dynamic Action-Routed tools to optimize token overhead and maximize IDE compatibility.
+This server use dynamic Action-Routed tools to optimize token overhead and maximize IDE compatibility.
 
 ### Available MCP Tools
 
@@ -303,15 +303,15 @@ Manage uptime kuma monitors operations. Action parameter must be one of:
 - `resume_monitor`: Resume monitoring for a specific ID.
 
 #### 2. `uptime_kuma_status`
-Retrieve status and analytics. Action parameter must be one of:
+Fetch status and analytics. Action parameter must be one of:
 - `get_heartbeats`: Fetch monitor heartbeat records.
-- `info`: Retrieve system stats and general status info.
+- `info`: Fetch system stats and general status info.
 
 ### Dynamic Tool Selection & Visibility
 
-This MCP server supports dynamic toolset selection and visibility filtering at runtime. This allows you to restrict the set of exposed tools in order to prevent blowing up the LLM's context window.
+This MCP server supports dynamic toolset selection and visibility filtering at runtime. This allows the operator to restrict the set of exposed tools to prevent blowing up the LLM's context window.
 
-You can configure tool filtering via multiple input channels:
+The operator can configure tool filtering via multiple input channels:
 
 - **CLI Arguments:** Pass `--tools` or `--toolsets` (or their disabled counterparts `--disabled-tools` and `--disabled-toolsets`) during startup.
 - **Environment Variables:** Define standard environment variables:
@@ -320,11 +320,11 @@ You can configure tool filtering via multiple input channels:
 - **HTTP SSE Request Headers:** Pass custom headers during transport initialization:
   - `x-mcp-enabled-tools` / `x-mcp-disabled-tools`
   - `x-mcp-enabled-tags` / `x-mcp-disabled-tags`
-- **HTTP SSE Request Query Parameters:** Append query parameters directly to your transport connection URL:
+- **HTTP SSE Request Query Parameters:** Append query parameters directly to the operator's transport connection URL:
   - `?tools=tool1,tool2`
   - `?tags=tag1`
 
-When query strings or parameters are supplied, an LLM-free **Knowledge Graph resolution layer** (using `DynamicToolOrchestrator`) matches query intents against known tool tags, names, or descriptions, with safe fallback and automated 24-hour background cache refreshing.
+When query strings or parameters are provided, an LLM-free **Knowledge Graph resolution layer** (using `DynamicToolOrchestrator`) matches query intents against known tool tags, names, or descriptions, with safe fallback and automated 24-hour background cache refreshing.
 
 ---
 
@@ -458,7 +458,7 @@ the detailed transport contract.
 
 ## Agent
 
-This repository features a fully integrated Pydantic AI Graph Agent. It communicates over the **Agent Control Protocol (ACP)** and interacts seamlessly with the **Agent Web UI (AG-UI)** and Terminal interface.
+This repository features a fully integrated Pydantic AI Graph Agent. It communicates over the **Agent Control Protocol (ACP)** and interacts smoothly with the **Agent Web UI (AG-UI)** and Terminal interface.
 
 ### Running the Agent CLI
 To start the interactive command-line agent:
@@ -556,7 +556,7 @@ Built directly upon the enterprise-ready [`agent-utilities`](https://github.com/
 - **Scoped Credentials:** Execution context runs restricted to the specific caller identity.
 
 ### Runtime Security Grid
-| Feature | Functionality | Enablement |
+| Feature | Feature | Enablement |
 |---------|---------------|------------|
 | **Tool Guard** | Sensitivity inspection with human-in-the-loop validation | Enabled by default |
 | **Prompt Injection Defense** | Input scanning, repetition monitoring, and recursive loop blocks | Enabled by default |
@@ -566,12 +566,12 @@ Built directly upon the enterprise-ready [`agent-utilities`](https://github.com/
 
 ## Installation
 
-Pick the extra that matches what you want to run:
+Pick the extra that matches what the operator want to run:
 
 | Extra | Installs | Use when |
 |-------|----------|----------|
-| `uptime-kuma-agent[mcp]` | Connector-focused MCP server (`agent-utilities[mcp]` — FastMCP/FastAPI + `epistemic-graph[full]`) | You only run the **MCP server** (smallest install / image) |
-| `uptime-kuma-agent[agent]` | Agent runtime (`agent-utilities[agent-runtime,logfire]` — model orchestration + `epistemic-graph[full]`) | You run the **integrated agent** |
+| `uptime-kuma-agent[mcp]` | Connector-focused MCP server (`agent-utilities[mcp]` — FastMCP/FastAPI + `epistemic-graph[full]`) | The operator only run the **MCP server** (smallest install / image) |
+| `uptime-kuma-agent[agent]` | Agent runtime (`agent-utilities[agent-runtime,logfire]` — model orchestration + `epistemic-graph[full]`) | The operator run the **integrated agent** |
 | `uptime-kuma-agent[all]` | Everything (`mcp` + `agent` + `logfire`) | Development / both surfaces |
 
 ```bash
@@ -606,7 +606,7 @@ agent (`immutable agent digest`) with a co-located `:mcp` sidecar.
 
 Both `[mcp]` and `[agent]` carry the **epistemic-graph** engine through the required
 Agent Utilities core dependency (`epistemic-graph[full]`). The `[mcp]` extra keeps
-the server connector-focused; `[agent]` additionally enables model orchestration. Local
+the server connector-focused; `[agent]` also enables model orchestration. Local
 deployments can use the bundled engine. For production or shared state, run
 **epistemic-graph as a dedicated database service** and configure the runtime to use it.
 Deployment recipes (single-node + Raft HA), connection configuration, and architecture
@@ -645,11 +645,11 @@ is the recommended reference for installation, deployment, and day-to-day operat
 
 ## Contribute
 
-Contributions are welcome! Please ensure code quality by executing local checks before submitting pull requests:
+Contributions are welcome! Please ensure code quality by running local checks before submitting pull requests:
 - Format code using `ruff format .`
 - Lint code using `ruff check .`
 - Validate type-safety with `mypy .`
-- Execute test suites using `pytest`
+- Run test suites using `pytest`
 
 
 <!-- BEGIN agent-utilities-deployment (generated; do not edit between markers) -->

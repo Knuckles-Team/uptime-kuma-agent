@@ -46,7 +46,7 @@ docker compose -f docker/uptime-kuma.compose.yml up -d
 # http://localhost:3001
 ```
 
-On first launch, browse to `http://localhost:3001` and create the administrator
+On first start, browse to `http://localhost:3001` and create the administrator
 account; those credentials become `UPTIME_KUMA_USERNAME` / `UPTIME_KUMA_PASSWORD`.
 
 ## Connect uptime-kuma-agent
