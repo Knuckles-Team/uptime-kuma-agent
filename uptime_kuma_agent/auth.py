@@ -4,7 +4,7 @@ import logging
 import threading
 from typing import TYPE_CHECKING, Any
 
-from agent_utilities.core.config import setting
+from agent_connector_sdk.config import setting
 
 if TYPE_CHECKING:
     from uptime_kuma_api import UptimeKumaApi

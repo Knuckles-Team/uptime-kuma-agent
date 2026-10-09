@@ -1,62 +1,93 @@
 """Native epistemic-graph ingestion for Uptime Kuma records.
 
 CONCEPT:AU-KG.ingest.enterprise-source-extractor. Connector-specific mappers emit
-canonical node_type nodes and relationship edges. The required agent-utilities
-native-ingest primitive owns the transaction and raises NativeIngestError when the
-authoritative engine cannot commit.
+canonical node_type nodes and relationship edges. The ``agent_connector_sdk.ingest``
+knowledge-ingest facade owns the transaction and raises ``IngestError`` when the
+engine cannot commit.
 """
 
 from __future__ import annotations
 
 from typing import Any
 
-from agent_utilities.knowledge_graph.memory.native_ingest import (
-    ingest_documents as _native_ingest_documents,
+from agent_connector_sdk.ingest import (
+    ChangeSet,
+    Document,
+    Entity,
+    IngestBinding,
+    IngestError,
+    KnowledgeIngest,
+    Relationship,
+    current_ingest,
 )
-from agent_utilities.knowledge_graph.memory.native_ingest import (
-    ingest_entities as _native_ingest_entities,
-)
 
-_SOURCE = "uptime-kuma-agent"
-_DOMAIN = "uptimekuma"
+_BINDING = IngestBinding(connector="uptime-kuma-agent", stream="uptimekuma")
 
 
-def ingest_entities(
+def _to_entity(record: dict[str, Any]) -> Entity:
+    return Entity(
+        id=record.get("id"),
+        node_type=record.get("node_type"),
+        properties={k: v for k, v in record.items() if k not in ("id", "node_type")},
+    )
+
+
+def _to_relationship(record: dict[str, Any]) -> Relationship:
+    props = {
+        k: v for k, v in record.items() if k not in ("source", "target", "relationship")
+    }
+    return Relationship(
+        source=record.get("source"),
+        target=record.get("target"),
+        relationship=record.get("relationship"),
+        properties=props or None,
+    )
+
+
+def _to_document(record: dict[str, Any]) -> Document:
+    return Document(
+        id=record.get("id"),
+        text=record.get("text"),
+        title=record.get("title"),
+        source_uri=record.get("source_uri"),
+        properties={
+            k: v
+            for k, v in record.items()
+            if k not in ("id", "text", "title", "source_uri")
+        },
+    )
+
+
+async def ingest_entities(
     entities: list[dict[str, Any]],
     relationships: list[dict[str, Any]] | None = None,
     *,
-    source: str = _SOURCE,
-    domain: str = _DOMAIN,
-    client: Any | None = None,
-    graph: str | None = None,
+    ingest: KnowledgeIngest | None = None,
 ) -> dict[str, int]:
-    """Write canonical typed nodes and relationships through agent-utilities."""
-    return _native_ingest_entities(
-        entities,
-        relationships,
-        source=source,
-        domain=domain,
-        client=client,
-        graph=graph,
+    """Write canonical typed nodes and relationships through the SDK's ingest facade."""
+    if not entities:
+        raise IngestError("ingest_entities needs at least one entity")
+    change_set = ChangeSet(
+        entities=tuple(_to_entity(e) for e in entities),
+        relationships=tuple(_to_relationship(r) for r in relationships or ()),
     )
+    service = ingest or current_ingest()
+    receipt = await service.submit(_BINDING, change_set)
+    return {"nodes": receipt.affected_count, "edges": receipt.relationship_count}
 
 
-def ingest_documents(
+async def ingest_documents(
     documents: list[dict[str, Any]],
     *,
-    source: str = _SOURCE,
-    domain: str = _DOMAIN,
-    client: Any | None = None,
-    graph: str | None = None,
+    ingest: KnowledgeIngest | None = None,
 ) -> dict[str, int]:
-    """Write searchable documents through the authoritative native-ingest path."""
-    return _native_ingest_documents(
-        documents,
-        source=source,
-        domain=domain,
-        client=client,
-        graph=graph,
-    )
+    """Write searchable documents through the SDK's ingest facade."""
+    if not documents:
+        raise IngestError("ingest_documents needs at least one document")
+    change_set = ChangeSet(documents=tuple(_to_document(d) for d in documents))
+    service = ingest or current_ingest()
+    receipt = await service.submit(_BINDING, change_set)
+    return {"nodes": receipt.affected_count, "edges": receipt.relationship_count}
 
 
 def _monitor_entity(mon: dict[str, Any]) -> dict[str, Any] | None:
@@ -108,19 +139,17 @@ def _heartbeat_entities(
     return entities, relationships
 
 
-def ingest_monitors(
+async def ingest_monitors(
     monitors: list[dict[str, Any]],
     heartbeats: dict[Any, list[dict[str, Any]]] | None = None,
     *,
-    client: Any | None = None,
-    graph: str | None = None,
+    ingest: KnowledgeIngest | None = None,
 ) -> dict[str, int]:
     """Map Uptime Kuma monitor records (+ optional heartbeats) to typed nodes.
 
     ``monitors``: list of monitor dicts (``client.get_monitors()``) → ``:UptimeMonitor``.
     ``heartbeats``: optional ``{monitor_id: [beat, …]}`` (``client.get_heartbeats()``) →
     ``:HeartbeatStat`` nodes linked to their monitor via ``:heartbeatOf``.
-    Returns ``{"nodes":n, "edges":m}`` or ``None``.
     """
     entities: list[dict[str, Any]] = []
     relationships: list[dict[str, Any]] = []
@@ -133,4 +162,4 @@ def ingest_monitors(
         h_ents, h_rels = _heartbeat_entities(monitor_id, beats)
         entities.extend(h_ents)
         relationships.extend(h_rels)
-    return ingest_entities(entities, relationships, client=client, graph=graph)
+    return await ingest_entities(entities, relationships, ingest=ingest)
