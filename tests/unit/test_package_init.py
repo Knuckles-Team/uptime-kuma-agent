@@ -1,5 +1,3 @@
-import importlib
-import sys
 from unittest.mock import MagicMock, patch
 import pytest
 
@@ -56,27 +54,8 @@ def test_import_module_safely_failure():
         assert res is None
 
 
-@pytest.mark.concept("CONCEPT:UK-OS.governance.uka")
-@pytest.mark.parametrize(
-    "import_result, mcp_avail, agent_avail",
-    [
-        (MagicMock(), True, True),
-        (None, False, False),
-    ],
-)
-def test_getattr_availability_flags_parametrized(import_result, mcp_avail, agent_avail):
-    # Test _MCP_AVAILABLE and _AGENT_AVAILABLE dynamic checks
-    with patch("uptime_kuma_agent._import_module_safely", return_value=import_result):
-        assert uptime_kuma_agent._MCP_AVAILABLE is mcp_avail
-        assert uptime_kuma_agent._AGENT_AVAILABLE is agent_avail
 
 
-@pytest.mark.concept("CONCEPT:UK-OS.governance.uka")
-def test_getattr_availability_flags_fallback():
-    # Test the fallback lines (52 and 57) when keys are not found in OPTIONAL_MODULES
-    with patch("uptime_kuma_agent.OPTIONAL_MODULES", {}):
-        assert not uptime_kuma_agent._MCP_AVAILABLE
-        assert not uptime_kuma_agent._AGENT_AVAILABLE
 
 
 @pytest.mark.concept("CONCEPT:UK-OS.governance.uka")

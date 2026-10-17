@@ -1,6 +1,6 @@
 # uptime-kuma-agent
 
-Uptime Kuma **MCP Server + A2A Agent** for the agent-utilities ecosystem — a typed,
+Uptime Kuma **MCP Server + A2A Agent** for the Graph OS ecosystem — a typed,
 deterministic tool surface over the Uptime Kuma monitoring API.
 
 !!! info "Official documentation"
@@ -23,7 +23,7 @@ Pydantic AI agent. It provides:
   tools, minimizing context overhead for language models.
 - **An integrated A2A agent** (`uptime-agent` console script) — a Pydantic AI graph
   agent with a web UI that calls the MCP server over `streamable-http`.
-- **Enterprise governance** inherited from `agent-utilities` — OpenTelemetry tracing,
+- **Enterprise governance** inherited from `agent-connector-sdk` — OpenTelemetry tracing,
   Eunomia policy enforcement, and OIDC token delegation.
 
 Authentication is configured entirely from the environment, and each tool module

@@ -3,7 +3,7 @@
 Generated: 2026-05-24T04:17:16.245125+00:00
 Skipped informational: 5
 
-- [ ] [P] **T001** [Dependency Audit] Minor update: agent-utilities 0.2.40 (installed) -> 0.16.0
+- [ ] [P] **T001** [Dependency Audit] Minor update: agent-connector-sdk 0.2.40 (installed) -> 0.16.0
   - Priority: P3-Low | Effort: Small
 - [ ] [P] **T002** [Dependency Audit] Minor update: requests 2.32.5 (installed) -> 2.34.2
   - Priority: P3-Low | Effort: Small
@@ -39,5 +39,5 @@ Skipped informational: 5
   - Priority: P4-Enhancement | Effort: Medium
 - [ ] [P] **T018** [Environment Variables] 3 Python env vars not in .env.example: UPTIME_KUMA_PASSWORD, UPTIME_KUMA_TOKEN,
   - Priority: P4-Enhancement | Effort: Medium
-- [ ] [P] **T019** [analyze_xdg_kg] Analysis error: No module named 'agent_utilities.knowledge_graph'
+- [ ] [P] **T019** [analyze_xdg_kg] Analysis error: No module named 'agent_connector_sdk.knowledge_graph'
   - Priority: P1-High | Effort: Medium
