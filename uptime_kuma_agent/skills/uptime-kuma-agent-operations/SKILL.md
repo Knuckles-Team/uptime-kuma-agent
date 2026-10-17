@@ -2,12 +2,12 @@
 name: uptime-kuma-agent-operations
 skill_type: skill
 description: >-
-  Operate uptime-kuma-agent through its governed MCP and GraphOS capabilities, including caddy uptime sync, uptime kuma sync. Use when a request requires this provider's read, change, automation, ingestion, troubleshooting, or evidence workflows.
+  Operate uptime-kuma-agent through its governed MCP and Arbora capabilities, including caddy uptime sync, uptime kuma sync. Use when a request requires this provider's read, change, automation, ingestion, troubleshooting, or evidence workflows.
 ---
 
 # Uptime Kuma Agent Operations
 
-Use the provider's governed MCP tools through GraphOS delegation.
+Use the provider's governed MCP tools through Arbora delegation.
 
 ## Workflow
 

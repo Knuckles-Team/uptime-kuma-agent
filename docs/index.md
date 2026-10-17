@@ -1,6 +1,6 @@
 # uptime-kuma-agent
 
-Uptime Kuma **MCP Server + A2A Agent** for the Graph OS ecosystem — a typed,
+Uptime Kuma **MCP Server + A2A Agent** for the Arbora ecosystem — a typed,
 deterministic tool surface over the Uptime Kuma monitoring API.
 
 !!! info "Official documentation"

@@ -1,5 +1,5 @@
 {
-  "api_version": "graphos.io/v1",
+  "api_version": "arbora.io/v1",
   "artifacts": {
     "connector_manifest.yml": "ad9440569fb272d093dbc612674d4d88457d51d54826ea6fb708b713df663987",
     "uptime_kuma_agent/connectors/mcp_source_presets.json": "8e1ed279046cf280e8a6aa59e61d43628b54a4c5f621761d984bb21aad38dc7b",
