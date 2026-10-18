@@ -76,5 +76,10 @@ where = [ ".",]
 [tool.vulture]
 ignore_names = ["request", "config"]
 
+[tool.pipelines]
+# uptime-kuma-api publishes only a source distribution; the release readiness
+# gate and the Dockerfile build it from source, and nothing else.
+allow-source-build = ["uptime-kuma-api"]
+
 [tool.pipelines_hooks.ste]
 exempt = ["specs/*", "specs/**/*"]
