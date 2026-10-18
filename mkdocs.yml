@@ -1,5 +1,5 @@
 site_name: "uptime-kuma-agent"
-site_description: "Uptime Kuma MCP Server + A2A Agent — a typed, deterministic tool surface over the Uptime Kuma monitoring API for the agent-utilities ecosystem."
+site_description: "Uptime Kuma MCP Server + A2A Agent — a typed, deterministic tool surface over the Uptime Kuma monitoring API for the Arbora ecosystem."
 site_url: "https://knuckles-team.github.io/uptime-kuma-agent/"
 repo_name: "Knuckles-Team/uptime-kuma-agent"
 repo_url: "https://github.com/Knuckles-Team/uptime-kuma-agent"

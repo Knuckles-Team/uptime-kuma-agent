@@ -4,7 +4,7 @@
   "schema_version": "1.0",
   "prompt_version": "0.1.0",
   "source": "uptime-kuma-agent",
-  "extends": "agent-utilities:base",
+  "extends": "agent-connector-sdk:base",
   "compose": "append",
   "description": "Uptime Kuma observability specialist: availability monitoring, heartbeat analysis, and incident triage over the uptime-kuma-agent MCP server.",
   "metadata": {
