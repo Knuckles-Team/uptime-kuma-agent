@@ -27,7 +27,7 @@ class _FakeTransport:
     def __init__(self) -> None:
         self.requests: list[Any] = []
 
-    async def source_status(self, connector: str, stream: str) -> Any:
+    async def source_status(self, connector: str, stream: str) -> Any:  # noqa: V107
         return SimpleNamespace(accepted_checkpoint=None)
 
     async def submit(self, request: Any) -> Any:
@@ -37,7 +37,7 @@ class _FakeTransport:
             relationship_count=len(request.relationships),
         )
 
-    async def store_blob(self, data: bytes) -> str:
+    async def store_blob(self, data: bytes) -> str:  # noqa: V107
         raise AssertionError("this connector's ingestion carries no media")
 
 

@@ -16,9 +16,9 @@ logger = logging.getLogger(__name__)
 
 def _new_client(base_url: str, *, timeout: int) -> UptimeKumaApi:
     """Construct the optional runtime client behind a unit-testable seam."""
-    from uptime_kuma_api import UptimeKumaApi
+    from uptime_kuma_agent.api_client import operations_class
 
-    return UptimeKumaApi(base_url, timeout=timeout)
+    return operations_class()(base_url, timeout=timeout)
 
 
 def _client_is_connected(client: Any) -> bool:

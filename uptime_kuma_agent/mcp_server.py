@@ -33,7 +33,7 @@ from starlette.responses import JSONResponse
 
 from uptime_kuma_agent.auth import get_client
 
-__version__ = "2.2.1"
+__version__ = "2.3.0"
 
 logger = get_logger(name="uptime-kuma-agent")
 logger.setLevel(logging.INFO)
@@ -64,10 +64,11 @@ def _optional_client_type() -> type[Any] | None:
     through :func:`get_client`.
     """
     try:
-        from uptime_kuma_api import UptimeKumaApi
+        from uptime_kuma_agent.api_client import operations_class
+
+        return operations_class()
     except ImportError:
         return None
-    return UptimeKumaApi
 
 
 def register_monitors_tools(mcp: FastMCP):
