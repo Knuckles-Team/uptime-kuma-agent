@@ -21,7 +21,7 @@ from agent_connector_sdk.ingest import (
     current_ingest,
 )
 
-_BINDING = IngestBinding(connector="uptime-kuma-agent", stream="uptimekuma")
+_BINDING = IngestBinding(connector="uptime-kuma", stream="uptimekuma")
 
 
 def _to_entity(record: dict[str, Any]) -> Entity:
