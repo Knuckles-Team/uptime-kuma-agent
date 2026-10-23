@@ -1,9 +1,6 @@
 {
   "api_version": "arbora.io/v1",
   "artifacts": {
-    "connector_manifest.yml": "c8cf0abbf4d2427e7732ed28844cc951e1741e960e1509d4beec1407d89d434c",
-    "uptime_kuma_agent/connectors/mcp_source_presets.json": "8e1ed279046cf280e8a6aa59e61d43628b54a4c5f621761d984bb21aad38dc7b",
-    "uptime_kuma_agent/connectors/tool_schema_fingerprints.json": "6b91e6d06eddc2bacbf8417bab690722ac24271ef2553ec3a7dd22b1a637e316",
     "uptime_kuma_agent/ontology/fixtures/records.json": "480b29e01ed9ef0bf09ce76db8d7a0e89a18645a3bca12d7cd53fc4fb3612ffc",
     "uptime_kuma_agent/ontology/mappings/source.yaml": "4a0b643d5df5e5a7d1907ae3b540d2a6feb6515381f399ff66e1eeb0094fe5d1",
     "uptime_kuma_agent/ontology/migrations/manifest.json": "d514caa62423dc48d9557b3de0f6390f7393545031cc7cfb68d45aa2042be08c",
