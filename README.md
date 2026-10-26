@@ -20,8 +20,6 @@
 ![PyPI - Wheel](https://img.shields.io/pypi/wheel/uptime-kuma-agent)
 ![PyPI - Implementation](https://img.shields.io/pypi/implementation/uptime-kuma-agent)
 
-*Version: 2.3.3*
-
 > **Documentation** — Installation, deployment, usage across the API, CLI, and MCP
 > interfaces, the integrated A2A agent, and guidance for provisioning the Uptime Kuma
 > platform are maintained in the [official documentation](https://knuckles-team.github.io/uptime-kuma-agent/).

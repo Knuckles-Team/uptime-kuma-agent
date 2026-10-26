@@ -23,16 +23,16 @@ Atomic operation to discover all Caddy-fronted service routes and ensure each ha
 
 ## Prerequisites
 
-- **Caddyfile** accessible on the host filesystem (default: `/home/apps/caddy/Caddyfile`).
-- **Uptime Kuma SQLite database** accessible on the host filesystem (default: `/home/apps/uptime-kuma/data/kuma.db`).
+- **Caddyfile** accessible on the host filesystem (default: `/etc/caddy/Caddyfile`).
+- **Uptime Kuma SQLite database** accessible on the host filesystem (default: `/var/lib/uptime-kuma/data/kuma.db`).
 - Python 3.10+ with `sqlite3` (stdlib) and `re` (stdlib) — no external dependencies.
 
 ## Configuration
 
 | Variable | Default | Description |
 |---|---|---|
-| `CADDYFILE_PATH` | `/home/apps/caddy/Caddyfile` | Absolute path to the Caddy server block configuration |
-| `KUMA_DB_PATH` | `/home/apps/uptime-kuma/data/kuma.db` | Absolute path to the Uptime Kuma SQLite database |
+| `CADDYFILE_PATH` | `/etc/caddy/Caddyfile` | Absolute path to the Caddy server block configuration |
+| `KUMA_DB_PATH` | `/var/lib/uptime-kuma/data/kuma.db` | Absolute path to the Uptime Kuma SQLite database |
 
 Override these by passing `--caddyfile` and `--db` CLI arguments to the script.
 
@@ -72,7 +72,7 @@ After execution, confirm the output line:
 Successfully registered N new monitors in Uptime Kuma.
 ```
 
-If `N` is `0`, all monitors were already present. Optionally verify in the Uptime Kuma dashboard at `https://uptime.arpa`.
+If `N` is `0`, all monitors were already present. Optionally verify in the Uptime Kuma dashboard at `https://uptime.example.invalid`.
 
 ## Customization
 
