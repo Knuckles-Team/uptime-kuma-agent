@@ -116,7 +116,9 @@ async def test_ingest_monitors_maps_monitor_and_heartbeats(ingest):
 
 async def test_ingest_monitors_without_heartbeats(ingest):
     service, transport = ingest
-    res = await ingest_monitors([{"id": 1, "name": "web", "type": "http"}], ingest=service)
+    res = await ingest_monitors(
+        [{"id": 1, "name": "web", "type": "http"}], ingest=service
+    )
     assert res == {"nodes": 1, "edges": 0}
     request = transport.requests[0]
     assert request.records[0].record_id == "uptimekuma:monitor:1"

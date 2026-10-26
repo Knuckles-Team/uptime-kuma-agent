@@ -1,4 +1,5 @@
 import pytest
+
 from uptime_kuma_agent.uptime_kuma_models import (
     UptimeKumaMonitor,
     UptimeKumaMonitorStatus,

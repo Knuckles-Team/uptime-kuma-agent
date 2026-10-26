@@ -1,5 +1,6 @@
 #!/usr/bin/python
 import warnings
+from importlib.metadata import version as package_version
 
 from fastmcp import Context, FastMCP
 from fastmcp.dependencies import Depends
@@ -33,7 +34,7 @@ from starlette.responses import JSONResponse
 
 from uptime_kuma_agent.auth import get_client
 
-__version__ = "2.3.3"
+__version__ = package_version("uptime-kuma-agent")
 
 logger = get_logger(name="uptime-kuma-agent")
 logger.setLevel(logging.INFO)

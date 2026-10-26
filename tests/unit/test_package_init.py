@@ -1,4 +1,5 @@
 from unittest.mock import MagicMock, patch
+
 import pytest
 
 import uptime_kuma_agent
@@ -52,10 +53,6 @@ def test_import_module_safely_failure():
     with patch("importlib.import_module", side_effect=ImportError("Not found")):
         res = _import_module_safely("non_existent_module")
         assert res is None
-
-
-
-
 
 
 @pytest.mark.concept("CONCEPT:UK-OS.governance.uka")
