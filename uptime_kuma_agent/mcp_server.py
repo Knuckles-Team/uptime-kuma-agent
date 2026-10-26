@@ -25,9 +25,9 @@ import sys
 from typing import Any
 
 from agent_connector_sdk.config import load_config
+from agent_connector_sdk.connector import build_server
 from agent_connector_sdk.mcp.action_dispatch import resolve_action
 from agent_connector_sdk.mcp.concurrency import run_blocking
-from agent_connector_sdk.mcp.server import create_mcp_server
 from agent_connector_sdk.mcp.tool_surface import register_tool_surface
 from starlette.requests import Request
 from starlette.responses import JSONResponse
@@ -228,14 +228,15 @@ def register_ingest_tools(mcp: FastMCP):
         return {"listed": len(records), "ingested": result}
 
 
-def get_mcp_instance() -> tuple[Any, ...]:
-    """Initialize and return the MCP instance."""
+def get_mcp_instance(*, command_args=None) -> tuple[Any, ...]:
+    """Initialize the legacy MCP entry point with its existing configuration."""
     load_config()
-    args, mcp, middlewares = create_mcp_server(
-        name="uptime-kuma-agent MCP",
-        version=__version__,
-        instructions="uptime-kuma-agent MCP Server — Condensed Action-Routed Tools.",
-    )
+    args, mcp = build_server("uptime_kuma_agent", command_args=command_args)
+    return mcp, args, list(mcp.middleware)
+
+
+def register_server_surface(mcp: FastMCP) -> None:
+    """Reuse the existing custom health route and tool registrar in order."""
 
     @mcp.custom_route("/health", methods=["GET"])
     async def health_check(request: Request) -> JSONResponse:
@@ -248,10 +249,6 @@ def get_mcp_instance() -> tuple[Any, ...]:
         service="uptime-kuma-agent",
         tools_module=sys.modules[__name__],
     )
-
-    for mw in middlewares:
-        mcp.add_middleware(mw)
-    return mcp, args, middlewares
 
 
 def mcp_server() -> None:
