@@ -9,7 +9,6 @@ from starlette.responses import JSONResponse
 
 import uptime_kuma_agent.mcp_server as mcp_server_module
 from uptime_kuma_agent.mcp_server import (
-    get_mcp_instance,
     mcp_server,
     register_monitors_tools,
     register_status_tools,
@@ -239,9 +238,7 @@ async def test_health_check_route():
 
     mock_mcp.custom_route = custom_route_decorator
 
-    with patch("uptime_kuma_agent.mcp_server.create_mcp_server") as mock_create:
-        mock_create.return_value = (MagicMock(), mock_mcp, [])
-        get_mcp_instance()
+    mcp_server_module.register_server_surface(mock_mcp)
 
     assert "/health" in captured_routes
     health_check_func = captured_routes["/health"]
