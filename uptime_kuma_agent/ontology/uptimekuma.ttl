@@ -18,6 +18,14 @@
     rdfs:label "Uptime Monitor" ;
     rdfs:comment "A configured health check against an endpoint (http/tcp/ping/dns/…), with an interval and active state (uptime_kuma_monitors)." .
 
+:monitorLatestStatus a owl:DatatypeProperty ;
+    rdfs:domain :UptimeMonitor ; rdfs:range xsd:integer ;
+    rdfs:comment "Status from the latest observed heartbeat." .
+
+:monitorLastCheck a owl:DatatypeProperty ;
+    rdfs:domain :UptimeMonitor ; rdfs:range xsd:dateTime ;
+    rdfs:comment "Timestamp of the latest observed heartbeat." .
+
 :HeartbeatStat a owl:Class ;
     rdfs:label "Heartbeat Stat" ;
     rdfs:comment "A single timeseries health sample of a monitor — status, response time (ping), message and timestamp (uptime_kuma_status get_heartbeats)." .

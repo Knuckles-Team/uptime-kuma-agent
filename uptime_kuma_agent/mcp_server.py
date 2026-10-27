@@ -33,6 +33,7 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse
 
 from uptime_kuma_agent.auth import get_client
+from uptime_kuma_agent.service_health import service_health
 
 __version__ = package_version("uptime-kuma-agent")
 
@@ -139,6 +140,13 @@ def register_monitors_tools(mcp: FastMCP):
 
 
 def register_status_tools(mcp: FastMCP):
+    @mcp.tool(tags={"status"})
+    async def uptime_kuma_service_health(client=Depends(get_client)) -> list[dict]:
+        """Read monitor health from the latest observed heartbeat."""
+        monitors = await run_blocking(client.get_monitors)
+        heartbeats = await run_blocking(client.get_heartbeats)
+        return service_health(monitors, heartbeats)
+
     @mcp.tool(tags={"status"})
     async def uptime_kuma_status(
         action: str = Field(
