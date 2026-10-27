@@ -1,0 +1,12 @@
+@prefix ac: <https://knuckles-team.github.io/agent-connector-sdk/access#> .
+@prefix kg: <http://knuckles.team/kg#> .
+@prefix uk: <http://knuckles.team/kg/uptime-access#> .
+
+uk:serviceHealth a ac:AccessContract ;
+    ac:classIri kg:UptimeMonitor ; ac:sourceId "uptime-kuma" ;
+    ac:entity "monitor" ; ac:keyField "id" ; ac:accessKind "mcp_tool" ;
+    ac:operation "uptime_kuma_service_health" ; ac:pagination "none" .
+
+uk:name a ac:PropertyBinding ; ac:contract uk:serviceHealth ; ac:property kg:name ; ac:field "name" .
+uk:status a ac:PropertyBinding ; ac:contract uk:serviceHealth ; ac:property kg:monitorLatestStatus ; ac:field "status" .
+uk:lastCheck a ac:PropertyBinding ; ac:contract uk:serviceHealth ; ac:property kg:monitorLastCheck ; ac:field "last_check" .

@@ -1,0 +1,4 @@
+[
+  {"id": "1", "name": "Example service", "status": 0, "last_check": "2026-01-01T00:02:00+00:00"},
+  {"id": "2", "name": "New service", "status": null, "last_check": null}
+]

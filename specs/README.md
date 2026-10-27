@@ -14,3 +14,4 @@ Read the existing specs first. Extend the spec that owns the behavior. Create a 
 
 - [`CONN-UPTIME-KUMA-AGENT-CONNECTOR-CONTENT`](connector-content/spec.md) — The connector serves its packaged content.
 - [`CONN-UPTIME-KUMA-AGENT-CONNECTOR-IDENTITY`](connector-identity/spec.md) — The connector is filed under its fleet name.
+- [`CONN-UPTIME-KUMA-AGENT-SERVICE-HEALTH`](service-health/spec.md) — The connector serves a safe monitor health projection.

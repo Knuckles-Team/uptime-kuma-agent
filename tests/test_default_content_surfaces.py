@@ -137,7 +137,7 @@ def test_canonical_and_legacy_routes_preserve_the_full_tool_surface():
                 tool.name: tool.model_dump(mode="json")
                 for tool in await canonical_client.list_tools()
             }
-        assert len(legacy) == 89
+        assert len(legacy) == 90
         assert declared == legacy
 
     asyncio.run(capture())
