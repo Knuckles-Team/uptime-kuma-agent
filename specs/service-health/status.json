@@ -2,7 +2,7 @@
   "schema_version": 2,
   "spec_id": "CONN-UPTIME-KUMA-AGENT-SERVICE-HEALTH",
   "owner_repo": "uptime-kuma-agent",
-  "delivery_state": "SPECIFIED",
+  "delivery_state": "VERIFIED",
   "requirement_ids": [
     "CONN-UPTIME-KUMA-AGENT-SERVICE-HEALTH-R001"
   ],
@@ -10,8 +10,10 @@
     {
       "id": "CONN-UPTIME-KUMA-AGENT-SERVICE-HEALTH-R001",
       "title": "Service health access",
-      "delivery_state": "SPECIFIED",
-      "landed_in": [],
+      "delivery_state": "VERIFIED",
+      "landed_in": [
+        "6a2c4ffbf010"
+      ],
       "verified_by": [
         "tests/test_service_health.py:32"
       ]
