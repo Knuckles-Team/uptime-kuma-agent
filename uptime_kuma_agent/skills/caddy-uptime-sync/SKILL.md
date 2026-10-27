@@ -6,7 +6,7 @@ description: >-
 license: MIT
 tags: [caddy, uptime-kuma, sync, monitors, networking, ops]
 metadata:
-  author: Genius
+  author: example-operator
   version: '0.1.21'
 ---
 # Caddy to Uptime Kuma Sync

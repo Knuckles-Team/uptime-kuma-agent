@@ -13,7 +13,7 @@ description: >-
 license: MIT
 tags: [uptime-kuma, monitoring, caddy, health-checks, sync, infrastructure]
 metadata:
-  author: Genius
+  author: example-operator
   version: '0.17.0'
 ---
 
