@@ -1,6 +1,6 @@
 # CONN-UPTIME-KUMA-AGENT-SERVICE-HEALTH — Service health access
 
-Owner: uptime-kuma-agent. Cross-repo ID: `SDK-CONNECTOR-CONTROL-R038`.
+Owner: uptime-kuma-agent. Cross-repo ID: `SCION-CONNECTOR-CONTROL-R038`.
 
 ## Purpose and user stories
 
