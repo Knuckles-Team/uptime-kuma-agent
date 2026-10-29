@@ -1,3 +1,4 @@
+import importlib
 import json
 import runpy
 import sys
@@ -7,12 +8,14 @@ from unittest.mock import AsyncMock, MagicMock, patch
 import pytest
 from starlette.responses import JSONResponse
 
-import uptime_kuma_agent.mcp_server as mcp_server_module
 from uptime_kuma_agent.mcp_server import (
     mcp_server,
     register_monitors_tools,
     register_status_tools,
 )
+
+# The package re-exports the mcp_server function, shadowing the submodule attribute.
+mcp_server_module = importlib.import_module("uptime_kuma_agent.mcp_server")
 
 
 @pytest.mark.concept("CONCEPT:UK-OS.config.uka")
