@@ -1,7 +1,7 @@
 """Knowledge-graph ingestion coverage for the Uptime Kuma connector.
 
 Exercises the real ``ingest_entities`` / ``ingest_monitors`` seam against a fake
-``agent_connector_sdk.ingest`` transport (no engine required), asserting the
+``scion_sdk.ingest`` transport (no engine required), asserting the
 submitted records/relationships and the Uptime Kuma monitor -> :UptimeMonitor /
 heartbeat -> :HeartbeatStat mapping. CONCEPT:AU-KG.ingest.enterprise-source-extractor.
 """
@@ -12,7 +12,7 @@ from types import SimpleNamespace
 from typing import Any
 
 import pytest
-from agent_connector_sdk.ingest import IngestError, KnowledgeIngest
+from scion_sdk.ingest import IngestError, KnowledgeIngest
 
 from uptime_kuma_agent.kg_ingest import (
     ingest_documents,

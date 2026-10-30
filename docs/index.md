@@ -23,7 +23,7 @@ Pydantic AI agent. It provides:
   tools, minimizing context overhead for language models.
 - **An integrated A2A agent** (`uptime-agent` console script) — a Pydantic AI graph
   agent with a web UI that calls the MCP server over `streamable-http`.
-- **Enterprise governance** inherited from `agent-connector-sdk` — OpenTelemetry tracing,
+- **Enterprise governance** inherited from `scion-sdk` — OpenTelemetry tracing,
   Eunomia policy enforcement, and OIDC token delegation.
 
 Authentication is configured entirely from the environment, and each tool module

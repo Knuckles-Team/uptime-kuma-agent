@@ -127,4 +127,4 @@
     rdfs:label "Uptime Kuma Monitoring Ontology" ;
     rdfs:comment """Uptime Kuma availability-monitoring model — monitors, heartbeat
     timeseries samples, status pages, tags and notification providers, with their
-    measurement relationships — federated into the agent-connector-sdk knowledge-graph hub.""" .
+    measurement relationships — federated into the scion-sdk knowledge-graph hub.""" .

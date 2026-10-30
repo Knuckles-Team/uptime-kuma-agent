@@ -2,7 +2,7 @@
 
 Verifies that the action-routed MCP tools expose ``list_actions`` discovery and
 raise a rich did-you-mean error (mentioning ``list_actions``) on unknown actions
-via the shared ``agent_connector_sdk.mcp.action_dispatch`` helper.
+via the shared ``scion_sdk.mcp.action_dispatch`` helper.
 """
 
 from unittest.mock import MagicMock
