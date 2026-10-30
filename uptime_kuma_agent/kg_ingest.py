@@ -1,7 +1,7 @@
 """Native epistemic-graph ingestion for Uptime Kuma records.
 
 CONCEPT:AU-KG.ingest.enterprise-source-extractor. Connector-specific mappers emit
-canonical node_type nodes and relationship edges. The ``agent_connector_sdk.ingest``
+canonical node_type nodes and relationship edges. The ``scion_sdk.ingest``
 knowledge-ingest facade owns the transaction and raises ``IngestError`` when the
 engine cannot commit.
 """
@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from agent_connector_sdk.ingest import (
+from scion_sdk.ingest import (
     ChangeSet,
     Document,
     Entity,

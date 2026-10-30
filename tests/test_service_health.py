@@ -31,7 +31,7 @@ class FakeProvider:
 
 @pytest.mark.spec("CONN-UPTIME-KUMA-AGENT-SERVICE-HEALTH-R001")
 def test_served_health_contract():
-    from agent_connector_sdk.access_contract import parse_access_contracts
+    from scion_sdk.access_contract import parse_access_contracts
 
     from uptime_kuma_agent.mcp_server import get_mcp_instance
 
