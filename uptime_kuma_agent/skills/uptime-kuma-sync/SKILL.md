@@ -13,7 +13,7 @@ description: >-
 license: MIT
 tags: [uptime-kuma, monitoring, caddy, health-checks, sync, infrastructure]
 metadata:
-  author: example-operator
+  author: Repository Maintainers
   version: '0.17.0'
 ---
 

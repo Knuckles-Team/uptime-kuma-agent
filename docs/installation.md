@@ -21,7 +21,7 @@ The base install ships the MCP server runtime. Install the extra for what the op
 
 | Extra | Install | Pulls in |
 |---|---|---|
-| (base) | `pip install uptime-kuma-agent` | MCP-server runtime (`agent-connector-sdk[mcp]`) + `uptime-kuma-api` |
+| (base) | `pip install uptime-kuma-agent` | MCP-server runtime (`scion-sdk[mcp]`) + `uptime-kuma-api` |
 | `agent` | `pip install "uptime-kuma-agent[agent]"` | Pydantic-AI agent + Logfire tracing |
 | `all` | `pip install "uptime-kuma-agent[all]"` | MCP server, agent, and Logfire tracing |
 | `test` | `pip install "uptime-kuma-agent[test]"` | `pytest`, `pytest-asyncio`, `pytest-cov`, `pytest-xdist` |

@@ -8,7 +8,7 @@ description: >-
 license: MIT
 tags: [uptime-kuma-agent, connector, development, testing, packaging, pages, specs]
 metadata:
-  author: Project Maintainers
+  author: Repository Maintainers
   version: '0.1.0'
 ---
 
@@ -18,7 +18,7 @@ This skill is the repository contract for the uptime-kuma-agent connector. The
 package owns the Uptime Kuma client and models, authentication, MCP actions,
 connector source mappings, packaged prompts, skills, and ontology. Shared
 transport, connector validation, release rendering, and delivery gates belong
-to `agent-connector-sdk` and `pipelines`; admission and durable graph state
+to `scion-sdk` and `pipelines`; admission and durable graph state
 belong to their owning repositories.
 
 ## Repository map
