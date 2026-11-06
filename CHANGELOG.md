@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.3.8] - 2026-11-06
+
+### Fixed
+- The observability specialist prompt names the typed `uptime_kuma_*` tools instead of the retired `uptime_kuma_monitors` and `uptime_kuma_status` tools.
+- `UPTIME_KUMA_TIMEOUT` defaults to 120 seconds: a large Uptime Kuma database takes over 25 seconds to log in and longer to return the monitor list.
+- Require `scion-sdk>=0.6.5` so destructive tools accept `confirm=true`.
+
 ## [2.3.7] - 2026-10-30
 
 ### Changed

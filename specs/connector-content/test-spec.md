@@ -8,6 +8,7 @@ Governing spec: [spec.md](spec.md).
 | T-002 | `CONN-UPTIME-KUMA-AGENT-CONNECTOR-CONTENT-R005` | `tests/test_access_contracts.py::test_competency_contracts_certified` (planned) | Test: `tests/test_access_contracts.py::test_competency_contracts_certified` (L2) runs the connector ontology certification and validates each recording against its contract. |
 | T-003 | `CONN-UPTIME-KUMA-AGENT-CONNECTOR-CONTENT-R003` | `tests/test_service_health.py::test_served_health_contract` | L3: a served-tool test in the connector returns the recorded fields, and the conformance kit run of `scion-sdk` passes. |
 | T-004 | `CONN-UPTIME-KUMA-AGENT-CONNECTOR-CONTENT-R002` | `tests/test_access_contracts.py::test_monitor_and_heartbeat_contracts` (planned) | Test: `tests/test_access_contracts.py::test_monitor_and_heartbeat_contracts` (L2) runs the ontology certification. |
+| T-005 | `CONN-UPTIME-KUMA-AGENT-CONNECTOR-CONTENT-R006` | `tests/unit/test_auth_timeout.py::test_default_timeout_covers_a_slow_login` | With no override the client is built with a 120 second timeout and the prompt no longer lists the retired action tools. |
 
 ## Negative and boundary cases
 

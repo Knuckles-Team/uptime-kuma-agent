@@ -47,7 +47,7 @@ def get_client() -> UptimeKumaApi:
     ``Incorrect username or password`` on bad creds — neither says which step
     failed or how to fix it. We distinguish CONNECT vs LOGIN vs UNCONFIGURED and
     include a remediation hint without echoing endpoint or identity values. A generous connect ``timeout``
-    (default 30s, overridable via ``UPTIME_KUMA_TIMEOUT``) absorbs
+    (default 120s, overridable via ``UPTIME_KUMA_TIMEOUT``) absorbs
     cluster/ingress latency that makes the library's short default time out.
     """
     global _client
@@ -65,7 +65,7 @@ def get_client() -> UptimeKumaApi:
         token = setting("UPTIME_KUMA_TOKEN", "") or setting("SUPERTOKEN", "")
         username = setting("UPTIME_KUMA_USERNAME", "")
         password = setting("UPTIME_KUMA_PASSWORD", "")
-        timeout = int(setting("UPTIME_KUMA_TIMEOUT", "30"))
+        timeout = int(setting("UPTIME_KUMA_TIMEOUT", "120"))
 
         if token and not (username and password):
             if ":" in token:

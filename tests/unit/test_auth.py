@@ -35,7 +35,7 @@ def test_get_client_caching(mock_new_client):
     assert get_client() is mock_api_instance
     assert get_client() is mock_api_instance
 
-    mock_new_client.assert_called_once_with("http://localhost:3001", timeout=30)
+    mock_new_client.assert_called_once_with("http://localhost:3001", timeout=120)
 
 
 @pytest.mark.concept("CONCEPT:UK-OS.identity.uka")
@@ -53,7 +53,7 @@ def test_get_client_user_pass(mock_new_client):
     assert client is mock_api_instance
     mock_api_instance.login.assert_called_once_with("testuser", "testpassword")
     assert get_client() is mock_api_instance
-    mock_new_client.assert_called_once_with("http://localhost:3001", timeout=30)
+    mock_new_client.assert_called_once_with("http://localhost:3001", timeout=120)
 
 
 @pytest.mark.concept("CONCEPT:UK-OS.identity.uka")
