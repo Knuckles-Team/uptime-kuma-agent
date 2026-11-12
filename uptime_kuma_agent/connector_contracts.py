@@ -1,4 +1,5 @@
 """Surface contracts: tool use, links, data locations and business roles."""
+
 from scion_sdk.surface_contracts import (
     BusinessRole,
     DataLocation,
@@ -31,35 +32,37 @@ CONTRACTS = (
                     "active",
                 ),
                 refusals=(
-                    Refusal(code="NOT_FOUND", when="no record has the given identifier"),
+                    Refusal(
+                        code="NOT_FOUND", when="no record has the given identifier"
+                    ),
                 ),
             ),
             ToolStep(
                 tool="uptime_kuma_get_monitor",
-                params=(
-                    "id_",
-                ),
+                params=("id_",),
                 result=(
                     "id",
                     "name",
                     "active",
                 ),
                 refusals=(
-                    Refusal(code="NOT_FOUND", when="no record has the given identifier"),
+                    Refusal(
+                        code="NOT_FOUND", when="no record has the given identifier"
+                    ),
                 ),
             ),
             ToolStep(
                 tool="uptime_kuma_get_monitor_status",
-                params=(
-                    "monitor_id",
-                ),
+                params=("monitor_id",),
                 result=(
                     "id",
                     "name",
                     "active",
                 ),
                 refusals=(
-                    Refusal(code="NOT_FOUND", when="no record has the given identifier"),
+                    Refusal(
+                        code="NOT_FOUND", when="no record has the given identifier"
+                    ),
                 ),
             ),
             ToolStep(
@@ -72,7 +75,9 @@ CONTRACTS = (
                     "msg",
                 ),
                 refusals=(
-                    Refusal(code="NOT_FOUND", when="no record has the given identifier"),
+                    Refusal(
+                        code="NOT_FOUND", when="no record has the given identifier"
+                    ),
                 ),
             ),
             ToolStep(
@@ -85,7 +90,9 @@ CONTRACTS = (
                     "msg",
                 ),
                 refusals=(
-                    Refusal(code="NOT_FOUND", when="no record has the given identifier"),
+                    Refusal(
+                        code="NOT_FOUND", when="no record has the given identifier"
+                    ),
                 ),
             ),
             ToolStep(
@@ -101,7 +108,9 @@ CONTRACTS = (
                     "msg",
                 ),
                 refusals=(
-                    Refusal(code="NOT_FOUND", when="no record has the given identifier"),
+                    Refusal(
+                        code="NOT_FOUND", when="no record has the given identifier"
+                    ),
                 ),
             ),
             ToolStep(
@@ -136,9 +145,7 @@ CONTRACTS = (
         steps=(
             ToolStep(
                 tool="uptime_kuma_add_monitor",
-                params=(
-                    "config",
-                ),
+                params=("config",),
                 result=(
                     "id",
                     "name",
@@ -147,9 +154,7 @@ CONTRACTS = (
             ),
             ToolStep(
                 tool="uptime_kuma_edit_monitor",
-                params=(
-                    "id_",
-                ),
+                params=("id_",),
                 result=(
                     "id",
                     "name",
@@ -158,9 +163,7 @@ CONTRACTS = (
             ),
             ToolStep(
                 tool="uptime_kuma_pause_monitor",
-                params=(
-                    "id_",
-                ),
+                params=("id_",),
                 result=(
                     "id",
                     "name",
@@ -169,9 +172,7 @@ CONTRACTS = (
             ),
             ToolStep(
                 tool="uptime_kuma_resume_monitor",
-                params=(
-                    "id_",
-                ),
+                params=("id_",),
                 result=(
                     "id",
                     "name",
@@ -180,16 +181,16 @@ CONTRACTS = (
             ),
             ToolStep(
                 tool="uptime_kuma_delete_monitor",
-                params=(
-                    "id_",
-                ),
+                params=("id_",),
                 result=(
                     "id",
                     "name",
                     "active",
                 ),
                 refusals=(
-                    Refusal(code="NOT_FOUND", when="no record has the given identifier"),
+                    Refusal(
+                        code="NOT_FOUND", when="no record has the given identifier"
+                    ),
                 ),
             ),
         ),
@@ -207,28 +208,28 @@ CONTRACTS = (
                     "color",
                 ),
                 refusals=(
-                    Refusal(code="NOT_FOUND", when="no record has the given identifier"),
+                    Refusal(
+                        code="NOT_FOUND", when="no record has the given identifier"
+                    ),
                 ),
             ),
             ToolStep(
                 tool="uptime_kuma_get_tag",
-                params=(
-                    "id_",
-                ),
+                params=("id_",),
                 result=(
                     "id",
                     "name",
                     "color",
                 ),
                 refusals=(
-                    Refusal(code="NOT_FOUND", when="no record has the given identifier"),
+                    Refusal(
+                        code="NOT_FOUND", when="no record has the given identifier"
+                    ),
                 ),
             ),
             ToolStep(
                 tool="uptime_kuma_add_tag",
-                params=(
-                    "config",
-                ),
+                params=("config",),
                 result=(
                     "id",
                     "name",
@@ -237,9 +238,7 @@ CONTRACTS = (
             ),
             ToolStep(
                 tool="uptime_kuma_edit_tag",
-                params=(
-                    "id_",
-                ),
+                params=("id_",),
                 result=(
                     "id",
                     "name",
@@ -248,16 +247,16 @@ CONTRACTS = (
             ),
             ToolStep(
                 tool="uptime_kuma_delete_tag",
-                params=(
-                    "id_",
-                ),
+                params=("id_",),
                 result=(
                     "id",
                     "name",
                     "color",
                 ),
                 refusals=(
-                    Refusal(code="NOT_FOUND", when="no record has the given identifier"),
+                    Refusal(
+                        code="NOT_FOUND", when="no record has the given identifier"
+                    ),
                 ),
             ),
             ToolStep(
@@ -284,7 +283,9 @@ CONTRACTS = (
                     "monitor_id",
                 ),
                 refusals=(
-                    Refusal(code="NOT_FOUND", when="no record has the given identifier"),
+                    Refusal(
+                        code="NOT_FOUND", when="no record has the given identifier"
+                    ),
                 ),
             ),
         ),
@@ -302,28 +303,28 @@ CONTRACTS = (
                     "active",
                 ),
                 refusals=(
-                    Refusal(code="NOT_FOUND", when="no record has the given identifier"),
+                    Refusal(
+                        code="NOT_FOUND", when="no record has the given identifier"
+                    ),
                 ),
             ),
             ToolStep(
                 tool="uptime_kuma_get_maintenance",
-                params=(
-                    "id_",
-                ),
+                params=("id_",),
                 result=(
                     "id",
                     "title",
                     "active",
                 ),
                 refusals=(
-                    Refusal(code="NOT_FOUND", when="no record has the given identifier"),
+                    Refusal(
+                        code="NOT_FOUND", when="no record has the given identifier"
+                    ),
                 ),
             ),
             ToolStep(
                 tool="uptime_kuma_add_maintenance",
-                params=(
-                    "config",
-                ),
+                params=("config",),
                 result=(
                     "id",
                     "title",
@@ -332,9 +333,7 @@ CONTRACTS = (
             ),
             ToolStep(
                 tool="uptime_kuma_edit_maintenance",
-                params=(
-                    "id_",
-                ),
+                params=("id_",),
                 result=(
                     "id",
                     "title",
@@ -343,9 +342,7 @@ CONTRACTS = (
             ),
             ToolStep(
                 tool="uptime_kuma_pause_maintenance",
-                params=(
-                    "id_",
-                ),
+                params=("id_",),
                 result=(
                     "id",
                     "title",
@@ -354,9 +351,7 @@ CONTRACTS = (
             ),
             ToolStep(
                 tool="uptime_kuma_resume_maintenance",
-                params=(
-                    "id_",
-                ),
+                params=("id_",),
                 result=(
                     "id",
                     "title",
@@ -365,30 +360,30 @@ CONTRACTS = (
             ),
             ToolStep(
                 tool="uptime_kuma_delete_maintenance",
-                params=(
-                    "id_",
-                ),
+                params=("id_",),
                 result=(
                     "id",
                     "title",
                     "active",
                 ),
                 refusals=(
-                    Refusal(code="NOT_FOUND", when="no record has the given identifier"),
+                    Refusal(
+                        code="NOT_FOUND", when="no record has the given identifier"
+                    ),
                 ),
             ),
             ToolStep(
                 tool="uptime_kuma_get_monitor_maintenance",
-                params=(
-                    "id_",
-                ),
+                params=("id_",),
                 result=(
                     "id",
                     "title",
                     "active",
                 ),
                 refusals=(
-                    Refusal(code="NOT_FOUND", when="no record has the given identifier"),
+                    Refusal(
+                        code="NOT_FOUND", when="no record has the given identifier"
+                    ),
                 ),
             ),
             ToolStep(
@@ -405,16 +400,16 @@ CONTRACTS = (
             ),
             ToolStep(
                 tool="uptime_kuma_get_status_page_maintenance",
-                params=(
-                    "id_",
-                ),
+                params=("id_",),
                 result=(
                     "id",
                     "title",
                     "active",
                 ),
                 refusals=(
-                    Refusal(code="NOT_FOUND", when="no record has the given identifier"),
+                    Refusal(
+                        code="NOT_FOUND", when="no record has the given identifier"
+                    ),
                 ),
             ),
             ToolStep(
@@ -443,20 +438,22 @@ CONTRACTS = (
                     "title",
                 ),
                 refusals=(
-                    Refusal(code="NOT_FOUND", when="no record has the given identifier"),
+                    Refusal(
+                        code="NOT_FOUND", when="no record has the given identifier"
+                    ),
                 ),
             ),
             ToolStep(
                 tool="uptime_kuma_get_status_page",
-                params=(
-                    "slug",
-                ),
+                params=("slug",),
                 result=(
                     "slug",
                     "title",
                 ),
                 refusals=(
-                    Refusal(code="NOT_FOUND", when="no record has the given identifier"),
+                    Refusal(
+                        code="NOT_FOUND", when="no record has the given identifier"
+                    ),
                 ),
             ),
             ToolStep(
@@ -472,9 +469,7 @@ CONTRACTS = (
             ),
             ToolStep(
                 tool="uptime_kuma_save_status_page",
-                params=(
-                    "slug",
-                ),
+                params=("slug",),
                 result=(
                     "slug",
                     "title",
@@ -482,15 +477,15 @@ CONTRACTS = (
             ),
             ToolStep(
                 tool="uptime_kuma_delete_status_page",
-                params=(
-                    "slug",
-                ),
+                params=("slug",),
                 result=(
                     "slug",
                     "title",
                 ),
                 refusals=(
-                    Refusal(code="NOT_FOUND", when="no record has the given identifier"),
+                    Refusal(
+                        code="NOT_FOUND", when="no record has the given identifier"
+                    ),
                 ),
             ),
             ToolStep(
@@ -508,9 +503,7 @@ CONTRACTS = (
             ),
             ToolStep(
                 tool="uptime_kuma_unpin_incident",
-                params=(
-                    "slug",
-                ),
+                params=("slug",),
                 result=(
                     "slug",
                     "title",
@@ -538,27 +531,27 @@ CONTRACTS = (
                     "name",
                 ),
                 refusals=(
-                    Refusal(code="NOT_FOUND", when="no record has the given identifier"),
+                    Refusal(
+                        code="NOT_FOUND", when="no record has the given identifier"
+                    ),
                 ),
             ),
             ToolStep(
                 tool="uptime_kuma_get_notification",
-                params=(
-                    "id_",
-                ),
+                params=("id_",),
                 result=(
                     "id",
                     "name",
                 ),
                 refusals=(
-                    Refusal(code="NOT_FOUND", when="no record has the given identifier"),
+                    Refusal(
+                        code="NOT_FOUND", when="no record has the given identifier"
+                    ),
                 ),
             ),
             ToolStep(
                 tool="uptime_kuma_add_notification",
-                params=(
-                    "config",
-                ),
+                params=("config",),
                 result=(
                     "id",
                     "name",
@@ -566,9 +559,7 @@ CONTRACTS = (
             ),
             ToolStep(
                 tool="uptime_kuma_edit_notification",
-                params=(
-                    "id_",
-                ),
+                params=("id_",),
                 result=(
                     "id",
                     "name",
@@ -576,9 +567,7 @@ CONTRACTS = (
             ),
             ToolStep(
                 tool="uptime_kuma_test_notification",
-                params=(
-                    "config",
-                ),
+                params=("config",),
                 result=(
                     "id",
                     "name",
@@ -586,15 +575,15 @@ CONTRACTS = (
             ),
             ToolStep(
                 tool="uptime_kuma_delete_notification",
-                params=(
-                    "id_",
-                ),
+                params=("id_",),
                 result=(
                     "id",
                     "name",
                 ),
                 refusals=(
-                    Refusal(code="NOT_FOUND", when="no record has the given identifier"),
+                    Refusal(
+                        code="NOT_FOUND", when="no record has the given identifier"
+                    ),
                 ),
             ),
         ),
@@ -606,31 +595,29 @@ CONTRACTS = (
             ToolStep(
                 tool="uptime_kuma_get_proxies",
                 params=(),
-                result=(
-                    "msg",
-                ),
+                result=("msg",),
                 refusals=(
-                    Refusal(code="NOT_FOUND", when="no record has the given identifier"),
+                    Refusal(
+                        code="NOT_FOUND", when="no record has the given identifier"
+                    ),
                 ),
             ),
             ToolStep(
                 tool="uptime_kuma_get_proxy",
-                params=(
-                    "id_",
-                ),
+                params=("id_",),
                 result=(
                     "id",
                     "host",
                 ),
                 refusals=(
-                    Refusal(code="NOT_FOUND", when="no record has the given identifier"),
+                    Refusal(
+                        code="NOT_FOUND", when="no record has the given identifier"
+                    ),
                 ),
             ),
             ToolStep(
                 tool="uptime_kuma_add_proxy",
-                params=(
-                    "config",
-                ),
+                params=("config",),
                 result=(
                     "id",
                     "host",
@@ -638,9 +625,7 @@ CONTRACTS = (
             ),
             ToolStep(
                 tool="uptime_kuma_edit_proxy",
-                params=(
-                    "id_",
-                ),
+                params=("id_",),
                 result=(
                     "id",
                     "host",
@@ -648,15 +633,15 @@ CONTRACTS = (
             ),
             ToolStep(
                 tool="uptime_kuma_delete_proxy",
-                params=(
-                    "id_",
-                ),
+                params=("id_",),
                 result=(
                     "id",
                     "host",
                 ),
                 refusals=(
-                    Refusal(code="NOT_FOUND", when="no record has the given identifier"),
+                    Refusal(
+                        code="NOT_FOUND", when="no record has the given identifier"
+                    ),
                 ),
             ),
             ToolStep(
@@ -667,27 +652,27 @@ CONTRACTS = (
                     "host",
                 ),
                 refusals=(
-                    Refusal(code="NOT_FOUND", when="no record has the given identifier"),
+                    Refusal(
+                        code="NOT_FOUND", when="no record has the given identifier"
+                    ),
                 ),
             ),
             ToolStep(
                 tool="uptime_kuma_get_docker_host",
-                params=(
-                    "id_",
-                ),
+                params=("id_",),
                 result=(
                     "id",
                     "host",
                 ),
                 refusals=(
-                    Refusal(code="NOT_FOUND", when="no record has the given identifier"),
+                    Refusal(
+                        code="NOT_FOUND", when="no record has the given identifier"
+                    ),
                 ),
             ),
             ToolStep(
                 tool="uptime_kuma_add_docker_host",
-                params=(
-                    "config",
-                ),
+                params=("config",),
                 result=(
                     "id",
                     "host",
@@ -695,9 +680,7 @@ CONTRACTS = (
             ),
             ToolStep(
                 tool="uptime_kuma_edit_docker_host",
-                params=(
-                    "id_",
-                ),
+                params=("id_",),
                 result=(
                     "id",
                     "host",
@@ -705,9 +688,7 @@ CONTRACTS = (
             ),
             ToolStep(
                 tool="uptime_kuma_test_docker_host",
-                params=(
-                    "config",
-                ),
+                params=("config",),
                 result=(
                     "id",
                     "host",
@@ -715,15 +696,15 @@ CONTRACTS = (
             ),
             ToolStep(
                 tool="uptime_kuma_delete_docker_host",
-                params=(
-                    "id_",
-                ),
+                params=("id_",),
                 result=(
                     "id",
                     "host",
                 ),
                 refusals=(
-                    Refusal(code="NOT_FOUND", when="no record has the given identifier"),
+                    Refusal(
+                        code="NOT_FOUND", when="no record has the given identifier"
+                    ),
                 ),
             ),
         ),
@@ -735,18 +716,16 @@ CONTRACTS = (
             ToolStep(
                 tool="uptime_kuma_info",
                 params=(),
-                result=(
-                    "msg",
-                ),
+                result=("msg",),
             ),
             ToolStep(
                 tool="uptime_kuma_get_settings",
                 params=(),
-                result=(
-                    "settings",
-                ),
+                result=("settings",),
                 refusals=(
-                    Refusal(code="NOT_FOUND", when="no record has the given identifier"),
+                    Refusal(
+                        code="NOT_FOUND", when="no record has the given identifier"
+                    ),
                 ),
             ),
             ToolStep(
@@ -768,41 +747,31 @@ CONTRACTS = (
                     "disableAuth",
                     "trustProxy",
                 ),
-                result=(
-                    "settings",
-                ),
+                result=("settings",),
             ),
             ToolStep(
                 tool="uptime_kuma_get_database_size",
                 params=(),
-                result=(
-                    "msg",
-                ),
+                result=("msg",),
                 refusals=(
-                    Refusal(code="NOT_FOUND", when="no record has the given identifier"),
+                    Refusal(
+                        code="NOT_FOUND", when="no record has the given identifier"
+                    ),
                 ),
             ),
             ToolStep(
                 tool="uptime_kuma_shrink_database",
                 params=(),
-                result=(
-                    "msg",
-                ),
+                result=("msg",),
             ),
             ToolStep(
                 tool="uptime_kuma_clear_events",
-                params=(
-                    "monitor_id",
-                ),
-                result=(
-                    "msg",
-                ),
+                params=("monitor_id",),
+                result=("msg",),
             ),
             ToolStep(
                 tool="uptime_kuma_clear_heartbeats",
-                params=(
-                    "monitor_id",
-                ),
+                params=("monitor_id",),
                 result=(
                     "status",
                     "time",
@@ -813,27 +782,21 @@ CONTRACTS = (
             ToolStep(
                 tool="uptime_kuma_clear_statistics",
                 params=(),
-                result=(
-                    "msg",
-                ),
+                result=("msg",),
             ),
             ToolStep(
                 tool="uptime_kuma_test_chrome",
-                params=(
-                    "executable",
-                ),
-                result=(
-                    "msg",
-                ),
+                params=("executable",),
+                result=("msg",),
             ),
             ToolStep(
                 tool="uptime_kuma_get_game_list",
                 params=(),
-                result=(
-                    "msg",
-                ),
+                result=("msg",),
                 refusals=(
-                    Refusal(code="NOT_FOUND", when="no record has the given identifier"),
+                    Refusal(
+                        code="NOT_FOUND", when="no record has the given identifier"
+                    ),
                 ),
             ),
             ToolStep(
@@ -842,18 +805,12 @@ CONTRACTS = (
                     "json_data",
                     "import_handle",
                 ),
-                result=(
-                    "msg",
-                ),
+                result=("msg",),
             ),
             ToolStep(
                 tool="uptime_kuma_wait_for_event",
-                params=(
-                    "event",
-                ),
-                result=(
-                    "msg",
-                ),
+                params=("event",),
+                result=("msg",),
             ),
         ),
     ),
@@ -864,23 +821,17 @@ CONTRACTS = (
             ToolStep(
                 tool="uptime_kuma_connect",
                 params=(),
-                result=(
-                    "msg",
-                ),
+                result=("msg",),
             ),
             ToolStep(
                 tool="uptime_kuma_disconnect",
                 params=(),
-                result=(
-                    "msg",
-                ),
+                result=("msg",),
             ),
             ToolStep(
                 tool="uptime_kuma_need_setup",
                 params=(),
-                result=(
-                    "msg",
-                ),
+                result=("msg",),
             ),
             ToolStep(
                 tool="uptime_kuma_setup",
@@ -888,9 +839,7 @@ CONTRACTS = (
                     "username",
                     "password",
                 ),
-                result=(
-                    "msg",
-                ),
+                result=("msg",),
             ),
             ToolStep(
                 tool="uptime_kuma_login",
@@ -899,25 +848,17 @@ CONTRACTS = (
                     "password",
                     "token",
                 ),
-                result=(
-                    "msg",
-                ),
+                result=("msg",),
             ),
             ToolStep(
                 tool="uptime_kuma_login_by_token",
-                params=(
-                    "token",
-                ),
-                result=(
-                    "msg",
-                ),
+                params=("token",),
+                result=("msg",),
             ),
             ToolStep(
                 tool="uptime_kuma_logout",
                 params=(),
-                result=(
-                    "msg",
-                ),
+                result=("msg",),
             ),
             ToolStep(
                 tool="uptime_kuma_change_password",
@@ -925,25 +866,17 @@ CONTRACTS = (
                     "old_password",
                     "new_password",
                 ),
-                result=(
-                    "msg",
-                ),
+                result=("msg",),
             ),
             ToolStep(
                 tool="uptime_kuma_twofa_status",
                 params=(),
-                result=(
-                    "msg",
-                ),
+                result=("msg",),
             ),
             ToolStep(
                 tool="uptime_kuma_prepare_2fa",
-                params=(
-                    "password",
-                ),
-                result=(
-                    "msg",
-                ),
+                params=("password",),
+                result=("msg",),
             ),
             ToolStep(
                 tool="uptime_kuma_verify_token",
@@ -951,27 +884,17 @@ CONTRACTS = (
                     "token",
                     "password",
                 ),
-                result=(
-                    "msg",
-                ),
+                result=("msg",),
             ),
             ToolStep(
                 tool="uptime_kuma_save_2fa",
-                params=(
-                    "password",
-                ),
-                result=(
-                    "msg",
-                ),
+                params=("password",),
+                result=("msg",),
             ),
             ToolStep(
                 tool="uptime_kuma_disable_2fa",
-                params=(
-                    "password",
-                ),
-                result=(
-                    "msg",
-                ),
+                params=("password",),
+                result=("msg",),
             ),
             ToolStep(
                 tool="uptime_kuma_get_api_keys",
@@ -982,21 +905,23 @@ CONTRACTS = (
                     "active",
                 ),
                 refusals=(
-                    Refusal(code="NOT_FOUND", when="no record has the given identifier"),
+                    Refusal(
+                        code="NOT_FOUND", when="no record has the given identifier"
+                    ),
                 ),
             ),
             ToolStep(
                 tool="uptime_kuma_get_api_key",
-                params=(
-                    "id_",
-                ),
+                params=("id_",),
                 result=(
                     "id",
                     "name",
                     "active",
                 ),
                 refusals=(
-                    Refusal(code="NOT_FOUND", when="no record has the given identifier"),
+                    Refusal(
+                        code="NOT_FOUND", when="no record has the given identifier"
+                    ),
                 ),
             ),
             ToolStep(
@@ -1014,9 +939,7 @@ CONTRACTS = (
             ),
             ToolStep(
                 tool="uptime_kuma_enable_api_key",
-                params=(
-                    "id_",
-                ),
+                params=("id_",),
                 result=(
                     "id",
                     "name",
@@ -1025,9 +948,7 @@ CONTRACTS = (
             ),
             ToolStep(
                 tool="uptime_kuma_disable_api_key",
-                params=(
-                    "id_",
-                ),
+                params=("id_",),
                 result=(
                     "id",
                     "name",
@@ -1036,16 +957,16 @@ CONTRACTS = (
             ),
             ToolStep(
                 tool="uptime_kuma_delete_api_key",
-                params=(
-                    "id_",
-                ),
+                params=("id_",),
                 result=(
                     "id",
                     "name",
                     "active",
                 ),
                 refusals=(
-                    Refusal(code="NOT_FOUND", when="no record has the given identifier"),
+                    Refusal(
+                        code="NOT_FOUND", when="no record has the given identifier"
+                    ),
                 ),
             ),
         ),
@@ -1056,9 +977,7 @@ CONTRACTS = (
         steps=(
             ToolStep(
                 tool="uptime_ingest_monitors",
-                params=(
-                    "params_json",
-                ),
+                params=("params_json",),
                 result=(
                     "listed",
                     "ingested",
@@ -1088,9 +1007,7 @@ LINKS = (
             "uptime-kuma-agent-service-reliability-engineer",
             "uptime-kuma-agent-status-page-owner",
         ),
-        skills=(
-            "uptime-kuma-agent-operations",
-        ),
+        skills=("uptime-kuma-agent-operations",),
     ),
     SurfaceLink(
         task="manage-monitors",
@@ -1126,9 +1043,7 @@ LINKS = (
             "uptime-kuma-agent-operator",
             "uptime-kuma-agent-service-reliability-engineer",
         ),
-        skills=(
-            "uptime-kuma-agent-operations",
-        ),
+        skills=("uptime-kuma-agent-operations",),
     ),
     SurfaceLink(
         task="schedule-maintenance",
@@ -1149,9 +1064,7 @@ LINKS = (
             "uptime-kuma-agent-operator",
             "uptime-kuma-agent-service-reliability-engineer",
         ),
-        skills=(
-            "uptime-kuma-agent-operations",
-        ),
+        skills=("uptime-kuma-agent-operations",),
     ),
     SurfaceLink(
         task="publish-status-page",
@@ -1168,9 +1081,7 @@ LINKS = (
             "uptime-kuma-agent-operator",
             "uptime-kuma-agent-status-page-owner",
         ),
-        skills=(
-            "uptime-kuma-agent-operations",
-        ),
+        skills=("uptime-kuma-agent-operations",),
     ),
     SurfaceLink(
         task="configure-notifications",
@@ -1187,9 +1098,7 @@ LINKS = (
             "uptime-kuma-agent-operator",
             "uptime-kuma-agent-status-page-owner",
         ),
-        skills=(
-            "uptime-kuma-agent-operations",
-        ),
+        skills=("uptime-kuma-agent-operations",),
     ),
     SurfaceLink(
         task="configure-proxies-and-docker-hosts",
@@ -1210,9 +1119,7 @@ LINKS = (
             "uptime-kuma-agent-operator",
             "uptime-kuma-agent-platform-administrator",
         ),
-        skills=(
-            "uptime-kuma-agent-operations",
-        ),
+        skills=("uptime-kuma-agent-operations",),
     ),
     SurfaceLink(
         task="administer-server",
@@ -1234,9 +1141,7 @@ LINKS = (
             "uptime-kuma-agent-operator",
             "uptime-kuma-agent-platform-administrator",
         ),
-        skills=(
-            "uptime-kuma-agent-operations",
-        ),
+        skills=("uptime-kuma-agent-operations",),
     ),
     SurfaceLink(
         task="manage-access",
@@ -1265,22 +1170,16 @@ LINKS = (
             "uptime-kuma-agent-operator",
             "uptime-kuma-agent-platform-administrator",
         ),
-        skills=(
-            "uptime-kuma-agent-operations",
-        ),
+        skills=("uptime-kuma-agent-operations",),
     ),
     SurfaceLink(
         task="ingest-monitors",
-        tools=(
-            "uptime_ingest_monitors",
-        ),
+        tools=("uptime_ingest_monitors",),
         prompts=(
             "uptime-kuma-agent-operator",
             "uptime-kuma-agent-service-reliability-engineer",
         ),
-        skills=(
-            "uptime-kuma-agent-operations",
-        ),
+        skills=("uptime-kuma-agent-operations",),
     ),
 )
 
