@@ -80,6 +80,6 @@ def _register_legacy_surface(context: RegistrationContext) -> None:
 
 
 connector = Connector(
-    instructions="uptime-kuma-agent MCP Server — Condensed Action-Routed Tools.",
+    instructions="uptime-kuma-agent MCP Server — one typed tool per Uptime Kuma operation.",
     extra_registrations=(_register_legacy_surface,),
 )

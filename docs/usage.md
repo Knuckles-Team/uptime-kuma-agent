@@ -5,22 +5,16 @@ calls, as a **Python API** (`UptimeKumaApi`) the operator import, and as an **ag
 
 ## As an MCP server
 
-Once [deployed](deployment.md), the server registers two consolidated, action-routed
-tools. Each is togglable through its environment switch.
-
-| Tool | Toggle | Actions |
-|---|---|---|
-| `uptime_kuma_monitors` | `MONITORSTOOL` | `get_monitors`, `get_monitor`, `add_monitor`, `edit_monitor`, `delete_monitor`, `pause_monitor`, `resume_monitor` |
-| `uptime_kuma_status` | `STATUSTOOL` | `get_heartbeats`, `info` |
-
-Each tool takes an `action` and a `params_json` string, so a single tool covers a
-whole family of operations without inflating the model's context.
+Once [deployed](deployment.md), the server registers one typed tool per Uptime Kuma
+operation (`uptime_kuma_get_monitors`, `uptime_kuma_get_monitor`, `uptime_kuma_pause_monitor`,
+`uptime_kuma_get_heartbeats`, `uptime_kuma_info`, and the rest of the client surface), plus
+`uptime_kuma_service_health` and `uptime_ingest_monitors`. Each tool takes its arguments by name.
 
 Example agent prompts that map onto these tools:
 
-- *"List all the monitors and tell me which ones are down."* → `uptime_kuma_monitors` (`get_monitors`)
-- *"Pause the monitor with ID 7."* → `uptime_kuma_monitors` (`pause_monitor`)
-- *"Show the recent heartbeats and the system info."* → `uptime_kuma_status` (`get_heartbeats`, `info`)
+- *"List all the monitors and tell me which ones are down."* → `uptime_kuma_service_health`
+- *"Pause the monitor with ID 7."* → `uptime_kuma_pause_monitor` (`id_=7`)
+- *"Show the recent heartbeats and the system info."* → `uptime_kuma_get_heartbeats`, `uptime_kuma_info`
 
 ## As a Python API
 

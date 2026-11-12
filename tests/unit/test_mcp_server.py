@@ -3,167 +3,20 @@ import json
 import runpy
 import sys
 from pathlib import Path
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import MagicMock, patch
 
 import pytest
 from starlette.responses import JSONResponse
 
-from uptime_kuma_agent.mcp_server import (
-    mcp_server,
-    register_monitors_tools,
-    register_status_tools,
-)
+from uptime_kuma_agent.mcp_server import mcp_server, register_status_tools
 
 # The package re-exports the mcp_server function, shadowing the submodule attribute.
 mcp_server_module = importlib.import_module("uptime_kuma_agent.mcp_server")
 
 
-@pytest.mark.concept("CONCEPT:UK-OS.config.uka")
-@pytest.mark.asyncio
-async def test_uptime_kuma_monitors_tool():
-    # Capture the tool function
-    captured_tools = {}
-    mock_mcp = MagicMock()
-
-    def tool_decorator(*args, **kwargs):
-        def decorator(func):
-            captured_tools[func.__name__] = func
-            return func
-
-        return decorator
-
-    mock_mcp.tool = tool_decorator
-
-    # Register tools
-    register_monitors_tools(mock_mcp)
-    uptime_kuma_monitors = captured_tools["uptime_kuma_monitors"]
-
-    # Mock client and context
-    mock_client = MagicMock()
-    mock_ctx = MagicMock()
-    mock_ctx.info = AsyncMock()
-
-    # 1. Test invalid params_json
-    res = await uptime_kuma_monitors(
-        action="get_monitors",
-        params_json="{invalid json",
-        client=mock_client,
-        ctx=mock_ctx,
-    )
-    assert "error" in res
-    assert "Invalid params_json" in res["error"]
-    mock_ctx.info.assert_called_with("Executing tool...")
-
-    # 2. Test get_monitors
-    mock_client.get_monitors.return_value = [{"id": 1, "name": "mon1"}]
-    res = await uptime_kuma_monitors(
-        action="get_monitors",
-        params_json=json.dumps({"foo": "bar"}),
-        client=mock_client,
-        ctx=None,
-    )
-    assert res == [{"id": 1, "name": "mon1"}]
-    mock_client.get_monitors.assert_called_once_with(foo="bar")
-
-    # 3. Test get_monitor
-    mock_client.get_monitor.return_value = {"id": 1}
-    res = await uptime_kuma_monitors(
-        action="get_monitor",
-        params_json=json.dumps({"monitor_id": 1}),
-        client=mock_client,
-        ctx=None,
-    )
-    assert res == {"id": 1}
-    mock_client.get_monitor.assert_called_once_with(id_=1)
-
-    # 4. Test add_monitor
-    mock_client.add_monitor.return_value = {"status": "added"}
-    res = await uptime_kuma_monitors(
-        action="add_monitor",
-        params_json=json.dumps({"name": "new_mon"}),
-        client=mock_client,
-        ctx=None,
-    )
-    assert res == {"status": "added"}
-    mock_client.add_monitor.assert_called_once_with(name="new_mon")
-
-    # 5. Test edit_monitor
-    mock_client.edit_monitor.return_value = {"status": "edited"}
-    res = await uptime_kuma_monitors(
-        action="edit_monitor",
-        params_json=json.dumps({"id": 1, "name": "edit"}),
-        client=mock_client,
-        ctx=None,
-    )
-    assert res == {"status": "edited"}
-    mock_client.edit_monitor.assert_called_once_with(id_=1, name="edit")
-
-    # 6. Test delete_monitor
-    mock_client.delete_monitor.return_value = {"status": "deleted"}
-    res = await uptime_kuma_monitors(
-        action="delete_monitor",
-        params_json=json.dumps({"id": 1}),
-        client=mock_client,
-        ctx=None,
-    )
-    assert res == {"status": "deleted"}
-    mock_client.delete_monitor.assert_called_once_with(id_=1)
-
-    # 7. Test pause_monitor
-    mock_client.pause_monitor.return_value = {"status": "paused"}
-    res = await uptime_kuma_monitors(
-        action="pause_monitor",
-        params_json=json.dumps({"id": 1}),
-        client=mock_client,
-        ctx=None,
-    )
-    assert res == {"status": "paused"}
-    mock_client.pause_monitor.assert_called_once_with(id_=1)
-
-    # 8. Test resume_monitor
-    mock_client.resume_monitor.return_value = {"status": "resumed"}
-    res = await uptime_kuma_monitors(
-        action="resume_monitor",
-        params_json=json.dumps({"id": 1}),
-        client=mock_client,
-        ctx=None,
-    )
-    assert res == {"status": "resumed"}
-    mock_client.resume_monitor.assert_called_once_with(id_=1)
-
-    # Public and legacy aliases are normalized, but ambiguous or absent IDs fail closed.
-    with pytest.raises(ValueError, match="only one"):
-        await uptime_kuma_monitors(
-            action="get_monitor",
-            params_json=json.dumps({"monitor_id": 1, "id": 1}),
-            client=mock_client,
-            ctx=None,
-        )
-    with pytest.raises(ValueError, match="must include 'monitor_id'"):
-        await uptime_kuma_monitors(
-            action="get_monitor",
-            params_json="{}",
-            client=mock_client,
-            ctx=None,
-        )
-
-    # 9. Test unknown action
-    with pytest.raises(ValueError) as exc_info:
-        await uptime_kuma_monitors(
-            action="invalid_action", params_json="{}", client=mock_client, ctx=None
-        )
-    assert "list_actions" in str(exc_info.value)
-
-    # 10. Test discovery (list_actions)
-    res = await uptime_kuma_monitors(
-        action="list_actions", params_json="{}", client=mock_client, ctx=None
-    )
-    assert "get_monitors" in res["actions"]
-
-
 @pytest.mark.concept("CONCEPT:UK-OS.config.uka-2")
 @pytest.mark.asyncio
-async def test_uptime_kuma_status_tool():
+async def test_uptime_kuma_service_health_tool():
     captured_tools = {}
     mock_mcp = MagicMock()
 
@@ -177,50 +30,18 @@ async def test_uptime_kuma_status_tool():
     mock_mcp.tool = tool_decorator
 
     register_status_tools(mock_mcp)
-    uptime_kuma_status = captured_tools["uptime_kuma_status"]
+    # The hand-written status tools hold no action router: one typed tool each.
+    assert set(captured_tools) == {"uptime_kuma_service_health"}
 
     mock_client = MagicMock()
-    mock_ctx = MagicMock()
-    mock_ctx.info = AsyncMock()
-
-    # 1. Test invalid params_json
-    res = await uptime_kuma_status(
-        action="info", params_json="{bad", client=mock_client, ctx=mock_ctx
-    )
-    assert "error" in res
-    assert "Invalid params_json" in res["error"]
-
-    # 2. Test get_heartbeats
-    mock_client.get_heartbeats.return_value = ["heartbeat"]
-    res = await uptime_kuma_status(
-        action="get_heartbeats",
-        params_json=json.dumps({"monitor_id": 1}),
-        client=mock_client,
-        ctx=None,
-    )
-    assert res == ["heartbeat"]
-    mock_client.get_heartbeats.assert_called_once_with(monitor_id=1)
-
-    # 3. Test info
-    mock_client.info.return_value = {"version": "1.0"}
-    res = await uptime_kuma_status(
-        action="info", params_json="{}", client=mock_client, ctx=None
-    )
-    assert res == {"version": "1.0"}
-    mock_client.info.assert_called_once_with()
-
-    # 4. Test unknown action
-    with pytest.raises(ValueError) as exc_info:
-        await uptime_kuma_status(
-            action="bad_action", params_json="{}", client=mock_client, ctx=None
-        )
-    assert "list_actions" in str(exc_info.value)
-
-    # 5. Test discovery (list_actions)
-    res = await uptime_kuma_status(
-        action="list_actions", params_json="{}", client=mock_client, ctx=None
-    )
-    assert "info" in res["actions"]
+    mock_client.get_monitors.return_value = [{"id": 1, "name": "mon1", "active": True}]
+    mock_client.get_heartbeats.return_value = {
+        1: [{"status": 1, "time": "2026-01-01 00:00:00"}]
+    }
+    res = await captured_tools["uptime_kuma_service_health"](client=mock_client)
+    assert isinstance(res, list)
+    mock_client.get_monitors.assert_called_once_with()
+    mock_client.get_heartbeats.assert_called_once_with()
 
 
 @pytest.mark.concept("CONCEPT:UK-OS.config.uka-3")

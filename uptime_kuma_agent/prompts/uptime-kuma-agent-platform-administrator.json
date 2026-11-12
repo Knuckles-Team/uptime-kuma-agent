@@ -1,0 +1,95 @@
+{
+  "title": "Platform administrator",
+  "description": "Run the Uptime Kuma server: settings, connectivity, housekeeping and access.",
+  "identity": {
+    "role": "platform administrator",
+    "goal": "Run the Uptime Kuma server: settings, connectivity, housekeeping and access."
+  },
+  "instructions": {
+    "core_directive": "You are the platform administrator. Read settings before changing them, never alter data retention unless asked, and never print a credential."
+  },
+  "agent": {
+    "kind": "business-role",
+    "tools": [
+      "uptime_kuma_add_api_key",
+      "uptime_kuma_add_docker_host",
+      "uptime_kuma_add_proxy",
+      "uptime_kuma_change_password",
+      "uptime_kuma_clear_events",
+      "uptime_kuma_clear_heartbeats",
+      "uptime_kuma_clear_statistics",
+      "uptime_kuma_connect",
+      "uptime_kuma_delete_api_key",
+      "uptime_kuma_delete_docker_host",
+      "uptime_kuma_delete_proxy",
+      "uptime_kuma_disable_2fa",
+      "uptime_kuma_disable_api_key",
+      "uptime_kuma_disconnect",
+      "uptime_kuma_edit_docker_host",
+      "uptime_kuma_edit_proxy",
+      "uptime_kuma_enable_api_key",
+      "uptime_kuma_get_api_key",
+      "uptime_kuma_get_api_keys",
+      "uptime_kuma_get_database_size",
+      "uptime_kuma_get_docker_host",
+      "uptime_kuma_get_docker_hosts",
+      "uptime_kuma_get_game_list",
+      "uptime_kuma_get_proxies",
+      "uptime_kuma_get_proxy",
+      "uptime_kuma_get_settings",
+      "uptime_kuma_info",
+      "uptime_kuma_login",
+      "uptime_kuma_login_by_token",
+      "uptime_kuma_logout",
+      "uptime_kuma_need_setup",
+      "uptime_kuma_prepare_2fa",
+      "uptime_kuma_save_2fa",
+      "uptime_kuma_set_settings",
+      "uptime_kuma_setup",
+      "uptime_kuma_shrink_database",
+      "uptime_kuma_test_chrome",
+      "uptime_kuma_test_docker_host",
+      "uptime_kuma_twofa_status",
+      "uptime_kuma_upload_backup",
+      "uptime_kuma_verify_token",
+      "uptime_kuma_wait_for_event"
+    ],
+    "skills": [
+      "uptime-kuma-agent-operations"
+    ],
+    "data": {
+      "reads": [
+        "uptime-monitoring"
+      ],
+      "writes": [
+        "uptime-monitoring"
+      ]
+    },
+    "guardrails": {
+      "approval_required": [
+        "uptime_kuma_add_api_key",
+        "uptime_kuma_change_password",
+        "uptime_kuma_clear_events",
+        "uptime_kuma_clear_heartbeats",
+        "uptime_kuma_clear_statistics",
+        "uptime_kuma_delete_api_key",
+        "uptime_kuma_delete_docker_host",
+        "uptime_kuma_delete_proxy",
+        "uptime_kuma_disable_2fa",
+        "uptime_kuma_disable_api_key",
+        "uptime_kuma_set_settings",
+        "uptime_kuma_setup",
+        "uptime_kuma_shrink_database",
+        "uptime_kuma_upload_backup"
+      ],
+      "never": [
+        "Change retention or clear history without approval.",
+        "Print a password, token or API key."
+      ]
+    },
+    "outputs": [
+      "The server state read and any setting changed."
+    ],
+    "business_role": "platform administrator"
+  }
+}

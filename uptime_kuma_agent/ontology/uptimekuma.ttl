@@ -9,14 +9,14 @@
 # Uptime Kuma monitoring ontology — monitors, heartbeat samples, status pages,
 # tags and notifications. All classes/properties live in the shared `:` (kg#)
 # namespace; only the owl:Ontology node gets the per-package IRI. Backs the
-# uptime-kuma-agent MCP tool surface (uptime_kuma_monitors / uptime_kuma_status /
+# uptime-kuma-agent MCP tool surface (uptime_kuma_get_monitors / uptime_kuma_get_heartbeats /
 # uptime_ingest_monitors).
 
 # --- classes (owl:Class) ---
 
 :UptimeMonitor a owl:Class ;
     rdfs:label "Uptime Monitor" ;
-    rdfs:comment "A configured health check against an endpoint (http/tcp/ping/dns/…), with an interval and active state (uptime_kuma_monitors)." .
+    rdfs:comment "A configured health check against an endpoint (http/tcp/ping/dns/…), with an interval and active state (uptime_kuma_get_monitors)." .
 
 :monitorLatestStatus a owl:DatatypeProperty ;
     rdfs:domain :UptimeMonitor ; rdfs:range xsd:integer ;
@@ -28,7 +28,7 @@
 
 :HeartbeatStat a owl:Class ;
     rdfs:label "Heartbeat Stat" ;
-    rdfs:comment "A single timeseries health sample of a monitor — status, response time (ping), message and timestamp (uptime_kuma_status get_heartbeats)." .
+    rdfs:comment "A single timeseries health sample of a monitor — status, response time (ping), message and timestamp (uptime_kuma_get_heartbeats)." .
 
 :StatusPage a owl:Class ;
     rdfs:label "Status Page" ;
@@ -128,3 +128,9 @@
     rdfs:comment """Uptime Kuma availability-monitoring model — monitors, heartbeat
     timeseries samples, status pages, tags and notification providers, with their
     measurement relationships — federated into the scion-sdk knowledge-graph hub.""" .
+
+# connector-surface core roll-up
+<http://knuckles.team/kg#UptimeMonitor> rdfs:subClassOf <http://knuckles.team/kg#Monitor> .
+<http://knuckles.team/kg#HeartbeatStat> rdfs:subClassOf <http://knuckles.team/kg#Heartbeat> .
+<http://knuckles.team/kg#MonitorTag> rdfs:subClassOf <http://knuckles.team/kg#Tag> .
+<http://knuckles.team/kg#Notification> rdfs:subClassOf <http://knuckles.team/kg#ConfigurationItem> .

@@ -26,7 +26,6 @@ from typing import Any
 
 from scion_sdk.config import load_config
 from scion_sdk.connector import build_server
-from scion_sdk.mcp.action_dispatch import resolve_action
 from scion_sdk.mcp.concurrency import run_blocking
 from scion_sdk.mcp.tool_surface import register_tool_surface
 from starlette.requests import Request
@@ -39,22 +38,6 @@ __version__ = package_version("uptime-kuma-agent")
 
 logger = get_logger(name="uptime-kuma-agent")
 logger.setLevel(logging.INFO)
-
-
-def _normalize_monitor_identifier(kwargs: dict[str, Any]) -> dict[str, Any]:
-    """Translate the public monitor identifier to the upstream client's ``id_``."""
-    normalized = dict(kwargs)
-    supplied = [
-        key for key in ("monitor_id", "id", "id_") if normalized.get(key) is not None
-    ]
-    if not supplied:
-        raise ValueError("params_json must include 'monitor_id'")
-    if len(supplied) > 1:
-        raise ValueError(
-            "params_json must include only one of 'monitor_id', 'id', or 'id_'"
-        )
-    normalized["id_"] = normalized.pop(supplied[0])
-    return normalized
 
 
 def _optional_client_type() -> type[Any] | None:
@@ -73,72 +56,6 @@ def _optional_client_type() -> type[Any] | None:
         return None
 
 
-def register_monitors_tools(mcp: FastMCP):
-    @mcp.tool(tags={"monitors"})
-    async def uptime_kuma_monitors(
-        action: str = Field(
-            description="Action to perform. Must be one of: 'get_monitors', 'get_monitor', 'add_monitor', 'edit_monitor', 'delete_monitor', 'pause_monitor', 'resume_monitor'"
-        ),
-        params_json: str = Field(
-            default="{}",
-            description=(
-                "JSON action parameters. Monitor-specific actions use "
-                "'monitor_id' (for example, {\"monitor_id\": 95})."
-            ),
-        ),
-        client=Depends(get_client),
-        ctx: Context | None = Field(
-            default=None, description="MCP context for progress reporting"
-        ),
-    ) -> dict:
-        """Manage uptime kuma monitors operations."""
-        if ctx:
-            await ctx.info("Executing tool...")
-        import json
-
-        try:
-            kwargs = json.loads(params_json)
-        except Exception:
-            return {"error": "Invalid params_json: expected a JSON object"}
-
-        kwargs = {k: v for k, v in kwargs.items() if v is not None}
-
-        valid_actions = [
-            "get_monitors",
-            "get_monitor",
-            "add_monitor",
-            "edit_monitor",
-            "delete_monitor",
-            "pause_monitor",
-            "resume_monitor",
-        ]
-        resolved = resolve_action(action, valid_actions, service="uptime-kuma-agent")
-        if isinstance(resolved, dict):
-            return resolved
-        action = resolved
-
-        if action == "get_monitors":
-            return await run_blocking(client.get_monitors, **kwargs)
-        if action == "get_monitor":
-            kwargs = _normalize_monitor_identifier(kwargs)
-            return await run_blocking(client.get_monitor, **kwargs)
-        if action == "add_monitor":
-            return await run_blocking(client.add_monitor, **kwargs)
-        if action == "edit_monitor":
-            kwargs = _normalize_monitor_identifier(kwargs)
-            return await run_blocking(client.edit_monitor, **kwargs)
-        if action == "delete_monitor":
-            kwargs = _normalize_monitor_identifier(kwargs)
-            return await run_blocking(client.delete_monitor, **kwargs)
-        if action == "pause_monitor":
-            kwargs = _normalize_monitor_identifier(kwargs)
-            return await run_blocking(client.pause_monitor, **kwargs)
-        if action == "resume_monitor":
-            kwargs = _normalize_monitor_identifier(kwargs)
-            return await run_blocking(client.resume_monitor, **kwargs)
-        raise ValueError(f"Unknown action: {action}")
-
-
 def register_status_tools(mcp: FastMCP):
     @mcp.tool(tags={"status"})
     async def uptime_kuma_service_health(client=Depends(get_client)) -> list[dict]:
@@ -146,43 +63,6 @@ def register_status_tools(mcp: FastMCP):
         monitors = await run_blocking(client.get_monitors)
         heartbeats = await run_blocking(client.get_heartbeats)
         return service_health(monitors, heartbeats)
-
-    @mcp.tool(tags={"status"})
-    async def uptime_kuma_status(
-        action: str = Field(
-            description="Action to perform. Must be one of: 'get_heartbeats', 'info'"
-        ),
-        params_json: str = Field(
-            default="{}", description="JSON string of parameters to pass to the action."
-        ),
-        client=Depends(get_client),
-        ctx: Context | None = Field(
-            default=None, description="MCP context for progress reporting"
-        ),
-    ) -> dict:
-        """Manage uptime kuma status operations."""
-        if ctx:
-            await ctx.info("Executing tool...")
-        import json
-
-        try:
-            kwargs = json.loads(params_json)
-        except Exception:
-            return {"error": "Invalid params_json: expected a JSON object"}
-
-        kwargs = {k: v for k, v in kwargs.items() if v is not None}
-
-        valid_actions = ["get_heartbeats", "info"]
-        resolved = resolve_action(action, valid_actions, service="uptime-kuma-agent")
-        if isinstance(resolved, dict):
-            return resolved
-        action = resolved
-
-        if action == "get_heartbeats":
-            return await run_blocking(client.get_heartbeats, **kwargs)
-        if action == "info":
-            return await run_blocking(client.info, **kwargs)
-        raise ValueError(f"Unknown action: {action}")
 
 
 def register_ingest_tools(mcp: FastMCP):
