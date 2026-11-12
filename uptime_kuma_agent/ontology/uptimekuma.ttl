@@ -1,7 +1,8 @@
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix core: <https://knuckles-team.github.io/ontology/core#> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 @prefix dc: <http://purl.org/dc/terms/> .
-@prefix : <http://knuckles.team/kg#> .
+@prefix : <https://knuckles-team.github.io/ontology/connector/uptime-kuma#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
@@ -31,6 +32,7 @@
     rdfs:comment "A single timeseries health sample of a monitor — status, response time (ping), message and timestamp (uptime_kuma_get_heartbeats)." .
 
 :StatusPage a owl:Class ;
+    rdfs:subClassOf core:StatusPage ;
     rdfs:label "Status Page" ;
     rdfs:comment "A public status page aggregating one or more monitors." .
 
@@ -123,14 +125,17 @@
     rdfs:comment "External Uptime Kuma identifier of the object." ;
     rdfs:range xsd:string .
 
-<http://knuckles.team/kg/uptimekuma> a owl:Ontology ;
+<https://knuckles-team.github.io/ontology/connector/uptimekuma> a owl:Ontology ;
     rdfs:label "Uptime Kuma Monitoring Ontology" ;
     rdfs:comment """Uptime Kuma availability-monitoring model — monitors, heartbeat
     timeseries samples, status pages, tags and notification providers, with their
     measurement relationships — federated into the scion-sdk knowledge-graph hub.""" .
 
 # connector-surface core roll-up
-<http://knuckles.team/kg#UptimeMonitor> rdfs:subClassOf <http://knuckles.team/kg#Monitor> .
-<http://knuckles.team/kg#HeartbeatStat> rdfs:subClassOf <http://knuckles.team/kg#Heartbeat> .
-<http://knuckles.team/kg#MonitorTag> rdfs:subClassOf <http://knuckles.team/kg#Tag> .
-<http://knuckles.team/kg#Notification> rdfs:subClassOf <http://knuckles.team/kg#ConfigurationItem> .
+<https://knuckles-team.github.io/ontology/connector/uptime-kuma#UptimeMonitor> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Monitor> .
+<https://knuckles-team.github.io/ontology/connector/uptime-kuma#HeartbeatStat> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Heartbeat> .
+<https://knuckles-team.github.io/ontology/connector/uptime-kuma#MonitorTag> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Tag> .
+<https://knuckles-team.github.io/ontology/connector/uptime-kuma#Notification> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#ConfigurationItem> .
+
+<https://knuckles-team.github.io/ontology/connector/uptime-kuma#name> a <http://www.w3.org/2002/07/owl#ObjectProperty> ;
+    <http://www.w3.org/2000/01/rdf-schema#label> "name" .
