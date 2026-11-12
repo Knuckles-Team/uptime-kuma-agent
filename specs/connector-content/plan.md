@@ -66,7 +66,7 @@ None. The constitution check passed.
 - `CONN-UPTIME-KUMA-AGENT-CONNECTOR-CONTENT-R001`: `uptime-mcp` in `pyproject.toml` runs `uptime_kuma_agent.mcp_server:mcp_server`, which builds the server from the `scion_sdk.connector` entry point `uptime_kuma_agent:connector` (`uptime_kuma_agent/__init__.py:82`); the SDK `Connector` then lists the packaged skills, ontology and prompts.
 - `CONN-UPTIME-KUMA-AGENT-CONNECTOR-CONTENT-R005`: arbora `fleet.call` reaches the existing read tool of `uptime_kuma_agent/mcp_server.py`, whose result is validated against `uptime_kuma_agent/ontology/access_contracts.ttl`.
 - `CONN-UPTIME-KUMA-AGENT-CONNECTOR-CONTENT-R003`: arbora `fleet.call` reaches the monitor list tool of `uptime_kuma_agent/mcp_server.py`; the SDK operation contract bound by the engine mapping reads its output schema.
-- `CONN-UPTIME-KUMA-AGENT-CONNECTOR-CONTENT-R002`: arbora `fleet.call` reaches the tools `uptime_kuma_monitors` and `uptime_kuma_status` of `uptime_kuma_agent/mcp_server.py`; their results are validated against `uptime_kuma_agent/ontology/access_contracts.ttl`.
+- `CONN-UPTIME-KUMA-AGENT-CONNECTOR-CONTENT-R002`: arbora `fleet.call` reaches the typed client-method tools `uptime_kuma_get_monitors` and `uptime_kuma_get_heartbeats`; their results are validated against `uptime_kuma_agent/ontology/access_contracts.ttl`.
 
 ## Cross-repo seams
 

@@ -3,7 +3,7 @@ name: uptime-kuma-agent-development
 skill_type: skill
 description: >-
   Develop, test, and release the uptime-kuma-agent connector while preserving
-  its typed Uptime Kuma client, action-routed MCP surface, packaged content,
+  its typed Uptime Kuma client, typed MCP tool surface, packaged content,
   spec evidence, and shared release gates.
 license: MIT
 tags: [uptime-kuma-agent, connector, development, testing, packaging, pages, specs]

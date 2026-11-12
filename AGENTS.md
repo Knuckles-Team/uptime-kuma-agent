@@ -31,8 +31,8 @@ To maintain strict traceability across design documents, execution flows, and te
 |------------|-----------|-------|-------------|
 | `CONCEPT:UK-OS.governance.uka` | Core Module | Dynamic Eager Loading | Lazy-loading optional modules dynamically via Python's `__getattr__` wrapper to optimize start time. |
 | `CONCEPT:UK-OS.identity.uka` | Authentication | Authentication Splitting | Splitting credentials (username:password or token), establishing connection pools, and caching client instances. |
-| `CONCEPT:UK-OS.config.uka` | MCP Server | Action-Routed Monitors | Bundling multiple Kuma monitors operations into a single action-routed FastMCP tool (`uptime_kuma_monitors`). |
-| `CONCEPT:UK-OS.config.uka-2` | MCP Server | Action-Routed Status | Bundling Uptime Kuma heartbeats and info endpoints into a single action-routed FastMCP tool (`uptime_kuma_status`). |
+| `CONCEPT:UK-OS.config.uka` | MCP Server | Typed Monitor Tools | One typed FastMCP tool per Kuma monitor operation (`uptime_kuma_get_monitors`, `uptime_kuma_pause_monitor`, ...). |
+| `CONCEPT:UK-OS.config.uka-2` | MCP Server | Typed Status Tools | One typed FastMCP tool per Uptime Kuma heartbeat and info operation (`uptime_kuma_get_heartbeats`, `uptime_kuma_info`). |
 | `CONCEPT:UK-OS.config.uka-3` | MCP Server | Custom Health Endpoint | Lightweight Starlette `/health` route integration within the MCP server. |
 | `CONCEPT:UK-OS.config.uka-4` | Agent Server | Dynamic Identity Discovery | CLI bootstrapping, profile verification, and dynamic identity loading. |
 

@@ -20,13 +20,13 @@ def test_default_timeout_covers_a_slow_login(monkeypatch):
     assert new.call_args.kwargs["timeout"] == 120
 
 
-def test_observability_prompt_names_only_served_tools():
+def test_operator_prompt_names_only_served_tools():
     path = (
         resources.files("uptime_kuma_agent")
         / "prompts"
-        / "observability_specialist.json"
+        / "uptime-kuma-agent-operator.json"
     )
-    tools = json.loads(path.read_text())["tools"]
+    tools = json.loads(path.read_text())["agent"]["tools"]
     assert "uptime_kuma_monitors" not in tools
     assert "uptime_kuma_status" not in tools
     assert "uptime_kuma_get_monitors" in tools

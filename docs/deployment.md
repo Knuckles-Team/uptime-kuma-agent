@@ -117,8 +117,6 @@ connection set:
 | `HOST` | `0.0.0.0` | Bind address for HTTP transports |
 | `PORT` | `8000` | Bind port for HTTP transports |
 | `TRANSPORT` | `stdio` | `stdio`, `streamable-http`, or `sse` |
-| `MONITORSTOOL` | `True` | Register the `uptime_kuma_monitors` tool |
-| `STATUSTOOL` | `True` | Register the `uptime_kuma_status` tool |
 | `ENABLE_OTEL` | `True` | Export traces via OpenTelemetry |
 | `EUNOMIA_TYPE` | `none` | Policy enforcement: `none`, `embedded`, `remote` |
 

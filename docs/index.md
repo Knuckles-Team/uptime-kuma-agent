@@ -15,19 +15,18 @@ deterministic tool surface over the Uptime Kuma monitoring API.
 ## Overview
 
 `uptime-kuma-agent` wraps the [Uptime Kuma](https://github.com/louislam/uptime-kuma)
-monitoring API with consolidated, action-routed MCP tools and ships an integrated
+monitoring API with one typed MCP tool per operation and ships an integrated
 Pydantic AI agent. It provides:
 
-- **Action-routed MCP tools** — `uptime_kuma_monitors` and `uptime_kuma_status`
-  consolidate the monitor lifecycle and status/heartbeat surface into two togglable
-  tools, minimizing context overhead for language models.
+- **Typed MCP tools** — one tool per Uptime Kuma operation (`uptime_kuma_get_monitors`,
+  `uptime_kuma_pause_monitor`, `uptime_kuma_get_heartbeats`, ...), plus
+  `uptime_kuma_service_health`.
 - **An integrated A2A agent** (`uptime-agent` console script) — a Pydantic AI graph
   agent with a web UI that calls the MCP server over `streamable-http`.
 - **Enterprise governance** inherited from `scion-sdk` — OpenTelemetry tracing,
   Eunomia policy enforcement, and OIDC token delegation.
 
-Authentication is configured entirely from the environment, and each tool module
-remains inactive when its toggle is disabled.
+Authentication is configured entirely from the environment.
 
 ## Explore the documentation
 
