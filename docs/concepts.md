@@ -2,7 +2,7 @@
 
 > **Prefix**: `CONCEPT:UKA-*`
 > **Version**: 0.14.0
-> **Bridge**: [`CONCEPT:AU-ECO.messaging.native-backend-abstraction`](https://knuckles-team.github.io/agent-connector-sdk/) (Unified Toolkit Ingestion)
+> **Bridge**: [`CONCEPT:AU-ECO.messaging.native-backend-abstraction`](https://knuckles-team.github.io/scion-sdk/) (Unified Toolkit Ingestion)
 
 ---
 

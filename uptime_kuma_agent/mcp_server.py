@@ -78,7 +78,7 @@ def register_ingest_tools(mcp: FastMCP):
             default=None, description="MCP context for progress reporting"
         ),
     ) -> dict:
-        """Natively ingest Uptime Kuma monitors into epistemic-graph as typed nodes.
+        """Natively ingest Uptime Kuma monitors into medulla as typed nodes.
 
         Lists monitors via the Uptime Kuma client and pushes them (as
         :UptimeMonitor nodes, plus optional :HeartbeatStat timeseries samples linked

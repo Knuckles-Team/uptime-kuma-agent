@@ -1,4 +1,4 @@
-"""Native epistemic-graph ingestion for Uptime Kuma records.
+"""Native medulla ingestion for Uptime Kuma records.
 
 CONCEPT:AU-KG.ingest.enterprise-source-extractor. Connector-specific mappers emit
 canonical node_type nodes and relationship edges. The ``scion_sdk.ingest``
