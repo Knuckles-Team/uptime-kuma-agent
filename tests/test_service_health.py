@@ -30,15 +30,20 @@ class FakeProvider:
 
 
 @pytest.mark.spec("CONN-UPTIME-KUMA-AGENT-SERVICE-HEALTH-R001")
+@pytest.mark.spec("CONN-UPTIME-KUMA-AGENT-CONNECTOR-CONTENT-R003")
 def test_served_health_contract():
     from scion_sdk.access_contract import parse_access_contracts
 
     from uptime_kuma_agent.mcp_server import get_mcp_instance
 
     fixture = json.loads((ROOT / "tests/fixtures/service_health.json").read_text())
-    (contract,) = parse_access_contracts(
-        (ROOT / "uptime_kuma_agent/ontology/access_contracts.ttl").read_text()
-    )
+    (contract,) = [
+        c
+        for c in parse_access_contracts(
+            (ROOT / "uptime_kuma_agent/ontology/access_contracts.ttl").read_text()
+        )
+        if c.operation == "uptime_kuma_service_health"
+    ]
     assert {field for _, field in contract.predicates} == {
         "name",
         "status",
@@ -62,10 +67,10 @@ def test_served_health_contract():
 
     result = asyncio.run(run())
     assert not result.is_error
-    rows = (
-        result.data if result.data is not None else json.loads(result.content[0].text)
-    )
+    rows = json.loads(result.content[0].text)
     assert rows == fixture
+    assert rows == json.loads((ROOT / "tests/recordings/service_health.json").read_text())
+    assert rows[1]["status"] == "unknown"
     assert "private" not in str(rows)
 
 

@@ -1,7 +1,19 @@
 """Privacy-safe projection of Uptime Kuma monitor and heartbeat data."""
 
 from datetime import UTC, datetime
-from typing import Any
+from typing import Any, TypedDict
+
+UNKNOWN_STATUS = "unknown"
+
+
+class MonitorHealth(TypedDict):
+    """One monitor row: name, status (0-3 or ``unknown``) and last-check time."""
+
+    id: str
+    name: str
+    status: int | str
+    last_check: str | None
+
 
 MAX_MONITORS = 1000
 MAX_HEARTBEATS = 100_000
@@ -19,7 +31,7 @@ def _timestamp(value: Any) -> datetime:
     )
 
 
-def service_health(monitors: Any, heartbeats: Any) -> list[dict[str, Any]]:
+def service_health(monitors: Any, heartbeats: Any) -> list[MonitorHealth]:
     """Return source-observed health, refusing ambiguous or oversized data."""
     if not isinstance(monitors, list) or len(monitors) > MAX_MONITORS:
         raise ValueError("invalid monitor list")
@@ -78,7 +90,7 @@ def service_health(monitors: Any, heartbeats: Any) -> list[dict[str, Any]]:
             {
                 "id": key,
                 "name": name,
-                "status": latest[1] if latest else None,
+                "status": latest[1] if latest else UNKNOWN_STATUS,
                 "last_check": latest[0].isoformat() if latest else None,
             }
         )
