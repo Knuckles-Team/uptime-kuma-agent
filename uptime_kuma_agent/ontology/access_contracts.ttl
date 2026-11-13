@@ -10,3 +10,21 @@ uk:serviceHealth a ac:AccessContract ;
 uk:name a ac:PropertyBinding ; ac:contract uk:serviceHealth ; ac:property :name ; ac:field "name" .
 uk:status a ac:PropertyBinding ; ac:contract uk:serviceHealth ; ac:property :monitorLatestStatus ; ac:field "status" .
 uk:lastCheck a ac:PropertyBinding ; ac:contract uk:serviceHealth ; ac:property :monitorLastCheck ; ac:field "last_check" .
+
+uk:monitorAccess a ac:AccessContract ;
+    ac:classIri :UptimeMonitor ; ac:sourceId "uptime-kuma" ;
+    ac:entity "uptimemonitor" ; ac:keyField "id" ; ac:accessKind "mcp_tool" ;
+    ac:operation "uptime_kuma_get_monitors" ; ac:pagination "none" .
+
+uk:monitorName a ac:PropertyBinding ; ac:contract uk:monitorAccess ; ac:property :name ; ac:field "name" .
+uk:monitorActive a ac:PropertyBinding ; ac:contract uk:monitorAccess ; ac:property :monitorActive ; ac:field "active" .
+
+uk:heartbeatAccess a ac:AccessContract ;
+    ac:classIri :HeartbeatStat ; ac:sourceId "uptime-kuma" ;
+    ac:entity "heartbeatstat" ; ac:keyField "time" ; ac:accessKind "mcp_tool" ;
+    ac:operation "uptime_kuma_get_heartbeats" ; ac:pagination "none" .
+
+uk:heartbeatStatus a ac:PropertyBinding ; ac:contract uk:heartbeatAccess ; ac:property :heartbeatStatus ; ac:field "status" .
+uk:heartbeatTime a ac:PropertyBinding ; ac:contract uk:heartbeatAccess ; ac:property :heartbeatTime ; ac:field "time" .
+uk:heartbeatPing a ac:PropertyBinding ; ac:contract uk:heartbeatAccess ; ac:property :ping ; ac:field "ping" .
+uk:heartbeatMsg a ac:PropertyBinding ; ac:contract uk:heartbeatAccess ; ac:property :heartbeatMsg ; ac:field "msg" .
