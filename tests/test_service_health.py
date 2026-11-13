@@ -69,7 +69,9 @@ def test_served_health_contract():
     assert not result.is_error
     rows = json.loads(result.content[0].text)
     assert rows == fixture
-    assert rows == json.loads((ROOT / "tests/recordings/service_health.json").read_text())
+    assert rows == json.loads(
+        (ROOT / "tests/recordings/service_health.json").read_text()
+    )
     assert rows[1]["status"] == "unknown"
     assert "private" not in str(rows)
 

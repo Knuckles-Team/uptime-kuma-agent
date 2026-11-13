@@ -58,7 +58,9 @@ def _optional_client_type() -> type[Any] | None:
 
 def register_status_tools(mcp: FastMCP):
     @mcp.tool(tags={"status"})
-    async def uptime_kuma_service_health(client=Depends(get_client)) -> list[MonitorHealth]:
+    async def uptime_kuma_service_health(
+        client=Depends(get_client),
+    ) -> list[MonitorHealth]:
         """Read monitor health from the latest observed heartbeat.
 
         A monitor with no heartbeat is returned with status ``unknown``."""
