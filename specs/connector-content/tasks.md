@@ -8,3 +8,4 @@ Each task line reads `- [ ] T001 [P] [US1] <ID>-R012.4 description`. Tasks run p
 - [ ] T002 [US2] CONN-UPTIME-KUMA-AGENT-CONNECTOR-CONTENT-R005 Declare access contracts for the competency reads of uptime-kuma-agent.
 - [x] T003 [US3] CONN-UPTIME-KUMA-AGENT-CONNECTOR-CONTENT-R003 Monitor list operation contract and recorded response for the cross-source mapping.
 - [x] T004 [US4] CONN-UPTIME-KUMA-AGENT-CONNECTOR-CONTENT-R002 Add access contracts for monitors and heartbeats.
+- [x] T005 [US1] CONN-UPTIME-KUMA-AGENT-CONNECTOR-CONTENT-R007 The pack extends only the core ontology.

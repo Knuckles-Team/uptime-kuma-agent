@@ -31,11 +31,6 @@
     rdfs:label "Heartbeat Stat" ;
     rdfs:comment "A single timeseries health sample of a monitor — status, response time (ping), message and timestamp (uptime_kuma_get_heartbeats)." .
 
-:StatusPage a owl:Class ;
-    rdfs:subClassOf core:StatusPage ;
-    rdfs:label "Status Page" ;
-    rdfs:comment "A public status page aggregating one or more monitors." .
-
 :MonitorTag a owl:Class ;
     rdfs:label "Monitor Tag" ;
     rdfs:comment "A tag/group label applied to monitors for organization." .
@@ -68,7 +63,7 @@
     rdfs:label "on status page" ;
     rdfs:comment "Links an UptimeMonitor to a StatusPage that publishes it." ;
     rdfs:domain :UptimeMonitor ;
-    rdfs:range :StatusPage .
+    rdfs:range core:StatusPage .
 
 # --- fields (owl:DatatypeProperty) ---
 

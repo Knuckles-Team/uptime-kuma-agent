@@ -57,6 +57,7 @@ The fleet operator and the engine rely on this behaviour of `uptime-kuma-agent`:
 - **FR-002**: Declare access contracts for the competency reads of uptime-kuma-agent. Rows: `CONN-UPTIME-KUMA-AGENT-CONNECTOR-CONTENT-R005`.
 - **FR-003**: Monitor list operation contract and recorded response for the cross-source mapping. Rows: `CONN-UPTIME-KUMA-AGENT-CONNECTOR-CONTENT-R003`.
 - **FR-004**: Add access contracts for monitors and heartbeats. Rows: `CONN-UPTIME-KUMA-AGENT-CONNECTOR-CONTENT-R002`.
+- **FR-005**: The packaged ontology extends only the core ontology and redeclares no core term (`CONN-UPTIME-KUMA-AGENT-CONNECTOR-CONTENT-R007`).
 
 ## Success Criteria
 
@@ -82,3 +83,4 @@ Searched `specs/` of `uptime-kuma-agent` with `git grep` for the terms of this s
 | FR-002 | `CONN-UPTIME-KUMA-AGENT-CONNECTOR-CONTENT-R005` | plan.md Production caller chain | T-002 | tests/test_access_contracts.py::test_competency_contracts_certified |
 | FR-003 | `CONN-UPTIME-KUMA-AGENT-CONNECTOR-CONTENT-R003` | plan.md Production caller chain | T-003 | tests/test_service_health.py::test_served_health_contract |
 | FR-004 | `CONN-UPTIME-KUMA-AGENT-CONNECTOR-CONTENT-R002` | plan.md Production caller chain | T-004 | tests/test_access_contracts.py::test_monitor_and_heartbeat_contracts |
+| FR-005 | `CONN-UPTIME-KUMA-AGENT-CONNECTOR-CONTENT-R007` | plan.md Production caller chain | T-006 | tests/test_ontology_extends_core.py::test_pack_declares_no_core_term |
