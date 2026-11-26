@@ -2,14 +2,7 @@
 name: uptime-kuma-sync
 skill_type: skill
 description: >-
-  Synchronize Caddy reverse proxy routes into Uptime Kuma as HTTP monitors.
-  Parses the Caddyfile for all .arpa hostnames, deduplicates them, appends
-  /health suffixes for MCP service endpoints, and inserts missing monitors
-  directly into the Uptime Kuma SQLite database. Use when the user says
-  "sync monitors", "register uptime monitors", "update kuma", "add missing
-  monitors", "sync caddy to uptime kuma", or after deploying a new service
-  that needs health monitoring. Do NOT use for querying existing monitor
-  status — use uptime-kuma-agent or the Uptime Kuma dashboard directly.
+  Synchronize Caddy reverse proxy routes into Uptime Kuma as HTTP monitors. Use when the user says "sync monitors", "register uptime monitors", "update kuma", "add missing monitors", "sync caddy to uptime kuma", or after deploying a new service that needs health monitoring. Do NOT use for querying existing monitor status — use uptime-kuma-agent or the Uptime Kuma dashboard directly.
 license: MIT
 tags: [uptime-kuma, monitoring, caddy, health-checks, sync, infrastructure]
 metadata:
@@ -18,6 +11,8 @@ metadata:
 ---
 
 # Uptime Kuma Sync Skill
+
+Scope: Synchronize Caddy reverse proxy routes into Uptime Kuma as HTTP monitors. Parses the Caddyfile for all .arpa hostnames, deduplicates them, appends /health suffixes for MCP service endpoints, and inserts missing monitors directly into the Uptime Kuma SQLite database. Use when the user says "sync monitors", "register uptime monitors", "update kuma", "add missing monitors", "sync caddy to uptime kuma", or after deploying a new service that needs health monitoring. Do NOT use for querying existing monitor status — use uptime-kuma-agent or the Uptime Kuma dashboard directly.
 
 Atomic operation to discover all Caddy-fronted service routes and ensure each has a corresponding HTTP monitor in Uptime Kuma.
 
@@ -38,7 +33,22 @@ Override these by passing `--caddyfile` and `--db` CLI arguments to the script.
 
 ## Steps
 
-### Step 1: Parse Caddy Routes
+1. Confirm the inputs exist with `ls -l "$CADDYFILE_PATH" "$KUMA_DB_PATH"`. Verify both paths are listed.
+2. Run `python scripts/sync_kuma_monitors.py` (add `--caddyfile` and `--db` to override paths). Verify the script exits with status 0 and prints no traceback.
+3. Read the summary line of the script output. Verify it matches `Successfully registered N new monitors in Uptime Kuma.`, where `N` is 0 when every route already had a monitor.
+4. Re-run `python scripts/sync_kuma_monitors.py`. Verify it now reports 0 new monitors, which proves no duplicates are created.
+
+## Failure recovery
+
+| Failure | Cause | Recovery |
+|---------|-------|----------|
+| Script exits with a Caddyfile error | `CADDYFILE_PATH` points to a missing file | Set `CADDYFILE_PATH` to the real file or pass `--caddyfile <path>` |
+| `database is locked` | Uptime Kuma holds a write lock on the SQLite file | Stop the Uptime Kuma container, run `python scripts/sync_kuma_monitors.py`, then start the container again |
+| Summary reports 0 monitors for new hosts | Hostnames do not match the TLD filter in the script | Edit the hostname match line in `scripts/sync_kuma_monitors.py` as shown under Customization and run it again |
+
+## Script behavior
+
+### Parse Parse Caddy Routes
 
 Execute the sync script to parse the Caddyfile and discover all reverse-proxied hostnames:
 
@@ -53,7 +63,7 @@ The script:
 4. Deduplicates by URL.
 5. Appends `/health` suffix to any URL containing `-mcp` (standard MCP health endpoint).
 
-### Step 2: Insert Missing Monitors
+### Insert Insert Missing Monitors
 
 The script connects to the Uptime Kuma SQLite database and:
 1. Queries all existing `monitor.url` values.
@@ -65,7 +75,7 @@ The script connects to the Uptime Kuma SQLite database and:
    - **Accepted Status Codes**: `200-299`
 4. Commits the transaction and prints a summary.
 
-### Step 3: Verify
+### Verify output
 
 After execution, confirm the output line:
 ```

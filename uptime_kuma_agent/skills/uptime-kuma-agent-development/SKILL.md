@@ -54,6 +54,22 @@ Specs are already designed. Deliver one small, reviewable slice at a time.
 - Stage only reviewed paths, and keep packaged skill and resource paths inside
   the existing `uptime_kuma_agent` package-data globs.
 
+## Steps
+
+1. Find the owning spec row with `git grep -n "<term>" -- specs`. Verify a CONN-UPTIME-KUMA-AGENT row id matches the change.
+2. Trace the changed action through `uptime_kuma_agent/mcp_server.py` and `uptime_kuma_agent/api_client.py`. Edit the existing seam. Verify with `git diff --stat` that only intended paths changed.
+3. Run the focused tests with `uv run --locked --extra test pytest tests -q -k "<area>"`. Verify they pass without a live Uptime Kuma server.
+4. Run `uvx pre-commit run --all-files`. Verify every hook reports Passed.
+5. Stage reviewed paths with `git add -- <path>` and commit with a `Spec:` trailer in the final paragraph. Verify `git diff --cached --name-status` lists only those paths.
+
+## Failure recovery
+
+| Failure | Cause | Recovery |
+|---------|-------|----------|
+| `uv sync --locked` fails | `uv.lock` out of step with `pyproject.toml` | Run `uv lock`, review the lock diff, and rerun `uv sync --locked` |
+| A hook rewrites files | A formatting or spelling gate fixed them | Review `git diff`, stage the fixed paths with `git add -- <path>`, and commit again |
+| Test calls a live server | The test bypasses the existing fakes | Switch it to the fake client fixture under `tests/` |
+
 ## Setup and gates
 
 Use the locked project environment when it is already available:

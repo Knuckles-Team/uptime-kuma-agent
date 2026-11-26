@@ -13,6 +13,22 @@ metadata:
 
 This skill orchestrates the synchronization of domain entries from a Caddy configuration into Uptime Kuma monitors.
 
+## Steps
+
+1. Read the Caddy routes with the Caddy MCP tool `get_routes`(), or `get_config`() when routes are unavailable. Verify the response lists at least one host matcher or upstream.
+2. List the current monitors with `uptime_kuma_get_monitors`(). Verify the response is a list whose URLs or hostnames can be compared with the Caddy hosts.
+3. Compare the two lists with `diff <(sort caddy_hosts.txt) <(sort kuma_hosts.txt)` into "missing from Uptime Kuma" and "missing from Caddy". Verify each domain appears in exactly one of the two lists, or in neither when it is already synchronized.
+4. Show both lists to the user and ask for approval with the question `Add, remove, or both?`. Verify an explicit reply naming the items to add and the items to remove before any change.
+5. Create approved monitors with `uptime_kuma_add_monitor`(config), and delete approved orphans with `uptime_kuma_delete_monitor`(id_). Verify a second `uptime_kuma_get_monitors`() call lists every added URL and none of the removed ones.
+
+## Failure recovery
+
+| Failure | Cause | Recovery |
+|---------|-------|----------|
+| `get_routes` returns no hosts | Caddy MCP server not connected or config has no host matchers | Connect the `caddy-mcp` server, call `get_config`() and read host matchers from the returned JSON |
+| `uptime_kuma_get_monitors` is rejected | No active Uptime Kuma session | Call `uptime_kuma_login`(username, password) or `uptime_kuma_connect`(), then fetch the monitors again |
+| Added monitor shows the wrong scheme | Scheme guessed instead of read from Caddy TLS settings | Edit it with `uptime_kuma_edit_monitor`(id_, config) using the scheme from the Caddy config |
+
 ## Workflow
 
 1. **Retrieve Caddy Configuration**
