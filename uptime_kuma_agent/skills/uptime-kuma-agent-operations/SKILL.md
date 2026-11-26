@@ -9,6 +9,22 @@ description: >-
 
 Use the provider's governed MCP tools through Arbora delegation.
 
+## Steps
+
+1. Establish the session by calling `uptime_kuma_connect`(). Sign in with `uptime_kuma_login`(username, password) when the server needs credentials. Verify `uptime_kuma_service_health`() reports the server reachable.
+2. Inspect before changing anything with `uptime_kuma_get_monitors`() or the read tool for the object in question. Verify the response names the target object and its current state.
+3. For a change, call the matching tool such as `uptime_kuma_edit_monitor`(id_, config) after stating the impact to the user. Verify the user approved the specific destructive or externally visible action.
+4. Read the object back with `uptime_kuma_get_monitor`(id_) or the matching get tool. Verify the changed fields hold the new values.
+5. For graph ingestion, call `uptime_ingest_monitors`() through the signed connector path. Verify the response reports the ingested monitor count.
+
+## Failure recovery
+
+| Failure | Cause | Recovery |
+|---------|-------|----------|
+| Login rejected | Wrong credentials or two-factor required | Check the credential reference in the connector configuration, and when 2FA is on call `uptime_kuma_login`(username, password, token) with a fresh token |
+| Tool reports unknown monitor id | Stale id after a delete or re-create | Call `uptime_kuma_get_monitors`() and use the id from the fresh list |
+| Ingestion returns zero monitors | No active session or empty server | Call `uptime_kuma_get_monitors`() to confirm monitors exist, then reconnect with `uptime_kuma_connect`() |
+
 ## Workflow
 
 1. Establish the verified GraphSession and tenant before discovery or retrieval.
