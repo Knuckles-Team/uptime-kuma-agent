@@ -20,23 +20,9 @@
 ![PyPI - Wheel](https://img.shields.io/pypi/wheel/uptime-kuma-agent)
 ![PyPI - Implementation](https://img.shields.io/pypi/implementation/uptime-kuma-agent)
 
-> **Documentation** — Installation, deployment, usage across the API, CLI, and MCP
-> interfaces, the integrated A2A agent, and guidance for provisioning the Uptime Kuma
-> platform are maintained in the [official documentation](https://knuckles-team.github.io/uptime-kuma-agent/).
-
----
-
-## Table of Contents
-- [Overview](#overview)
-- [Key Features](#key-features)
-- [Environment Variables](#environment-variables)
-- [Usage & Quick Start](#usage--quick-start)
-- [MCP Architecture](#mcp)
-- [Agentic Graph Architecture](#agent)
-- [Security & Access Governance](#security--governance)
-- [Installation](#installation)
-- [Documentation](#documentation)
-- [Contribution Guidelines](#contribute)
+> **Documentation** — Installation, deployment, and usage across the API, CLI, MCP,
+> and A2A agent interfaces are maintained in the
+> [official documentation](https://knuckles-team.github.io/uptime-kuma-agent/).
 
 ---
 
@@ -52,117 +38,6 @@
 - **Enterprise-Grade Security:** Complete support for Eunomia policies, OIDC token delegation, and granular execution context tracking.
 - **Integrated Graph Agent:** Built-in Pydantic AI agent supporting the Agent Control Protocol (ACP) and standard Web interfaces (AG-UI).
 - **Native Telemetry & Tracing:** Out-of-the-box OpenTelemetry exports and native Langfuse tracing.
-
----
-
-## Environment Variables
-
-<!-- ENV-VARS-TABLE:START -->
-
-#### Package environment variables
-
-| Variable | Example | Description |
-|----------|---------|-------------|
-| `HOST` | `0.0.0.0` |  |
-| `PORT` | `8000` |  |
-| `TRANSPORT` | `stdio` | options: stdio, streamable-http, sse |
-| `ENABLE_OTEL` | `True` |  |
-| `OTEL_EXPORTER_OTLP_ENDPOINT` | `http://localhost:8080/api/public/otel` |  |
-| `OTEL_EXPORTER_OTLP_PUBLIC_KEY` | secret-injected |  |
-| `OTEL_EXPORTER_OTLP_SECRET_KEY` | secret-injected |  |
-| `OTEL_EXPORTER_OTLP_PROTOCOL` | `http/protobuf` |  |
-| `EUNOMIA_TYPE` | `none` | options: none, embedded, remote |
-| `EUNOMIA_POLICY_FILE` | `mcp_policies.json` |  |
-| `EUNOMIA_REMOTE_URL` | `http://eunomia-server:8000` |  |
-| `UPTIME_KUMA_URL` | `http://localhost:3001` |  |
-| `UPTIME_KUMA_TOKEN` | secret-injected |  |
-| `UPTIME_KUMA_USERNAME` | `admin (used if AUTH_TYPE is password)` |  |
-| `UPTIME_KUMA_PASSWORD` | secret-injected |  |
-| `AUTH_TYPE` | `password` | options: password, token |
-| `CADDYFILE_PATH` | `${CADDY_CONFIG_PATH}` | Caddyfile parsed by the kuma-sync skill |
-| `KUMA_DB_PATH` | `${UPTIME_KUMA_DATA_PATH}/kuma.db` | Uptime-Kuma SQLite DB used by the kuma-sync skill |
-| `MONITORSTOOL` | `True` |  |
-| `STATUSTOOL` | `True` |  |
-
-#### Inherited scion-sdk variables (apply to every connector)
-
-| Variable | Example | Description |
-|----------|---------|-------------|
-| `MCP_TOOL_MODE` | `intent` | Tool surface: `intent` \| `condensed` \| `verbose` \| `both` |
-| `MCP_ENABLED_TOOLS` | — | Comma-separated tool allow-list |
-| `MCP_DISABLED_TOOLS` | — | Comma-separated tool deny-list |
-| `MCP_ENABLED_TAGS` | — | Comma-separated tag allow-list |
-| `MCP_DISABLED_TAGS` | — | Comma-separated tag deny-list |
-| `MCP_CLIENT_AUTH` | — | Outbound MCP child auth: `oidc-client-credentials` \| `basic` \| `none` |
-| `OIDC_CLIENT_ID` | — | OIDC client id (service-account auth) |
-| `OIDC_CLIENT_SECRET_REF` | `secret://identity/oidc-client-secret` | Runtime secret reference for the OIDC service account |
-| `MCP_BASIC_AUTH_USERNAME` | — | HTTP Basic username (`MCP_CLIENT_AUTH=basic`) |
-| `MCP_BASIC_AUTH_PASSWORD_REF` | `secret://identity/mcp-basic-password` | Runtime secret reference for HTTP Basic auth (`MCP_CLIENT_AUTH=basic`) |
-| `DEBUG` | `False` | Verbose logging |
-| `PYTHONUNBUFFERED` | `1` | Unbuffered stdout (recommended in containers) |
-| `MCP_URL` | `http://localhost:8000/mcp` | URL of the MCP server the agent connects to |
-| `PROVIDER` | `openai` | LLM provider for the agent |
-| `MODEL_ID` | `gpt-4o` | Model id for the agent |
-| `ENABLE_WEB_UI` | `True` | Serve the AG-UI web interface |
-
-_20 package + 16 inherited variable(s). Auto-generated from `.env.example` + the shared scion-sdk set — do not edit._
-<!-- ENV-VARS-TABLE:END -->
-
-
-The agent's behavior and connections can be fully configured via environment variables.
-
-| Environment Variable | Source Type | Default Value | Description |
-|----------------------|-------------|---------------|-------------|
-| `HOST` | System / Docker | `0.0.0.0` | IP interface address for the MCP and Agent servers to bind to. |
-| `PORT` | System / Docker | `8000` | Port number for HTTP/SSE transports. |
-| `TRANSPORT` | System / Docker | `stdio` | MCP transport channel. Supported values: `stdio`, `streamable-http`, `sse`. |
-| `MCP_TOOL_MODE` | MCP / Tools | `condensed` | Tool surface: `condensed`, `verbose`, or `both`. |
-| `MCP_ENABLED_TOOLS` / `MCP_DISABLED_TOOLS` | MCP / Tools | None | Comma-separated tool allow/deny list. |
-| `MCP_ENABLED_TAGS` / `MCP_DISABLED_TAGS` | MCP / Tools | None | Comma-separated tag allow/deny list. |
-| `PYTHONUNBUFFERED` | System / Docker | `1` | Unbuffered stdout (recommended in containers). |
-| `DEBUG` | System / Docker | `False` | Verbose logging. |
-| `UPTIME_KUMA_URL` | App Credential | `http://localhost:3001` | The base URL of the operator's target Uptime Kuma instance. |
-| `AUTH_TYPE` | App Credential | None | Type of authentication used. Supported values: `password`, `token`. |
-| `UPTIME_KUMA_TOKEN` | App Credential | None | Authentication token (if `AUTH_TYPE` is `token`). |
-| `UPTIME_KUMA_USERNAME`| App Credential | None | Login username (if `AUTH_TYPE` is `password`). |
-| `UPTIME_KUMA_PASSWORD`| App Credential | None | Login password (if `AUTH_TYPE` is `password`). |
-| `MONITORSTOOL` | Toggle switch | `True` | Set to `False` to completely disable the `uptime_kuma_monitors` MCP tool. |
-| `STATUSTOOL` | Toggle switch | `True` | Set to `False` to completely disable the `uptime_kuma_status` MCP tool. |
-| `CADDYFILE_PATH` | Kuma Sync Skill | deployment-provided | Caddyfile parsed by the `uptime-kuma-sync` skill. |
-| `KUMA_DB_PATH` | Kuma Sync Skill | deployment-provided | Uptime-Kuma SQLite DB used by the `uptime-kuma-sync` skill. |
-| `ENABLE_OTEL` | Tracing Switch| `True` | Enable telemetry exports via OpenTelemetry standards. |
-| `OTEL_EXPORTER_OTLP_ENDPOINT` | Tracing | `http://langfuse.example.invalid/api/public/otel` | Core endpoint URL for exporting tracing and span data. |
-| `OTEL_EXPORTER_OTLP_PUBLIC_KEY` / `OTEL_EXPORTER_OTLP_SECRET_KEY` | Tracing | None | OTLP exporter auth keys. |
-| `OTEL_EXPORTER_OTLP_PROTOCOL` | Tracing | None | OTLP protocol (e.g. `http/protobuf`). |
-| `EUNOMIA_TYPE` | Governance | `none` | Policy enforcement style. Options: `none`, `embedded`, `remote`. |
-| `EUNOMIA_POLICY_FILE` | Governance | `mcp_policies.json` | Path to the operator's local Eunomia JSON policy parameters. |
-| `EUNOMIA_REMOTE_URL` | Governance | None | Remote Eunomia server URL (when `EUNOMIA_TYPE=remote`). |
-| `MCP_URL` | Agent (`[agent]`) | `http://localhost:8000/mcp` | URL of the MCP server the agent connects to. |
-| `PROVIDER` | Agent (`[agent]`) | `openai` | LLM provider for the integrated agent. |
-| `MODEL_ID` | Agent (`[agent]`) | `gpt-4o` | Model id for the integrated agent. |
-| `ENABLE_WEB_UI` | Agent (`[agent]`) | `True` | Serve the AG-UI web interface. |
-
----
-
-## Usage & Quick Start
-
-To bootstrap and run the agent:
-
-1. **Configure Environment:** Create a `.env` file from the provided template:
-   ```bash
-   cp .env.example .env
-   # Add your target Uptime Kuma credentials
-   ```
-
-2. **Run MCP Server locally via CLI:**
-   ```bash
-   uv run uptime-mcp
-   ```
-
-3. **Interact with the Pydantic AI Graph Agent CLI:**
-   ```bash
-   uv run uptime-agent --provider openai --model-id gpt-4o
-   ```
 
 ---
 
@@ -454,6 +329,8 @@ the detailed transport contract.
   `MCP_ALLOWED_HOSTS` in `AgentConfig`.
 <!-- END GENERATED: additional-deployment-options -->
 
+---
+
 ## Agent
 
 This repository features a fully integrated Pydantic AI Graph Agent. It communicates over the **Agent Control Protocol (ACP)** and interacts smoothly with the **Agent Web UI (AG-UI)** and Terminal interface.
@@ -562,6 +439,117 @@ Built directly upon the enterprise-ready [`scion-sdk`](https://github.com/Knuckl
 
 ---
 
+## Environment Variables
+
+<!-- ENV-VARS-TABLE:START -->
+
+#### Package environment variables
+
+| Variable | Example | Description |
+|----------|---------|-------------|
+| `HOST` | `0.0.0.0` |  |
+| `PORT` | `8000` |  |
+| `TRANSPORT` | `stdio` | options: stdio, streamable-http, sse |
+| `ENABLE_OTEL` | `True` |  |
+| `OTEL_EXPORTER_OTLP_ENDPOINT` | `http://localhost:8080/api/public/otel` |  |
+| `OTEL_EXPORTER_OTLP_PUBLIC_KEY` | secret-injected |  |
+| `OTEL_EXPORTER_OTLP_SECRET_KEY` | secret-injected |  |
+| `OTEL_EXPORTER_OTLP_PROTOCOL` | `http/protobuf` |  |
+| `EUNOMIA_TYPE` | `none` | options: none, embedded, remote |
+| `EUNOMIA_POLICY_FILE` | `mcp_policies.json` |  |
+| `EUNOMIA_REMOTE_URL` | `http://eunomia-server:8000` |  |
+| `UPTIME_KUMA_URL` | `http://localhost:3001` |  |
+| `UPTIME_KUMA_TOKEN` | secret-injected |  |
+| `UPTIME_KUMA_USERNAME` | `admin (used if AUTH_TYPE is password)` |  |
+| `UPTIME_KUMA_PASSWORD` | secret-injected |  |
+| `AUTH_TYPE` | `password` | options: password, token |
+| `CADDYFILE_PATH` | `${CADDY_CONFIG_PATH}` | Caddyfile parsed by the kuma-sync skill |
+| `KUMA_DB_PATH` | `${UPTIME_KUMA_DATA_PATH}/kuma.db` | Uptime-Kuma SQLite DB used by the kuma-sync skill |
+| `MONITORSTOOL` | `True` |  |
+| `STATUSTOOL` | `True` |  |
+
+#### Inherited scion-sdk variables (apply to every connector)
+
+| Variable | Example | Description |
+|----------|---------|-------------|
+| `MCP_TOOL_MODE` | `intent` | Tool surface: `intent` \| `condensed` \| `verbose` \| `both` |
+| `MCP_ENABLED_TOOLS` | — | Comma-separated tool allow-list |
+| `MCP_DISABLED_TOOLS` | — | Comma-separated tool deny-list |
+| `MCP_ENABLED_TAGS` | — | Comma-separated tag allow-list |
+| `MCP_DISABLED_TAGS` | — | Comma-separated tag deny-list |
+| `MCP_CLIENT_AUTH` | — | Outbound MCP child auth: `oidc-client-credentials` \| `basic` \| `none` |
+| `OIDC_CLIENT_ID` | — | OIDC client id (service-account auth) |
+| `OIDC_CLIENT_SECRET_REF` | `secret://identity/oidc-client-secret` | Runtime secret reference for the OIDC service account |
+| `MCP_BASIC_AUTH_USERNAME` | — | HTTP Basic username (`MCP_CLIENT_AUTH=basic`) |
+| `MCP_BASIC_AUTH_PASSWORD_REF` | `secret://identity/mcp-basic-password` | Runtime secret reference for HTTP Basic auth (`MCP_CLIENT_AUTH=basic`) |
+| `DEBUG` | `False` | Verbose logging |
+| `PYTHONUNBUFFERED` | `1` | Unbuffered stdout (recommended in containers) |
+| `MCP_URL` | `http://localhost:8000/mcp` | URL of the MCP server the agent connects to |
+| `PROVIDER` | `openai` | LLM provider for the agent |
+| `MODEL_ID` | `gpt-4o` | Model id for the agent |
+| `ENABLE_WEB_UI` | `True` | Serve the AG-UI web interface |
+
+_20 package + 16 inherited variable(s). Auto-generated from `.env.example` + the shared scion-sdk set — do not edit._
+<!-- ENV-VARS-TABLE:END -->
+
+
+The agent's behavior and connections can be fully configured via environment variables.
+
+| Environment Variable | Source Type | Default Value | Description |
+|----------------------|-------------|---------------|-------------|
+| `HOST` | System / Docker | `0.0.0.0` | IP interface address for the MCP and Agent servers to bind to. |
+| `PORT` | System / Docker | `8000` | Port number for HTTP/SSE transports. |
+| `TRANSPORT` | System / Docker | `stdio` | MCP transport channel. Supported values: `stdio`, `streamable-http`, `sse`. |
+| `MCP_TOOL_MODE` | MCP / Tools | `condensed` | Tool surface: `condensed`, `verbose`, or `both`. |
+| `MCP_ENABLED_TOOLS` / `MCP_DISABLED_TOOLS` | MCP / Tools | None | Comma-separated tool allow/deny list. |
+| `MCP_ENABLED_TAGS` / `MCP_DISABLED_TAGS` | MCP / Tools | None | Comma-separated tag allow/deny list. |
+| `PYTHONUNBUFFERED` | System / Docker | `1` | Unbuffered stdout (recommended in containers). |
+| `DEBUG` | System / Docker | `False` | Verbose logging. |
+| `UPTIME_KUMA_URL` | App Credential | `http://localhost:3001` | The base URL of the operator's target Uptime Kuma instance. |
+| `AUTH_TYPE` | App Credential | None | Type of authentication used. Supported values: `password`, `token`. |
+| `UPTIME_KUMA_TOKEN` | App Credential | None | Authentication token (if `AUTH_TYPE` is `token`). |
+| `UPTIME_KUMA_USERNAME`| App Credential | None | Login username (if `AUTH_TYPE` is `password`). |
+| `UPTIME_KUMA_PASSWORD`| App Credential | None | Login password (if `AUTH_TYPE` is `password`). |
+| `MONITORSTOOL` | Toggle switch | `True` | Set to `False` to completely disable the `uptime_kuma_monitors` MCP tool. |
+| `STATUSTOOL` | Toggle switch | `True` | Set to `False` to completely disable the `uptime_kuma_status` MCP tool. |
+| `CADDYFILE_PATH` | Kuma Sync Skill | deployment-provided | Caddyfile parsed by the `uptime-kuma-sync` skill. |
+| `KUMA_DB_PATH` | Kuma Sync Skill | deployment-provided | Uptime-Kuma SQLite DB used by the `uptime-kuma-sync` skill. |
+| `ENABLE_OTEL` | Tracing Switch| `True` | Enable telemetry exports via OpenTelemetry standards. |
+| `OTEL_EXPORTER_OTLP_ENDPOINT` | Tracing | `http://langfuse.example.invalid/api/public/otel` | Core endpoint URL for exporting tracing and span data. |
+| `OTEL_EXPORTER_OTLP_PUBLIC_KEY` / `OTEL_EXPORTER_OTLP_SECRET_KEY` | Tracing | None | OTLP exporter auth keys. |
+| `OTEL_EXPORTER_OTLP_PROTOCOL` | Tracing | None | OTLP protocol (e.g. `http/protobuf`). |
+| `EUNOMIA_TYPE` | Governance | `none` | Policy enforcement style. Options: `none`, `embedded`, `remote`. |
+| `EUNOMIA_POLICY_FILE` | Governance | `mcp_policies.json` | Path to the operator's local Eunomia JSON policy parameters. |
+| `EUNOMIA_REMOTE_URL` | Governance | None | Remote Eunomia server URL (when `EUNOMIA_TYPE=remote`). |
+| `MCP_URL` | Agent (`[agent]`) | `http://localhost:8000/mcp` | URL of the MCP server the agent connects to. |
+| `PROVIDER` | Agent (`[agent]`) | `openai` | LLM provider for the integrated agent. |
+| `MODEL_ID` | Agent (`[agent]`) | `gpt-4o` | Model id for the integrated agent. |
+| `ENABLE_WEB_UI` | Agent (`[agent]`) | `True` | Serve the AG-UI web interface. |
+
+---
+
+## Usage & Quick Start
+
+To bootstrap and run the agent:
+
+1. **Configure Environment:** Create a `.env` file from the provided template:
+   ```bash
+   cp .env.example .env
+   # Add your target Uptime Kuma credentials
+   ```
+
+2. **Run MCP Server locally via CLI:**
+   ```bash
+   uv run uptime-mcp
+   ```
+
+3. **Interact with the Pydantic AI Graph Agent CLI:**
+   ```bash
+   uv run uptime-agent --provider openai --model-id gpt-4o
+   ```
+
+---
+
 ## Installation
 
 Pick the extra that matches what the operator want to run:
@@ -648,7 +636,6 @@ Contributions are welcome! Please ensure code quality by running local checks be
 - Lint code using `ruff check .`
 - Validate type-safety with `mypy .`
 - Run test suites using `pytest`
-
 
 <!-- BEGIN scion-sdk-deployment (generated; do not edit between markers) -->
 
